@@ -5,13 +5,37 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { DashboardLayout } from '@/components/shared/layout/DashboardLayout'
 import { getServerUser } from '@/lib/auth/helpers'
+import prisma from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
 
 export default async function StudentTimetablePage() {
   const user = await getServerUser()
 
-  const schedule = [
+  const student = await prisma.student.findFirst({
+    where: user?.id
+      ? { userId: user.id, deletedAt: null }
+      : { studentId: 'STU2024001', deletedAt: null },
+    include: {
+      currentClass: true,
+      currentSection: true,
+    },
+  })
+
+  const timetables = student?.currentClassId
+    ? await prisma.timetable.findMany({
+        where: { classId: student.currentClassId },
+        include: {
+          subject: true,
+          teacher: { include: { user: true } },
+        },
+        orderBy: { startTime: 'asc' },
+      })
+    : []
+
+  const colorPalette = ['blue', 'indigo', 'purple', 'amber', 'emerald', 'slate']
+
+  const defaultSchedule = [
     {
       day: 'Monday',
       periods: [
@@ -57,6 +81,25 @@ export default async function StudentTimetablePage() {
       ],
     },
   ]
+
+  const daysOrder = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']
+
+  const schedule = timetables.length > 0
+    ? daysOrder.map(dayName => {
+        const dayPeriods = timetables.filter(t => t.dayOfWeek === dayName)
+        const capitalized = dayName.charAt(0) + dayName.slice(1).toLowerCase()
+        return {
+          day: capitalized,
+          periods: dayPeriods.map((p, idx) => ({
+            time: `${p.startTime} - ${p.endTime}`,
+            subject: p.subject.name,
+            teacher: p.teacher?.user?.name || 'Faculty',
+            room: p.room || 'Room 201',
+            color: colorPalette[idx % colorPalette.length],
+          })),
+        }
+      }).filter(d => d.periods.length > 0)
+    : defaultSchedule
 
   return (
     <DashboardLayout user={user} role="STUDENT">

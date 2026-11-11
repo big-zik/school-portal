@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   FileText,
   Upload,
@@ -17,53 +17,83 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { DashboardLayout } from '@/components/shared/layout/DashboardLayout'
 
+const defaultAssignments = [
+  {
+    id: 'asg-3',
+    title: 'Essay: Themes of Colonial Resistance in Things Fall Apart',
+    subject: 'English & Composition',
+    teacher: 'Mr. Andrew Clark',
+    due: 'Feb 25, 2025 at 11:59 PM',
+    totalMarks: 30,
+    status: 'PENDING',
+    instructions:
+      'Write a 1,500-word critical essay examining Okonkwo’s inner conflict against the British colonial administration. Focus on chapters 15 through 22. Adhere to MLA 9th edition citation format.',
+    attachment: 'Things_Fall_Apart_Essay_Rubric.pdf',
+  },
+  {
+    id: 'asg-2',
+    title: 'Volumetric Analysis & Titration Lab Report',
+    subject: 'General Chemistry',
+    teacher: 'Mrs. Folashade Adebayo',
+    due: 'Feb 21, 2025',
+    totalMarks: 40,
+    status: 'SUBMITTED',
+    submittedDate: 'Feb 19, 2025 at 04:15 PM',
+    myFile: 'Daniel_Johnson_Chemistry_Titration_Lab.pdf',
+    instructions:
+      'Complete the quantitative table for hydrochloric acid standardization with anhydrous sodium carbonate. Calculate molar concentrations.',
+  },
+  {
+    id: 'asg-1',
+    title: 'Problem Set 4: Quadratic Equations & Graphing Proofs',
+    subject: 'Pure Mathematics',
+    teacher: 'Dr. Robert Smith',
+    due: 'Feb 15, 2025',
+    totalMarks: 50,
+    status: 'GRADED',
+    score: 46.5,
+    percentage: 93,
+    grade: 'A',
+    feedback:
+      'Superb work on vertex form and discriminant derivations. Review question 14 coordinate transformation.',
+    myFile: 'Daniel_Johnson_Math_PS4.pdf',
+  },
+]
+
 export default function StudentAssignmentsPage() {
   const [activeTab, setActiveTab] = useState<'pending' | 'submitted' | 'graded'>('pending')
   const [selectedAsg, setSelectedAsg] = useState<string | null>('asg-3')
   const [uploadSuccess, setUploadSuccess] = useState(false)
+  const [assignments, setAssignments] = useState(defaultAssignments)
 
-  const assignments = [
-    {
-      id: 'asg-3',
-      title: 'Essay: Themes of Colonial Resistance in Things Fall Apart',
-      subject: 'English & Composition',
-      teacher: 'Mr. Andrew Clark',
-      due: 'Feb 25, 2025 at 11:59 PM',
-      totalMarks: 30,
-      status: 'PENDING',
-      instructions:
-        'Write a 1,500-word critical essay examining Okonkwo’s inner conflict against the British colonial administration. Focus on chapters 15 through 22. Adhere to MLA 9th edition citation format.',
-      attachment: 'Things_Fall_Apart_Essay_Rubric.pdf',
-    },
-    {
-      id: 'asg-2',
-      title: 'Volumetric Analysis & Titration Lab Report',
-      subject: 'General Chemistry',
-      teacher: 'Mrs. Folashade Adebayo',
-      due: 'Feb 21, 2025',
-      totalMarks: 40,
-      status: 'SUBMITTED',
-      submittedDate: 'Feb 19, 2025 at 04:15 PM',
-      myFile: 'Daniel_Johnson_Chemistry_Titration_Lab.pdf',
-      instructions:
-        'Complete the quantitative table for hydrochloric acid standardization with anhydrous sodium carbonate. Calculate molar concentrations.',
-    },
-    {
-      id: 'asg-1',
-      title: 'Problem Set 4: Quadratic Equations & Graphing Proofs',
-      subject: 'Pure Mathematics',
-      teacher: 'Dr. Robert Smith',
-      due: 'Feb 15, 2025',
-      totalMarks: 50,
-      status: 'GRADED',
-      score: 46.5,
-      percentage: 93,
-      grade: 'A',
-      feedback:
-        'Superb work on vertex form and discriminant derivations. Review question 14 coordinate transformation.',
-      myFile: 'Daniel_Johnson_Math_PS4.pdf',
-    },
-  ]
+  useEffect(() => {
+    async function loadAssignments() {
+      try {
+        const res = await fetch('/api/assignments')
+        if (res.ok) {
+          const json = await res.json()
+          if (json.data && json.data.length > 0) {
+            const mapped = json.data.map((a: any) => ({
+              id: a.id,
+              title: a.title,
+              subject: a.subject?.name || 'General Subject',
+              teacher: a.teacher?.user?.name || 'Course Instructor',
+              due: new Date(a.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+              totalMarks: a.totalMarks,
+              status: 'PENDING',
+              instructions: a.description || 'Complete all requirements according to the course rubric.',
+              attachment: a.attachmentUrl || undefined,
+            }))
+            setAssignments(mapped)
+            setSelectedAsg(mapped[0].id)
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load assignments', err)
+      }
+    }
+    loadAssignments()
+  }, [])
 
   const current = assignments.find((a) => a.id === selectedAsg) || assignments[0]
 

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   ClipboardCheck,
   Calendar,
@@ -10,6 +10,7 @@ import {
   Save,
   Clock,
   Sparkles,
+  Loader2,
 } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -19,20 +20,70 @@ import { DashboardLayout } from '@/components/shared/layout/DashboardLayout'
 import { AttendanceStatus } from '@/types'
 
 export default function TeacherAttendancePage() {
+  const [classes, setClasses] = useState<Array<{ id: string; name: string }>>([])
+  const [selectedClassId, setSelectedClassId] = useState('')
   const [selectedClass, setSelectedClass] = useState('Grade 10 (SS 1) - Alpha')
-  const [selectedDate, setSelectedDate] = useState('2025-02-15')
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0])
   const [isSaved, setIsSaved] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
 
   // Students roster
   const [students, setStudents] = useState([
-    { id: 'STU2024001', name: 'Daniel Johnson', status: 'PRESENT' as AttendanceStatus, remarks: '' },
-    { id: 'STU2024002', name: 'Amara Okafor', status: 'PRESENT' as AttendanceStatus, remarks: '' },
-    { id: 'STU2024003', name: 'David Adeleke', status: 'LATE' as AttendanceStatus, remarks: 'Arrived 08:15 (bus traffic)' },
-    { id: 'STU2024004', name: 'Fatima Abubakar', status: 'PRESENT' as AttendanceStatus, remarks: '' },
-    { id: 'STU2024005', name: 'Chukwudi Eze', status: 'EXCUSED' as AttendanceStatus, remarks: 'Sick bay visit' },
-    { id: 'STU2024006', name: 'Grace Mensah', status: 'PRESENT' as AttendanceStatus, remarks: '' },
-    { id: 'STU2024007', name: 'Ibrahim Sani', status: 'PRESENT' as AttendanceStatus, remarks: '' },
+    { id: 'STU2024001', dbId: 'student-1', name: 'Daniel Johnson', status: 'PRESENT' as AttendanceStatus, remarks: '' },
+    { id: 'STU2024002', dbId: 'student-2', name: 'Amara Okafor', status: 'PRESENT' as AttendanceStatus, remarks: '' },
+    { id: 'STU2024003', dbId: 'student-3', name: 'David Adeleke', status: 'LATE' as AttendanceStatus, remarks: 'Arrived 08:15 (bus traffic)' },
+    { id: 'STU2024004', dbId: 'student-4', name: 'Fatima Abubakar', status: 'PRESENT' as AttendanceStatus, remarks: '' },
+    { id: 'STU2024005', dbId: 'student-5', name: 'Chukwudi Eze', status: 'EXCUSED' as AttendanceStatus, remarks: 'Sick bay visit' },
+    { id: 'STU2024006', dbId: 'student-6', name: 'Grace Mensah', status: 'PRESENT' as AttendanceStatus, remarks: '' },
+    { id: 'STU2024007', dbId: 'student-7', name: 'Ibrahim Sani', status: 'PRESENT' as AttendanceStatus, remarks: '' },
   ])
+
+  // Fetch classes
+  useEffect(() => {
+    async function loadClasses() {
+      try {
+        const res = await fetch('/api/classes')
+        if (res.ok) {
+          const json = await res.json()
+          if (json.data && json.data.length > 0) {
+            setClasses(json.data)
+            setSelectedClassId(json.data[0].id)
+            setSelectedClass(json.data[0].name)
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load classes', err)
+      }
+    }
+    loadClasses()
+  }, [])
+
+  // Fetch students when selected class changes
+  useEffect(() => {
+    if (!selectedClassId) return
+    async function loadStudents() {
+      try {
+        const res = await fetch(`/api/students?classId=${selectedClassId}`)
+        if (res.ok) {
+          const json = await res.json()
+          if (json.data && json.data.length > 0) {
+            setStudents(
+              json.data.map((s: any) => ({
+                id: s.studentId || s.id,
+                dbId: s.id,
+                name: s.user?.name || s.name || 'Student',
+                status: 'PRESENT' as AttendanceStatus,
+                remarks: '',
+              }))
+            )
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load students', err)
+      }
+    }
+    loadStudents()
+  }, [selectedClassId])
 
   const setStudentStatus = (id: string, status: AttendanceStatus) => {
     setStudents((prev) =>
@@ -46,8 +97,30 @@ export default function TeacherAttendancePage() {
     setIsSaved(false)
   }
 
-  const handleSaveAttendance = () => {
-    setIsSaved(true)
+  const handleSaveAttendance = async () => {
+    setIsSaving(true)
+    try {
+      if (selectedClassId) {
+        await fetch('/api/attendance', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            classId: selectedClassId,
+            date: selectedDate,
+            records: students.map((s) => ({
+              studentId: s.dbId || s.id,
+              status: s.status,
+              remarks: s.remarks,
+            })),
+          }),
+        })
+      }
+      setIsSaved(true)
+    } catch (err) {
+      console.error('Failed to save attendance', err)
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   return (
@@ -77,9 +150,18 @@ export default function TeacherAttendancePage() {
             <Button
               size="sm"
               onClick={handleSaveAttendance}
+              disabled={isSaving}
               className="text-xs gap-1.5 bg-emerald-600 hover:bg-emerald-700 font-semibold"
             >
-              <Save className="w-3.5 h-3.5" /> Save Attendance
+              {isSaving ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" /> Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="w-3.5 h-3.5" /> Save Attendance
+                </>
+              )}
             </Button>
           </div>
         </div>
@@ -103,13 +185,28 @@ export default function TeacherAttendancePage() {
             <div className="space-y-1">
               <label className="text-[11px] font-semibold text-gray-500 uppercase">Class & Cohort</label>
               <select
-                value={selectedClass}
-                onChange={(e) => setSelectedClass(e.target.value)}
+                value={selectedClassId || selectedClass}
+                onChange={(e) => {
+                  const val = e.target.value
+                  setSelectedClassId(val)
+                  const cls = classes.find((c) => c.id === val)
+                  if (cls) setSelectedClass(cls.name)
+                }}
                 className="h-9 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 text-xs"
               >
-                <option>Grade 10 (SS 1) - Alpha</option>
-                <option>Grade 10 (SS 1) - Beta</option>
-                <option>Grade 11 (SS 2) - Science</option>
+                {classes.length > 0 ? (
+                  classes.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))
+                ) : (
+                  <>
+                    <option>Grade 10 (SS 1) - Alpha</option>
+                    <option>Grade 10 (SS 1) - Beta</option>
+                    <option>Grade 11 (SS 2) - Science</option>
+                  </>
+                )}
               </select>
             </div>
 
