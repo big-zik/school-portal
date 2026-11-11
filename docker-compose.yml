@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://school_user:${DB_PASSWORD:-SecretPass123!}@db:5432/school_portal?schema=public
+      - REDIS_URL=redis://redis:6379
+      - AUTH_SECRET=${AUTH_SECRET:-super-secret-auth-key-min-32-chars-long}
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
+      - NODE_ENV=production
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: school_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-SecretPass123!}
+      POSTGRES_DB: school_portal
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    volumes:
+      - redisdata:/data
+    ports:
+      - "6379:6379"
+
+volumes:
+  pgdata:
+  redisdata:
