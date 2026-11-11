@@ -1,21 +1,54 @@
-import React from 'react'
-import { CreditCard, Download, PlusCircle, Search, Filter, CheckCircle2, Clock, AlertCircle } from 'lucide-react'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+'use client'
+
+import React, { useState, useEffect, useCallback } from 'react'
+import { CreditCard, Download, Search, CheckCircle2, Clock, AlertCircle, Loader2 } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import { DashboardLayout } from '@/components/shared/layout/DashboardLayout'
-import { formatCurrency } from '@/lib/utils'
+import { formatCurrency, formatDate } from '@/lib/utils'
 
 export default function AdminFeesManagementPage() {
-  const invoices = [
-    { invoiceNumber: 'INV-2025-00142', student: 'Daniel Johnson (STU2024001)', class: 'Grade 10 Alpha', amount: 285000, paid: 285000, balance: 0, status: 'PAID', date: 'Jan 20, 2025' },
-    { invoiceNumber: 'INV-2025-00143', student: 'Amara Okafor (STU2024002)', class: 'Grade 10 Alpha', amount: 285000, paid: 285000, balance: 0, status: 'PAID', date: 'Jan 22, 2025' },
-    { invoiceNumber: 'INV-2025-00144', student: 'David Adeleke (STU2024003)', class: 'Grade 10 Alpha', amount: 285000, paid: 150000, balance: 135000, status: 'PARTIAL', date: 'Jan 25, 2025' },
-    { invoiceNumber: 'INV-2025-00145', student: 'Fatima Abubakar (STU2024004)', class: 'Grade 10 Alpha', amount: 285000, paid: 0, balance: 285000, status: 'OVERDUE', date: 'Jan 15, 2025' },
-    { invoiceNumber: 'INV-2025-00146', student: 'Chukwudi Eze (STU2024005)', class: 'Grade 10 Alpha', amount: 285000, paid: 285000, balance: 0, status: 'PAID', date: 'Jan 18, 2025' },
-  ]
+  const [invoices, setInvoices] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState('')
+  const [statusFilter, setStatusFilter] = useState('')
+
+  const fetchFees = useCallback(async () => {
+    setLoading(true)
+    try {
+      const params = new URLSearchParams()
+      if (statusFilter) params.set('status', statusFilter)
+
+      const res = await fetch(`/api/fees?${params.toString()}`)
+      const json = await res.json()
+      if (json.success) {
+        setInvoices(json.data || [])
+      }
+    } catch (e) {
+      console.error('Failed to fetch fees', e)
+    } finally {
+      setLoading(false)
+    }
+  }, [statusFilter])
+
+  useEffect(() => {
+    fetchFees()
+  }, [fetchFees])
+
+  const filteredInvoices = invoices.filter((inv) => {
+    if (!search) return true
+    const q = search.toLowerCase()
+    const invNum = inv.invoiceNumber?.toLowerCase() || ''
+    const stuName = inv.student?.user?.name?.toLowerCase() || ''
+    return invNum.includes(q) || stuName.includes(q)
+  })
+
+  const totalBilled = invoices.reduce((acc, inv) => acc + (inv.totalAmount || 0), 0)
+  const totalPaid = invoices.reduce((acc, inv) => acc + (inv.paidAmount || 0), 0)
+  const totalOutstanding = invoices.reduce((acc, inv) => acc + (inv.balanceAmount || 0), 0)
 
   return (
     <DashboardLayout role="ADMIN">
@@ -27,14 +60,8 @@ export default function AdminFeesManagementPage() {
               Fee Structures & Invoicing Management
             </h1>
             <p className="text-xs text-gray-500 mt-0.5">
-              Create class fee bundles, generate bulk term invoices, verify bank settlements, and dispatch automated payment reminders
+              View student fee records, track settlement status, and monitor collection rate
             </p>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button size="sm" className="text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 font-semibold">
-              <PlusCircle className="w-4 h-4" /> Create Fee Package
-            </Button>
           </div>
         </div>
 
@@ -44,9 +71,9 @@ export default function AdminFeesManagementPage() {
             <CardContent className="p-5">
               <p className="text-xs font-medium text-gray-500">Total Billed Invoices</p>
               <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">
-                {formatCurrency(52700000)}
+                {formatCurrency(totalBilled)}
               </h3>
-              <p className="text-[11px] text-gray-400 mt-1">485 student packages generated</p>
+              <p className="text-[11px] text-gray-400 mt-1">{invoices.length} invoices generated</p>
             </CardContent>
           </Card>
 
@@ -54,9 +81,11 @@ export default function AdminFeesManagementPage() {
             <CardContent className="p-5">
               <p className="text-xs font-medium text-gray-500">Collected Revenue</p>
               <h3 className="text-2xl font-bold text-emerald-600 mt-1">
-                {formatCurrency(48500000)}
+                {formatCurrency(totalPaid)}
               </h3>
-              <p className="text-[11px] text-emerald-600 mt-1">92.0% collection rate</p>
+              <p className="text-[11px] text-emerald-600 mt-1">
+                {totalBilled > 0 ? ((totalPaid / totalBilled) * 100).toFixed(1) : 0}% collection rate
+              </p>
             </CardContent>
           </Card>
 
@@ -64,72 +93,113 @@ export default function AdminFeesManagementPage() {
             <CardContent className="p-5">
               <p className="text-xs font-medium text-gray-500">Outstanding Balance</p>
               <h3 className="text-2xl font-bold text-amber-600 mt-1">
-                {formatCurrency(4200000)}
+                {formatCurrency(totalOutstanding)}
               </h3>
-              <p className="text-[11px] text-amber-600 mt-1">Automated parent reminders sent</p>
+              <p className="text-[11px] text-amber-600 mt-1">Pending parent settlement</p>
             </CardContent>
           </Card>
         </div>
 
-        {/* Invoice Filter & Table */}
+        {/* Filter Bar */}
         <Card>
-          <CardHeader className="pb-3 flex flex-row items-center justify-between">
-            <CardTitle className="text-sm font-semibold">Term 2 Student Invoices</CardTitle>
-            <div className="w-64">
-              <Input placeholder="Search invoice or student name..." className="text-xs h-8" />
+          <CardContent className="p-4 flex flex-col md:flex-row items-center gap-3">
+            <div className="relative flex-1 w-full">
+              <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+              <Input
+                placeholder="Search invoices by student name or invoice number..."
+                className="pl-9 text-xs"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </div>
-          </CardHeader>
+            <div className="flex items-center gap-2 w-full md:w-auto">
+              <select
+                className="h-9 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 text-xs"
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+              >
+                <option value="">All Statuses</option>
+                <option value="PAID">Paid</option>
+                <option value="PARTIAL">Partially Paid</option>
+                <option value="PENDING">Pending</option>
+                <option value="OVERDUE">Overdue</option>
+              </select>
+              <Button variant="outline" size="sm" className="text-xs gap-1">
+                <Download className="w-3.5 h-3.5" /> Export CSV
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
+        {/* Invoices Table */}
+        <Card>
           <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Invoice #</TableHead>
-                  <TableHead>Student</TableHead>
-                  <TableHead>Class</TableHead>
-                  <TableHead className="text-right">Billed Amount</TableHead>
-                  <TableHead className="text-right">Paid</TableHead>
-                  <TableHead className="text-right">Balance</TableHead>
-                  <TableHead className="text-center">Status</TableHead>
-                  <TableHead className="text-right">Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {invoices.map((inv) => (
-                  <TableRow key={inv.invoiceNumber}>
-                    <TableCell className="font-mono text-xs font-bold text-gray-700 dark:text-gray-300">
-                      {inv.invoiceNumber}
-                    </TableCell>
-                    <TableCell className="text-xs font-medium text-gray-900 dark:text-gray-100">
-                      {inv.student}
-                    </TableCell>
-                    <TableCell className="text-xs text-gray-500">{inv.class}</TableCell>
-                    <TableCell className="text-right font-mono text-xs">{formatCurrency(inv.amount)}</TableCell>
-                    <TableCell className="text-right font-mono text-xs text-emerald-600 font-bold">{formatCurrency(inv.paid)}</TableCell>
-                    <TableCell className="text-right font-mono text-xs text-amber-600 font-bold">{formatCurrency(inv.balance)}</TableCell>
-                    <TableCell className="text-center">
-                      <Badge
-                        variant={
-                          inv.status === 'PAID'
-                            ? 'success'
-                            : inv.status === 'PARTIAL'
-                            ? 'warning'
-                            : 'destructive'
-                        }
-                        className="text-[10px]"
-                      >
-                        {inv.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Button size="sm" variant="ghost" className="text-xs h-7 text-blue-600">
-                        View
-                      </Button>
-                    </TableCell>
+            {loading ? (
+              <div className="flex items-center justify-center py-12 text-sm text-gray-500">
+                <Loader2 className="w-5 h-5 animate-spin mr-2" /> Loading fee records...
+              </div>
+            ) : filteredInvoices.length === 0 ? (
+              <div className="text-center py-12 text-sm text-gray-500">
+                <AlertCircle className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                No invoices found matching current criteria.
+              </div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-xs">Invoice #</TableHead>
+                    <TableHead className="text-xs">Student Name</TableHead>
+                    <TableHead className="text-xs">Class</TableHead>
+                    <TableHead className="text-xs">Amount</TableHead>
+                    <TableHead className="text-xs">Paid</TableHead>
+                    <TableHead className="text-xs">Balance</TableHead>
+                    <TableHead className="text-xs">Status</TableHead>
+                    <TableHead className="text-xs">Date</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {filteredInvoices.map((inv) => (
+                    <TableRow key={inv.id} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/40">
+                      <TableCell className="font-mono text-xs font-semibold text-blue-600">
+                        {inv.invoiceNumber}
+                      </TableCell>
+                      <TableCell className="text-xs font-medium text-gray-900 dark:text-gray-100">
+                        {inv.student?.user?.name || 'Unknown Student'}
+                      </TableCell>
+                      <TableCell className="text-xs text-gray-600 dark:text-gray-400">
+                        {inv.student?.currentClass?.name || 'Unassigned'}
+                      </TableCell>
+                      <TableCell className="text-xs font-semibold text-gray-900 dark:text-gray-100">
+                        {formatCurrency(inv.totalAmount)}
+                      </TableCell>
+                      <TableCell className="text-xs font-medium text-emerald-600">
+                        {formatCurrency(inv.paidAmount)}
+                      </TableCell>
+                      <TableCell className="text-xs font-medium text-amber-600">
+                        {formatCurrency(inv.balanceAmount)}
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={
+                            inv.status === 'PAID'
+                              ? 'success'
+                              : inv.status === 'PARTIAL'
+                              ? 'warning'
+                              : 'outline'
+                          }
+                          className="text-[10px]"
+                        >
+                          {inv.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-xs text-gray-500">
+                        {formatDate(inv.createdAt)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
           </CardContent>
         </Card>
       </div>
