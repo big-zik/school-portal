@@ -3,6 +3,12 @@ import { NextResponse } from 'next/server'
 
 const PUBLIC_ROUTES = [
   '/',
+  '/login',
+  '/register',
+  '/forgot-password',
+  '/reset-password',
+  '/verify-email',
+  // Backward compatibility redirects if any old links hit /auth/*
   '/auth/login',
   '/auth/register',
   '/auth/forgot-password',
@@ -32,6 +38,12 @@ export default auth((req) => {
   const { pathname } = req.nextUrl
   const isAuth = !!req.auth?.user
 
+  // Backward compatibility: redirect /auth/* to /*
+  if (pathname.startsWith('/auth/')) {
+    const canonicalPath = pathname.replace('/auth', '')
+    return NextResponse.redirect(new URL(canonicalPath, req.url))
+  }
+
   // 1. Allow public routes
   if (
     PUBLIC_ROUTES.includes(pathname) ||
@@ -42,7 +54,7 @@ export default auth((req) => {
 
   // 2. Redirect unauthenticated users
   if (!isAuth) {
-    const loginUrl = new URL('/auth/login', req.url)
+    const loginUrl = new URL('/login', req.url)
     loginUrl.searchParams.set('callbackUrl', req.url)
     return NextResponse.redirect(loginUrl)
   }
@@ -56,7 +68,7 @@ export default auth((req) => {
       if (!hasRole) {
         const priority = ['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'PARENT', 'STUDENT']
         const userFirstRole = priority.find((r) => userRoles.includes(r))
-        const redirectPath = userFirstRole ? ROLE_DASHBOARD[userFirstRole] : '/auth/login'
+        const redirectPath = userFirstRole ? ROLE_DASHBOARD[userFirstRole] : '/login'
         return NextResponse.redirect(new URL(redirectPath, req.url))
       }
       break

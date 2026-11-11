@@ -152,7 +152,7 @@ export function Header({ user, onToggleSidebar }: HeaderProps) {
                 <span>Profile & Settings</span>
               </Link>
               <button
-                onClick={() => signOut({ callbackUrl: '/auth/login' })}
+                onClick={() => signOut({ callbackUrl: '/login' })}
                 className="w-full flex items-center gap-2 px-4 py-2 text-xs text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30"
               >
                 <LogOut className="w-4 h-4" />
