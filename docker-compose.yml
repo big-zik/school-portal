@@ -12,6 +12,8 @@ services:
       - AUTH_SECRET=${AUTH_SECRET:-super-secret-auth-key-min-32-chars-long}
       - AUTH_TRUST_HOST=true
       - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
+      - HOSTNAME=0.0.0.0
+      - PORT=3000
       - NODE_ENV=production
     depends_on:
       - db
