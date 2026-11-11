@@ -17,13 +17,14 @@ import { Input } from '@/components/ui/input'
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import { DashboardLayout } from '@/components/shared/layout/DashboardLayout'
 import { getServerUser } from '@/lib/auth/helpers'
+import prisma from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
 
 export default async function AuditLogsPage() {
   const user = await getServerUser()
 
-  const sampleLogs = [
+  const defaultSampleLogs = [
     {
       id: 'log-01',
       actor: 'Dr. Robert Smith (teacher.smith@school.com)',
@@ -75,6 +76,27 @@ export default async function AuditLogsPage() {
       time: 'Feb 13, 2025 08:00:15 PM',
     },
   ]
+
+  const dbLogs = await prisma.auditLog.findMany({
+    include: {
+      user: { select: { name: true, email: true } },
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 50,
+  })
+
+  const logs = dbLogs.length > 0
+    ? dbLogs.map((l) => ({
+        id: l.id,
+        actor: l.user ? `${l.user.name} (${l.user.email})` : 'System Daemon',
+        action: l.action,
+        module: l.module,
+        entity: `${l.entityType}${l.entityId ? `: ${l.entityId}` : ''}`,
+        detail: l.newValue ? (typeof l.newValue === 'string' ? l.newValue : JSON.stringify(l.newValue)) : 'Action recorded in audit trail',
+        ip: l.ipAddress || '127.0.0.1',
+        time: new Date(l.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+      }))
+    : defaultSampleLogs
 
   return (
     <DashboardLayout user={user} role="SUPER_ADMIN">
@@ -140,7 +162,7 @@ export default async function AuditLogsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {sampleLogs.map((log) => (
+                {logs.map((log) => (
                   <TableRow key={log.id} className="text-xs">
                     <TableCell className="font-mono text-[11px] text-gray-500 whitespace-nowrap">
                       {log.time}

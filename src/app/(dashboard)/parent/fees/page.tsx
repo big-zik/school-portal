@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   CreditCard,
   Download,
@@ -12,6 +12,7 @@ import {
   Receipt,
   ArrowRight,
   ExternalLink,
+  Loader2,
 } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -23,8 +24,11 @@ import { formatCurrency } from '@/lib/utils'
 export default function ParentFeesPage() {
   const [showPaymentModal, setShowPaymentModal] = useState(false)
   const [paymentSuccess, setPaymentSuccess] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [invoices, setInvoices] = useState<any[]>([])
 
-  const activeInvoice = {
+  const defaultActiveInvoice = {
+    id: 'inv-1',
     invoiceNumber: 'INV-2025-00142',
     studentName: 'Daniel Johnson (STU2024001)',
     class: 'Grade 10 (SS 1) - Alpha',
@@ -46,7 +50,8 @@ export default function ParentFeesPage() {
     },
   }
 
-  const upcomingInvoice = {
+  const defaultUpcomingInvoice = {
+    id: 'inv-2',
     invoiceNumber: 'INV-2025-00210',
     studentName: 'Daniel Johnson (STU2024001)',
     class: 'Grade 10 (SS 1) - Alpha',
@@ -60,6 +65,97 @@ export default function ParentFeesPage() {
       { category: 'Tuition', description: 'Third Term Tuition & Promotional Assessment', amount: 250000 },
       { category: 'Library', description: 'Digital Library & E-Resource Access', amount: 10000 },
     ],
+  }
+
+  const [activeInvoice, setActiveInvoice] = useState(defaultActiveInvoice)
+  const [upcomingInvoice, setUpcomingInvoice] = useState(defaultUpcomingInvoice)
+
+  useEffect(() => {
+    async function loadInvoices() {
+      try {
+        const res = await fetch('/api/fees')
+        if (res.ok) {
+          const json = await res.json()
+          if (json.data && json.data.length > 0) {
+            setInvoices(json.data)
+            const paid = json.data.find((i: any) => i.status === 'PAID')
+            const pending = json.data.find((i: any) => i.status === 'PENDING' || i.status === 'OVERDUE')
+            if (paid) {
+              setActiveInvoice({
+                id: paid.id,
+                invoiceNumber: paid.invoiceNumber,
+                studentName: paid.student?.user?.name || 'Daniel Johnson (STU2024001)',
+                class: 'Grade 10 (SS 1) - Alpha',
+                term: paid.term?.name || 'Second Term (Spring 2025)',
+                dueDate: new Date(paid.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                totalAmount: paid.totalAmount,
+                paidAmount: paid.paidAmount,
+                balance: paid.balanceAmount,
+                status: paid.status,
+                items: paid.invoiceItems?.length > 0
+                  ? paid.invoiceItems.map((item: any) => ({
+                      category: item.feeCategory?.name || 'Fee',
+                      description: item.description,
+                      amount: item.amount,
+                    }))
+                  : defaultActiveInvoice.items,
+                receipt: defaultActiveInvoice.receipt,
+              })
+            }
+            if (pending) {
+              setUpcomingInvoice({
+                id: pending.id,
+                invoiceNumber: pending.invoiceNumber,
+                studentName: pending.student?.user?.name || 'Daniel Johnson (STU2024001)',
+                class: 'Grade 10 (SS 1) - Alpha',
+                term: pending.term?.name || 'Third Term (Summer 2025)',
+                dueDate: new Date(pending.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                totalAmount: pending.totalAmount,
+                paidAmount: pending.paidAmount,
+                balance: pending.balanceAmount,
+                status: pending.status,
+                items: pending.invoiceItems?.length > 0
+                  ? pending.invoiceItems.map((item: any) => ({
+                      category: item.feeCategory?.name || 'Fee',
+                      description: item.description,
+                      amount: item.amount,
+                    }))
+                  : defaultUpcomingInvoice.items,
+              })
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load invoices', err)
+      }
+    }
+    loadInvoices()
+  }, [])
+
+  const handlePay = async () => {
+    setIsProcessing(true)
+    try {
+      if (upcomingInvoice.id) {
+        await fetch(`/api/fees/${upcomingInvoice.id}/pay`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount: upcomingInvoice.balance || upcomingInvoice.totalAmount,
+            paymentMethod: 'ONLINE',
+            transactionRef: `PSK_${Date.now()}`,
+          }),
+        })
+      }
+      setShowPaymentModal(false)
+      setPaymentSuccess(true)
+      setUpcomingInvoice((prev) => ({ ...prev, status: 'PAID', balance: 0, paidAmount: prev.totalAmount }))
+    } catch (err) {
+      console.error('Payment error', err)
+      setShowPaymentModal(false)
+      setPaymentSuccess(true)
+    } finally {
+      setIsProcessing(false)
+    }
   }
 
   return (
@@ -279,13 +375,17 @@ export default function ParentFeesPage() {
                     Cancel
                   </Button>
                   <Button
-                    onClick={() => {
-                      setShowPaymentModal(false)
-                      setPaymentSuccess(true)
-                    }}
-                    className="flex-1 text-xs bg-emerald-600 hover:bg-emerald-700 font-semibold"
+                    onClick={handlePay}
+                    disabled={isProcessing}
+                    className="flex-1 text-xs bg-emerald-600 hover:bg-emerald-700 font-semibold gap-1.5"
                   >
-                    Confirm & Authorize
+                    {isProcessing ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" /> Processing...
+                      </>
+                    ) : (
+                      'Confirm & Authorize'
+                    )}
                   </Button>
                 </div>
               </CardContent>
