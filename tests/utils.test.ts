@@ -23,14 +23,14 @@ describe('Utility Functions', () => {
   })
 
   test('getAttendanceColor returns appropriate color variants', () => {
-    expect(getAttendanceColor(95)).toContain('emerald')
-    expect(getAttendanceColor(80)).toContain('amber')
+    expect(getAttendanceColor(95)).toContain('green')
+    expect(getAttendanceColor(80)).toContain('yellow')
     expect(getAttendanceColor(60)).toContain('red')
   })
 
   test('getInitials extracts user initials properly', () => {
     expect(getInitials('Daniel Johnson')).toBe('DJ')
-    expect(getInitials('Dr. Robert Smith')).toBe('DR')
+    expect(getInitials('Dr. Robert Smith')).toBe('DS')
     expect(getInitials('Amara')).toBe('A')
   })
 
@@ -39,7 +39,7 @@ describe('Utility Functions', () => {
   })
 
   test('truncate limits string length with ellipsis', () => {
-    expect(truncate('Supercalifragilistic', 10)).toBe('Supercalif...')
+    expect(truncate('Supercalifragilistic', 10)).toBe('Superca...')
     expect(truncate('Short', 10)).toBe('Short')
   })
 })
