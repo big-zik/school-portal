@@ -169,7 +169,7 @@ export function Sidebar({ role, isOpen, onClose }: SidebarProps) {
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-bold tracking-tight text-gray-900 dark:text-gray-100">
-                St. Augustine
+                CHOSEN GENERATION
               </span>
               <span className="text-[10px] font-medium text-blue-600 dark:text-blue-400">
                 School Portal

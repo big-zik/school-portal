@@ -71,13 +71,13 @@ export default function AdminSettingsPage() {
             <CardContent className="p-5 space-y-3.5">
               <div className="space-y-1">
                 <label className="text-xs font-semibold text-gray-600">School Legal Name</label>
-                <Input defaultValue="St. Augustine International Academy" className="text-xs h-9" />
+                <Input defaultValue="CHOSEN GENERATION SCHOOL" className="text-xs h-9" />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <label className="text-xs font-semibold text-gray-600">Official Email</label>
-                  <Input defaultValue="info@staugustine.edu" className="text-xs h-9" />
+                  <Input defaultValue="info@chosengenerationschool.edu" className="text-xs h-9" />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-semibold text-gray-600">Office Telephone</label>

@@ -68,7 +68,7 @@ function LoginFormContent() {
           <GraduationCap className="h-8 w-8" />
         </div>
         <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-          St. Augustine International Academy
+          CHOSEN GENERATION SCHOOL
         </h1>
         <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 max-w-sm">
           Unified School Management, Learning & Administration Portal
@@ -212,7 +212,7 @@ function LoginFormContent() {
         </CardContent>
 
         <CardFooter className="flex justify-center border-t border-gray-100 dark:border-gray-800 pt-4 text-xs text-gray-500">
-          <span>St. Augustine International Academy © 2026. All rights reserved.</span>
+          <span>CHOSEN GENERATION SCHOOL © 2026. All rights reserved.</span>
         </CardFooter>
       </Card>
     </div>

@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'St. Augustine International Academy | School Portal',
+  title: 'CHOSEN GENERATION SCHOOL | School Portal',
   description: 'Enterprise School Management, Academic Records, Fees, Attendance & Administration Portal',
 }
 

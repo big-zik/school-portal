@@ -103,7 +103,7 @@ export default async function HomePage() {
             </div>
             <div>
               <h1 className="text-base font-bold tracking-tight text-gray-900 dark:text-gray-100 leading-tight">
-                St. Augustine International Academy
+                CHOSEN GENERATION SCHOOL
               </h1>
               <p className="text-[11px] font-semibold text-blue-600 dark:text-blue-400">
                 School Management & Learning Portal
@@ -243,7 +243,7 @@ export default async function HomePage() {
       {/* Footer */}
       <footer className="mt-auto border-t border-gray-200/80 dark:border-gray-800 bg-white dark:bg-gray-900 py-8 px-4 text-center text-xs text-gray-500">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>© 2026 St. Augustine International Academy. All rights reserved.</p>
+          <p>© 2026 CHOSEN GENERATION SCHOOL. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <Link href="/auth/login" className="hover:underline">Staff Login</Link>
             <Link href="/auth/login" className="hover:underline">Student Portal</Link>

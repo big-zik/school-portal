@@ -37,14 +37,16 @@ async function main() {
   // 3. Seed School
   const school = await prisma.school.upsert({
     where: { id: 'school-main-001' },
-    update: {},
+    update: {
+      name: 'CHOSEN GENERATION SCHOOL',
+    },
     create: {
       id: 'school-main-001',
-      name: 'St. Augustine International Academy',
+      name: 'CHOSEN GENERATION SCHOOL',
       address: '42 Academic Way, Victoria Island',
       phone: '+234 1 234 5678',
-      email: 'info@staugustine.edu',
-      website: 'https://staugustine.edu',
+      email: 'info@chosengenerationschool.edu',
+      website: 'https://chosengenerationschool.edu',
       timezone: 'Africa/Lagos',
       currency: 'NGN',
       country: 'Nigeria',

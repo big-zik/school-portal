@@ -71,7 +71,7 @@ export default async function AdminDashboardPage() {
               Administrative Control Console 🏫
             </h1>
             <p className="text-xs md:text-sm text-gray-300">
-              Campus overview for St. Augustine International Academy • 485 enrolled students across 16 active classes.
+              Campus overview for CHOSEN GENERATION SCHOOL • 485 enrolled students across 16 active classes.
             </p>
           </div>
 
