@@ -96,10 +96,10 @@ export async function uploadFile(
 }
 
 async function uploadLocal(file: Buffer, key: string): Promise<UploadResult> {
-  const dest = path.join(LOCAL_DIR, key);
+  const dest = path.join(/*turbopackIgnore: true*/ process.cwd(), LOCAL_DIR, key);
   const dir = path.dirname(dest);
 
-  if (!fs.existsSync(dir)) {
+  if (!fs.existsSync(/*turbopackIgnore: true*/ dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
 
@@ -153,8 +153,8 @@ async function uploadS3(
  */
 export async function deleteFile(key: string): Promise<void> {
   if (PROVIDER === "local") {
-    const filePath = path.join(LOCAL_DIR, key);
-    if (fs.existsSync(filePath)) {
+    const filePath = path.join(/*turbopackIgnore: true*/ process.cwd(), LOCAL_DIR, key);
+    if (fs.existsSync(/*turbopackIgnore: true*/ filePath)) {
       fs.unlinkSync(filePath);
     }
     return;

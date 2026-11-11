@@ -92,7 +92,7 @@ export async function POST(req: Request) {
 
     // Resolve active term & academic year
     const activeTerm = await prisma.term.findFirst({
-      where: { isActive: true },
+      where: { isCurrent: true },
       include: { academicYear: true },
     })
 
