@@ -8,6 +8,7 @@ const LOCKOUT_DURATION_MS = 15 * 60 * 1000 // 15 minutes
 
 export const authConfig: NextAuthConfig = {
   secret: process.env.AUTH_SECRET,
+  trustHost: true,
 
   session: {
     strategy: 'jwt',
@@ -15,8 +16,8 @@ export const authConfig: NextAuthConfig = {
   },
 
   pages: {
-    signIn: '/auth/login',
-    error: '/auth/login',
+    signIn: '/login',
+    error: '/login',
   },
 
   providers: [

@@ -68,7 +68,7 @@ export default function ForgotPasswordPage() {
 
         <CardFooter className="flex justify-center border-t border-gray-100 dark:border-gray-800 pt-4">
           <Link
-            href="/auth/login"
+            href="/login"
             className="flex items-center gap-1.5 text-xs text-blue-600 hover:underline font-medium"
           >
             <ArrowLeft className="w-3.5 h-3.5" /> Back to Sign In

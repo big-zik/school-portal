@@ -43,7 +43,7 @@ export default async function HomePage() {
       badge: 'Academic',
       icon: GraduationCap,
       color: 'blue',
-      href: '/auth/login',
+      href: '/login',
     },
     {
       title: 'Parent Portal',
@@ -52,7 +52,7 @@ export default async function HomePage() {
       badge: 'Family & Bursary',
       icon: Users,
       color: 'emerald',
-      href: '/auth/login',
+      href: '/login',
     },
     {
       title: 'Teacher Portal',
@@ -61,7 +61,7 @@ export default async function HomePage() {
       badge: 'Instruction',
       icon: BookOpen,
       color: 'purple',
-      href: '/auth/login',
+      href: '/login',
     },
     {
       title: 'Admin Console',
@@ -70,7 +70,7 @@ export default async function HomePage() {
       badge: 'Operations',
       icon: ShieldCheck,
       color: 'amber',
-      href: '/auth/login',
+      href: '/login',
     },
   ]
 
@@ -112,7 +112,7 @@ export default async function HomePage() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link href="/auth/login">
+            <Link href="/login">
               <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-xs font-semibold px-5">
                 Sign In to Portal
               </Button>
@@ -137,7 +137,7 @@ export default async function HomePage() {
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <Link href="/auth/login">
+            <Link href="/login">
               <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-sm font-bold gap-2 shadow-lg shadow-blue-500/25">
                 Enter School Portal <ArrowRight className="w-4 h-4" />
               </Button>
@@ -180,7 +180,7 @@ export default async function HomePage() {
                   </p>
 
                   <div className="pt-2 border-t border-gray-100 dark:border-gray-800">
-                    <Link href={`/auth/login?role=${encodeURIComponent(p.role)}`}>
+                    <Link href={`/login?role=${encodeURIComponent(p.role)}`}>
                       <Button variant="outline" className="w-full text-xs font-semibold justify-between">
                         <span>Access Portal</span>
                         <ArrowRight className="w-3.5 h-3.5" />
@@ -245,9 +245,9 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <p>© 2026 CHOSEN GENERATION SCHOOL. All rights reserved.</p>
           <div className="flex items-center gap-4">
-            <Link href="/auth/login" className="hover:underline">Staff Login</Link>
-            <Link href="/auth/login" className="hover:underline">Student Portal</Link>
-            <Link href="/auth/login" className="hover:underline">Privacy & Security Policy</Link>
+            <Link href="/login" className="hover:underline">Staff Login</Link>
+            <Link href="/login" className="hover:underline">Student Portal</Link>
+            <Link href="/login" className="hover:underline">Privacy & Security Policy</Link>
           </div>
         </div>
       </footer>

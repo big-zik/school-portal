@@ -10,6 +10,7 @@ services:
       - DATABASE_URL=postgresql://school_user:${DB_PASSWORD:-SecretPass123!}@db:5432/school_portal?schema=public
       - REDIS_URL=redis://redis:6379
       - AUTH_SECRET=${AUTH_SECRET:-super-secret-auth-key-min-32-chars-long}
+      - AUTH_TRUST_HOST=true
       - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
       - NODE_ENV=production
     depends_on:
