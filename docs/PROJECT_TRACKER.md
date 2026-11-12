@@ -85,4 +85,5 @@
 | **Disaster Recovery Plan (DOC-OPS-003)** | Completed | 1.0.0 | 2026-11-12 | None |
 | **User Manuals & Role Guides (DOC-USR-001)** | Completed | 1.0.0 | 2026-11-12 | None |
 | **Administrator Guide (DOC-USR-001)** | Completed | 1.0.0 | 2026-11-12 | None |
+| **External Specialist SOW (DOC-SOW-001)** | Completed | 1.0.0 | 2026-11-12 | None |
 | **Master Documentation Index (README.md)** | Completed | 1.0.0 | 2026-11-12 | None |

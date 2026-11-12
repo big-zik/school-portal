@@ -32,6 +32,7 @@ All documents adhere strictly to standard software development lifecycle (SDLC) 
 | **DOC-OPS-002** | **Operations & Maintenance Guide** | Monitoring endpoints, routine maintenance schedule, SLAs, and incident runbooks. | 1.0.0 | Approved | [20_operations_and_maintenance_guide.md](./20_operations_and_maintenance_guide.md) |
 | **DOC-OPS-003** | **Disaster Recovery Plan** | RTO/RPO targets, database failure failover runbooks, and emergency contacts. | 1.0.0 | Approved | [21_disaster_recovery_plan.md](./21_disaster_recovery_plan.md) |
 | **DOC-USR-001** | **User Manuals & Quickstart Guides** | Step-by-step role manuals (Student, Parent, Teacher, Admin) and 1-page quick guides. | 1.0.0 | Approved | [22_user_manuals_and_quickstart.md](./22_user_manuals_and_quickstart.md) |
+| **DOC-SOW-001** | **External Specialist Scope of Work (SOW)** | Technical task brief, deliverables, and acceptance criteria for UI/UX, Frontend, Backend, DB & Security. | 1.0.0 | Approved | [23_external_specialist_scope_of_work.md](./23_external_specialist_scope_of_work.md) |
 
 ---
 
