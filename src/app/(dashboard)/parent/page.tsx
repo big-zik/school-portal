@@ -14,6 +14,10 @@ import {
   AlertCircle,
   FileText,
   DollarSign,
+  UploadCloud,
+  Bell,
+  HelpCircle,
+  Sparkles,
 } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -159,9 +163,9 @@ export default async function ParentDashboardPage() {
   return (
     <DashboardLayout user={user} role="PARENT">
       <div className="space-y-6">
-        {/* Welcome Banner */}
-        <div className="rounded-2xl bg-gradient-to-r from-emerald-800 via-teal-800 to-slate-900 text-white p-6 md:p-8 shadow-lg">
-          <div className="space-y-1.5 max-w-2xl">
+        {/* Welcome Banner with Quick Action Bar */}
+        <div className="rounded-2xl bg-gradient-to-r from-emerald-800 via-teal-800 to-slate-900 text-white p-6 md:p-8 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-1.5 max-w-xl">
             <Badge variant="secondary" className="bg-white/20 text-white border-0 text-[11px]">
               Parent / Guardian Portal
             </Badge>
@@ -169,8 +173,27 @@ export default async function ParentDashboardPage() {
               Welcome, {parentData.name} 👨‍👧
             </h1>
             <p className="text-xs md:text-sm text-emerald-100">
-              Monitoring academic progress, attendance records, and school fee accounts for your linked children.
+              Monitoring academic progress, attendance records, school fee accounts, and circulars for your linked children.
             </p>
+          </div>
+
+          {/* Quick Action Shortcuts */}
+          <div className="flex flex-wrap gap-2.5">
+            <Link href="/parent/fees">
+              <Button size="sm" className="text-xs bg-emerald-500 hover:bg-emerald-600 text-white font-semibold gap-1.5 shadow-sm">
+                <UploadCloud className="w-3.5 h-3.5" /> Upload Fee Receipt
+              </Button>
+            </Link>
+            <Link href="/parent/timetables">
+              <Button size="sm" variant="outline" className="text-xs border-white/30 text-white hover:bg-white/10 font-semibold gap-1.5">
+                <Calendar className="w-3.5 h-3.5" /> CA & Exam Timetables
+              </Button>
+            </Link>
+            <Link href="/parent/announcements">
+              <Button size="sm" variant="outline" className="text-xs border-white/30 text-white hover:bg-white/10 font-semibold gap-1.5">
+                <Bell className="w-3.5 h-3.5" /> Circulars
+              </Button>
+            </Link>
           </div>
         </div>
 
@@ -294,32 +317,48 @@ export default async function ParentDashboardPage() {
           {/* Right Column: Notices & Quick Parent Actions */}
           <div className="space-y-6">
             <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base">Important Notices</CardTitle>
+              <CardHeader className="pb-3 flex flex-row items-center justify-between">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Bell className="w-4 h-4 text-blue-600" />
+                  Official Circulars
+                </CardTitle>
+                <Link href="/parent/announcements">
+                  <Button variant="ghost" size="sm" className="text-xs text-blue-600 h-7 p-0 gap-1">
+                    All Updates <ChevronRight className="w-3.5 h-3.5" />
+                  </Button>
+                </Link>
               </CardHeader>
               <CardContent className="space-y-2.5">
                 {parentData.recentNotices.map((n, i) => (
-                  <div key={i} className="p-3 rounded-xl border border-gray-100 dark:border-gray-800 space-y-1">
-                    <p className="text-xs font-semibold text-gray-900 dark:text-gray-100">{n.title}</p>
-                    <p className="text-[10px] text-gray-400">{n.date}</p>
-                  </div>
+                  <Link key={i} href="/parent/announcements" className="block">
+                    <div className="p-3 rounded-xl border border-gray-100 dark:border-gray-800 space-y-1 hover:bg-gray-50/50 dark:hover:bg-gray-800/40 transition">
+                      <p className="text-xs font-semibold text-gray-900 dark:text-gray-100">{n.title}</p>
+                      <p className="text-[10px] text-gray-400">{n.date}</p>
+                    </div>
+                  </Link>
                 ))}
               </CardContent>
             </Card>
 
             <Card className="bg-gradient-to-br from-emerald-950 to-slate-900 text-white">
               <CardContent className="p-5 space-y-3">
-                <h4 className="text-sm font-semibold">Parent Service Desk</h4>
-                <div className="space-y-2">
-                  <Link href="/parent/meetings" className="block">
+                <h4 className="text-sm font-semibold flex items-center gap-2">
+                  <HelpCircle className="w-4 h-4 text-emerald-400" />
+                  Parent Helpdesk & Inquiries
+                </h4>
+                <p className="text-[11px] text-emerald-100/70">
+                  Have an issue with school fees, transport, homework, or need official contacts?
+                </p>
+                <div className="space-y-2 pt-1">
+                  <Link href="/parent/support" className="block">
                     <Button variant="outline" className="w-full justify-between text-xs border-white/20 hover:bg-white/10 text-white">
-                      <span>Schedule Teacher Conference</span>
+                      <span>Submit Issue to School</span>
                       <ArrowRight className="w-4 h-4" />
                     </Button>
                   </Link>
-                  <Link href="/parent/messages" className="block">
+                  <Link href="/parent/timetables" className="block">
                     <Button variant="outline" className="w-full justify-between text-xs border-white/20 hover:bg-white/10 text-white">
-                      <span>Message Class Administrator</span>
+                      <span>View CA & Exam Schedules</span>
                       <ArrowRight className="w-4 h-4" />
                     </Button>
                   </Link>

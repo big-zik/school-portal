@@ -20,6 +20,7 @@ import {
   HelpCircle,
   X,
   Library,
+  Bell,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { UserRole } from '@/types'
@@ -70,7 +71,9 @@ export function Sidebar({ role, isOpen, onClose }: SidebarProps) {
             section: 'Children Overview',
             items: [
               { label: 'Parent Dashboard', href: '/parent', icon: LayoutDashboard },
+              { label: 'School Circulars', href: '/parent/announcements', icon: Bell, badge: 'New' },
               { label: 'Children Academic', href: '/parent/children', icon: Users },
+              { label: 'Timetables & Exams', href: '/parent/timetables', icon: Calendar },
               { label: 'Attendance Records', href: '/parent/attendance', icon: ClipboardCheck },
               { label: 'Report Cards', href: '/parent/grades', icon: GraduationCap },
             ],
@@ -78,7 +81,8 @@ export function Sidebar({ role, isOpen, onClose }: SidebarProps) {
           {
             section: 'Services & Fees',
             items: [
-              { label: 'Fee Invoices & Pay', href: '/parent/fees', icon: CreditCard, badge: 'Pay Online' },
+              { label: 'Fee Invoices & Pay', href: '/parent/fees', icon: CreditCard, badge: 'Pay / Upload' },
+              { label: 'School Helpdesk & Info', href: '/parent/support', icon: HelpCircle },
               { label: 'Teacher Meetings', href: '/parent/meetings', icon: Calendar },
               { label: 'School Messages', href: '/parent/messages', icon: MessageSquare },
             ],
