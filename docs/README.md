@@ -34,6 +34,7 @@ All documents adhere strictly to standard software development lifecycle (SDLC) 
 | **DOC-USR-001** | **User Manuals & Quickstart Guides** | Step-by-step role manuals (Student, Parent, Teacher, Admin) and 1-page quick guides. | 1.0.0 | Approved | [22_user_manuals_and_quickstart.md](./22_user_manuals_and_quickstart.md) |
 | **DOC-SOW-001** | **External Specialist Scope of Work (SOW)** | Technical task brief, deliverables, and acceptance criteria for UI/UX, Frontend, Backend, DB & Security. | 1.0.0 | Approved | [23_external_specialist_scope_of_work.md](./23_external_specialist_scope_of_work.md) |
 | **DOC-SUPA-001** | **Supabase Setup & Migration Guide** | Managed PostgreSQL connection pooling, storage bucket setup, seed guide, and troubleshooting. | 1.0.0 | Approved | [24_supabase_setup_and_migration_guide.md](./24_supabase_setup_and_migration_guide.md) |
+| **DOC-CAT-001** | **Portal Aim & Functional Catalog** | Complete institutional aim, 4 strategic pillars, and 71-function operational matrix (.md & .docx). | 1.0.0 | Approved | [25_portal_aim_and_complete_functional_catalog.md](./25_portal_aim_and_complete_functional_catalog.md) |
 
 ---
 

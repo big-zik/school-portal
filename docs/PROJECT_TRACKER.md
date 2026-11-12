@@ -87,4 +87,5 @@
 | **Administrator Guide (DOC-USR-001)** | Completed | 1.0.0 | 2026-11-12 | None |
 | **External Specialist SOW (DOC-SOW-001)** | Completed | 1.0.0 | 2026-11-12 | None |
 | **Supabase Setup Guide (DOC-SUPA-001)** | Completed | 1.0.0 | 2026-11-12 | None |
+| **Functional Catalog & Aim (DOC-CAT-001)** | Completed | 1.0.0 | 2026-11-12 | None |
 | **Master Documentation Index (README.md)** | Completed | 1.0.0 | 2026-11-12 | None |
