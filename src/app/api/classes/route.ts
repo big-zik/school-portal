@@ -52,16 +52,23 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const roles = session.user.roles || []
-    if (!roles.includes('ADMIN') && !roles.includes('SUPER_ADMIN')) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    const userRoles = (session.user as any).roles || []
+    const userRole = (session.user as any).role
+    const isAuthorized =
+      userRoles.includes('ADMIN') ||
+      userRoles.includes('SUPER_ADMIN') ||
+      userRole === 'ADMIN' ||
+      userRole === 'SUPER_ADMIN'
+
+    if (!isAuthorized) {
+      return NextResponse.json({ success: false, error: 'Forbidden: Admin access required' }, { status: 403 })
     }
 
     const body = await req.json()
-    const { name, level, capacity, description, schoolId } = body
+    const { name, level, capacity, description, schoolId, sectionName } = body
 
     if (!name) {
-      return NextResponse.json({ error: 'Class name is required' }, { status: 400 })
+      return NextResponse.json({ success: false, error: 'Class name is required' }, { status: 400 })
     }
 
     let targetSchoolId = schoolId
@@ -71,19 +78,27 @@ export async function POST(req: Request) {
     }
 
     if (!targetSchoolId) {
-      return NextResponse.json({ error: 'School not configured' }, { status: 400 })
+      return NextResponse.json({ success: false, error: 'School not configured' }, { status: 400 })
     }
 
     const newClass = await prisma.class.create({
       data: {
         name,
         level: level ? parseInt(level, 10) : null,
-        capacity: capacity ? parseInt(capacity, 10) : null,
+        capacity: capacity ? parseInt(capacity, 10) : 40,
         description,
         schoolId: targetSchoolId,
+        sections: {
+          create: {
+            name: sectionName ? sectionName.trim() : 'Section A',
+          },
+        },
       },
       include: {
         sections: true,
+        _count: {
+          select: { students: true },
+        },
       },
     })
 

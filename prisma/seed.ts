@@ -242,57 +242,73 @@ async function main() {
   })
   console.log('✅ Teachers seeded')
 
-  // 8. Classes and Sections
-  const class10 = await prisma.class.upsert({
-    where: { id: 'class-grade-10' },
-    update: {},
-    create: {
-      id: 'class-grade-10',
-      schoolId: school.id,
-      name: 'Grade 10 (SS 1)',
-      level: 10,
-      description: 'Senior Secondary',
-      capacity: 60,
-    },
-  })
+  // 8. Classes and Sections (Pre-School, Pre-Nursery, Nursery 1-2, Basic 1-5, JSS 1-2)
+  const schoolClassesData = [
+    { id: 'class-preschool', name: 'Pre-School', level: 0, desc: 'Early Childhood Development & Playgroup', cap: 25 },
+    { id: 'class-prenursery', name: 'Pre-Nursery', level: 1, desc: 'Pre-Nursery Foundational Learning', cap: 25 },
+    { id: 'class-nursery1', name: 'Nursery 1', level: 2, desc: 'Nursery 1 Early Literacy & Numeracy', cap: 30 },
+    { id: 'class-nursery2', name: 'Nursery 2', level: 3, desc: 'Nursery 2 Kindergarten Transition', cap: 30 },
+    { id: 'class-basic1', name: 'Basic 1', level: 4, desc: 'Primary 1 / Basic One Foundation', cap: 35 },
+    { id: 'class-basic2', name: 'Basic 2', level: 5, desc: 'Primary 2 / Basic Two Elementary', cap: 35 },
+    { id: 'class-basic3', name: 'Basic 3', level: 6, desc: 'Primary 3 / Basic Three Elementary', cap: 35 },
+    { id: 'class-basic4', name: 'Basic 4', level: 7, desc: 'Primary 4 / Basic Four Intermediate', cap: 35 },
+    { id: 'class-basic5', name: 'Basic 5', level: 8, desc: 'Primary 5 / Basic Five Intermediate', cap: 35 },
+    { id: 'class-jss1', name: 'JSS 1', level: 9, desc: 'Junior Secondary School 1', cap: 40 },
+    { id: 'class-jss2', name: 'JSS 2', level: 10, desc: 'Junior Secondary School 2', cap: 40 },
+  ]
 
-  const class11 = await prisma.class.upsert({
-    where: { id: 'class-grade-11' },
+  for (const c of schoolClassesData) {
+    const cls = await prisma.class.upsert({
+      where: { id: c.id },
+      update: { name: c.name, level: c.level, capacity: c.cap, description: c.desc },
+      create: {
+        id: c.id,
+        schoolId: school.id,
+        name: c.name,
+        level: c.level,
+        description: c.desc,
+        capacity: c.cap,
+      },
+    })
+
+    await prisma.section.upsert({
+      where: { id: `sec-${c.id}-a` },
+      update: {},
+      create: {
+        id: `sec-${c.id}-a`,
+        classId: cls.id,
+        name: 'Section A',
+        roomNumber: `Room ${100 + c.level}`,
+        capacity: c.cap,
+      },
+    })
+  }
+
+  const class10 = await prisma.class.upsert({
+    where: { id: 'class-jss1' },
     update: {},
     create: {
-      id: 'class-grade-11',
+      id: 'class-jss1',
       schoolId: school.id,
-      name: 'Grade 11 (SS 2)',
-      level: 11,
-      description: 'Senior Secondary',
-      capacity: 60,
+      name: 'JSS 1',
+      level: 9,
+      description: 'Junior Secondary',
+      capacity: 40,
     },
   })
 
   const section10A = await prisma.section.upsert({
-    where: { id: 'sec-10-a' },
+    where: { id: 'sec-class-jss1-a' },
     update: {},
     create: {
-      id: 'sec-10-a',
+      id: 'sec-class-jss1-a',
       classId: class10.id,
-      name: 'Section Alpha (Science)',
+      name: 'Section A',
       roomNumber: 'Room 201',
-      capacity: 30,
+      capacity: 40,
     },
   })
-
-  const section10B = await prisma.section.upsert({
-    where: { id: 'sec-10-b' },
-    update: {},
-    create: {
-      id: 'sec-10-b',
-      classId: class10.id,
-      name: 'Section Beta (Arts)',
-      roomNumber: 'Room 202',
-      capacity: 30,
-    },
-  })
-  console.log('✅ Classes and Sections seeded')
+  console.log('✅ 11 School Classes and Sections seeded')
 
   // 9. Subjects
   const subMath = await prisma.subject.upsert({
