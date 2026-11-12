@@ -21,6 +21,7 @@ import {
   X,
   Library,
   Bell,
+  AlertTriangle,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { UserRole } from '@/types'
@@ -132,6 +133,9 @@ export function Sidebar({ role, isOpen, onClose }: SidebarProps) {
               { label: 'Fee Management', href: '/admin/fees', icon: CreditCard },
               { label: 'Attendance Analytics', href: '/admin/attendance', icon: ClipboardCheck },
               { label: 'Examinations & Reports', href: '/admin/reports', icon: GraduationCap },
+              { label: 'Calendar & Events', href: '/admin/events', icon: Calendar },
+              { label: 'Conduct & Discipline', href: '/admin/discipline', icon: AlertTriangle },
+              { label: 'Administrative Messages', href: '/admin/messages', icon: MessageSquare },
               { label: 'Library Catalog', href: '/admin/library', icon: Library },
               { label: 'Transport Fleet', href: '/admin/transport', icon: Bus },
               { label: 'Hostel Boarding', href: '/admin/hostel', icon: Building },

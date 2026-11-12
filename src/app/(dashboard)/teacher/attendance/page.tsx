@@ -21,8 +21,10 @@ import { AttendanceStatus } from '@/types'
 
 export default function TeacherAttendancePage() {
   const [classes, setClasses] = useState<Array<{ id: string; name: string }>>([])
+  const [subjects, setSubjects] = useState<Array<{ id: string; name: string; code: string }>>([])
   const [selectedClassId, setSelectedClassId] = useState('')
   const [selectedClass, setSelectedClass] = useState('Grade 10 (SS 1) - Alpha')
+  const [selectedSubjectId, setSelectedSubjectId] = useState('')
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0])
   const [isSaved, setIsSaved] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
@@ -38,24 +40,30 @@ export default function TeacherAttendancePage() {
     { id: 'STU2024007', dbId: 'student-7', name: 'Ibrahim Sani', status: 'PRESENT' as AttendanceStatus, remarks: '' },
   ])
 
-  // Fetch classes
+  // Fetch classes and subjects
   useEffect(() => {
-    async function loadClasses() {
+    async function loadMetadata() {
       try {
-        const res = await fetch('/api/classes')
-        if (res.ok) {
-          const json = await res.json()
-          if (json.data && json.data.length > 0) {
-            setClasses(json.data)
-            setSelectedClassId(json.data[0].id)
-            setSelectedClass(json.data[0].name)
+        const [clsRes, subRes] = await Promise.all([fetch('/api/classes'), fetch('/api/subjects')])
+        if (clsRes.ok) {
+          const clsJson = await clsRes.json()
+          if (clsJson.data && clsJson.data.length > 0) {
+            setClasses(clsJson.data)
+            setSelectedClassId(clsJson.data[0].id)
+            setSelectedClass(clsJson.data[0].name)
+          }
+        }
+        if (subRes.ok) {
+          const subJson = await subRes.json()
+          if (subJson.data && subJson.data.length > 0) {
+            setSubjects(subJson.data)
           }
         }
       } catch (err) {
-        console.error('Failed to load classes', err)
+        console.error('Failed to load classes or subjects', err)
       }
     }
-    loadClasses()
+    loadMetadata()
   }, [])
 
   // Fetch students when selected class changes
@@ -106,6 +114,7 @@ export default function TeacherAttendancePage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             classId: selectedClassId,
+            subjectId: selectedSubjectId || null,
             date: selectedDate,
             records: students.map((s) => ({
               studentId: s.dbId || s.id,
@@ -211,10 +220,18 @@ export default function TeacherAttendancePage() {
             </div>
 
             <div className="space-y-1">
-              <label className="text-[11px] font-semibold text-gray-500 uppercase">Subject</label>
-              <select className="h-9 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 text-xs">
-                <option>Pure Mathematics (MTH101)</option>
-                <option>Homeroom Roll-Call</option>
+              <label className="text-[11px] font-semibold text-gray-500 uppercase">Subject Period</label>
+              <select
+                value={selectedSubjectId}
+                onChange={(e) => setSelectedSubjectId(e.target.value)}
+                className="h-9 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 text-xs"
+              >
+                <option value="">Daily Homeroom Roll-Call (All-Day)</option>
+                {subjects.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name} ({s.code})
+                  </option>
+                ))}
               </select>
             </div>
 

@@ -1,7 +1,8 @@
 'use client'
 
 import React, { useState, useEffect, useCallback } from 'react'
-import { Users, PlusCircle, Search, Download, Trash2, Edit, AlertCircle, Loader2 } from 'lucide-react'
+import Link from 'next/link'
+import { Users, PlusCircle, Search, Download, Trash2, Edit, AlertCircle, Loader2, GraduationCap } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -100,6 +101,11 @@ export default function AdminStudentsPage() {
           </div>
 
           <div className="flex items-center gap-2">
+            <Link href="/admin/students/promotion">
+              <Button size="sm" variant="outline" className="text-xs gap-1.5 text-indigo-600 border-indigo-200 hover:bg-indigo-50">
+                <GraduationCap className="w-4 h-4" /> Promotions & Streams
+              </Button>
+            </Link>
             <Button
               size="sm"
               onClick={() => {
