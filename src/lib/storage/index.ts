@@ -20,16 +20,17 @@ import {
 } from "@aws-sdk/client-s3";
 import { getSignedUrl as awsGetSignedUrl } from "@aws-sdk/s3-request-presigner";
 import mime from "mime-types";
+import { createServerSupabaseClient } from "../supabase/server";
 
 // ---------------------------------------------------------------------------
 // Configuration helpers
 // ---------------------------------------------------------------------------
 
-type StorageProvider = "local" | "s3" | "r2";
+type StorageProvider = "local" | "s3" | "r2" | "supabase";
 
 function getProvider(): StorageProvider {
   const p = (process.env.STORAGE_PROVIDER ?? "local").toLowerCase();
-  if (p === "s3" || p === "r2" || p === "local") return p as StorageProvider;
+  if (p === "s3" || p === "r2" || p === "local" || p === "supabase") return p as StorageProvider;
   console.warn(
     `[storage] Unknown STORAGE_PROVIDER "${p}", falling back to "local".`
   );
@@ -92,7 +93,37 @@ export async function uploadFile(
   if (PROVIDER === "local") {
     return uploadLocal(file, key);
   }
+  if (PROVIDER === "supabase") {
+    return uploadSupabase(file, key, mimeType);
+  }
   return uploadS3(file, key, mimeType);
+}
+
+async function uploadSupabase(
+  file: Buffer,
+  key: string,
+  contentType: string
+): Promise<UploadResult> {
+  const supabase = createServerSupabaseClient();
+  const bucket = process.env.SUPABASE_STORAGE_BUCKET_DOCS || "documents";
+
+  if (!supabase) {
+    console.warn("[storage] Supabase client unavailable, falling back to local storage.");
+    return uploadLocal(file, key);
+  }
+
+  const { data, error } = await supabase.storage.from(bucket).upload(key, file, {
+    contentType,
+    upsert: true,
+  });
+
+  if (error) {
+    console.error("[storage] Supabase upload failed:", error);
+    throw new Error(`Supabase upload failed: ${error.message}`);
+  }
+
+  const { data: publicData } = supabase.storage.from(bucket).getPublicUrl(data.path);
+  return { url: publicData.publicUrl, key: data.path };
 }
 
 async function uploadLocal(file: Buffer, key: string): Promise<UploadResult> {
@@ -160,6 +191,15 @@ export async function deleteFile(key: string): Promise<void> {
     return;
   }
 
+  if (PROVIDER === "supabase") {
+    const supabase = createServerSupabaseClient();
+    const bucket = process.env.SUPABASE_STORAGE_BUCKET_DOCS || "documents";
+    if (supabase) {
+      await supabase.storage.from(bucket).remove([key]);
+    }
+    return;
+  }
+
   const client = getS3Client();
   await client.send(
     new DeleteObjectCommand({
@@ -187,6 +227,17 @@ export async function getSignedUrl(
 ): Promise<string> {
   if (PROVIDER === "local") {
     // Local storage doesn't have access control — return a plain URL.
+    const publicPath = LOCAL_DIR.replace(/^\./, "");
+    return `${LOCAL_BASE_URL}${publicPath}/${key}`;
+  }
+
+  if (PROVIDER === "supabase") {
+    const supabase = createServerSupabaseClient();
+    const bucket = process.env.SUPABASE_STORAGE_BUCKET_DOCS || "documents";
+    if (supabase) {
+      const { data } = await supabase.storage.from(bucket).createSignedUrl(key, expiresInSeconds);
+      if (data?.signedUrl) return data.signedUrl;
+    }
     const publicPath = LOCAL_DIR.replace(/^\./, "");
     return `${LOCAL_BASE_URL}${publicPath}/${key}`;
   }
