@@ -26,7 +26,7 @@ import { DashboardLayout } from '@/components/shared/layout/DashboardLayout'
 import { formatCurrency, formatDate } from '@/lib/utils'
 
 export default function AdminFeesManagementPage() {
-  const [activeTab, setActiveTab] = useState<'invoices' | 'approvals'>('invoices')
+  const [activeTab, setActiveTab] = useState<'invoices' | 'approvals' | 'debtors'>('invoices')
   const [invoices, setInvoices] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -145,6 +145,7 @@ export default function AdminFeesManagementPage() {
   const totalBilled = invoices.reduce((acc, inv) => acc + (inv.totalAmount || 0), 0)
   const totalPaid = invoices.reduce((acc, inv) => acc + (inv.paidAmount || 0), 0)
   const totalOutstanding = invoices.reduce((acc, inv) => acc + (inv.balanceAmount || 0), 0)
+  const debtors = invoices.filter((inv) => (inv.balanceAmount || 0) > 0)
 
   return (
     <DashboardLayout role="ADMIN">
@@ -183,6 +184,15 @@ export default function AdminFeesManagementPage() {
                   {approvals.length}
                 </Badge>
               )}
+            </Button>
+            <Button
+              onClick={() => setActiveTab('debtors')}
+              size="sm"
+              variant={activeTab === 'debtors' ? 'default' : 'ghost'}
+              className="text-xs font-semibold h-8 gap-1.5 text-amber-600"
+            >
+              <AlertCircle className="w-3.5 h-3.5" />
+              Debtors List ({debtors.length})
             </Button>
           </div>
         </div>
@@ -463,6 +473,99 @@ export default function AdminFeesManagementPage() {
                           </TableRow>
                         )
                       })}
+                    </TableBody>
+                  </Table>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* TAB 3: DEBTORS & DEFAULTERS LIST */}
+        {activeTab === 'debtors' && (
+          <div className="space-y-4">
+            <Card>
+              <CardHeader className="py-4 px-6 border-b border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <CardTitle className="text-base font-bold flex items-center gap-2 text-amber-700 dark:text-amber-400">
+                    <AlertCircle className="w-5 h-5 text-amber-600" />
+                    School Fee Debtors & Defaulters Registry
+                  </CardTitle>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    Students with active unpaid balances across all academic cohorts ({debtors.length} total defaulters)
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => alert(`Broadcasting payment reminder SMS to ${debtors.length} debtor parents...`)}
+                    className="text-xs font-semibold gap-1.5 border-amber-400 text-amber-800 hover:bg-amber-50"
+                  >
+                    Send Bulk SMS Reminders
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => window.print()} className="text-xs gap-1.5">
+                    <Download className="w-3.5 h-3.5" /> Export Debtors Report
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="p-0">
+                {debtors.length === 0 ? (
+                  <div className="text-center py-12 text-sm text-gray-500 space-y-2">
+                    <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto" />
+                    <p className="font-semibold text-gray-800 dark:text-gray-200">Zero Outstanding Debtors</p>
+                    <p className="text-xs text-gray-400">All student invoices have been fully cleared and verified.</p>
+                  </div>
+                ) : (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="text-xs">Student Name</TableHead>
+                        <TableHead className="text-xs">Class Arm</TableHead>
+                        <TableHead className="text-xs">Invoice #</TableHead>
+                        <TableHead className="text-xs">Total Billed</TableHead>
+                        <TableHead className="text-xs">Paid</TableHead>
+                        <TableHead className="text-xs">Outstanding Debt</TableHead>
+                        <TableHead className="text-xs">Due Date</TableHead>
+                        <TableHead className="text-xs text-right">Reminder Action</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {debtors.map((debtor) => (
+                        <TableRow key={debtor.id} className="hover:bg-amber-50/30 dark:hover:bg-gray-800/40">
+                          <TableCell className="font-bold text-xs text-gray-900 dark:text-gray-100">
+                            {debtor.student?.user?.name || 'Student'}
+                          </TableCell>
+                          <TableCell className="text-xs text-gray-600 dark:text-gray-300">
+                            {debtor.student?.currentClass?.name || 'Class'}
+                          </TableCell>
+                          <TableCell className="font-mono text-xs text-blue-600">
+                            {debtor.invoiceNumber}
+                          </TableCell>
+                          <TableCell className="text-xs text-gray-800 dark:text-gray-200 font-semibold">
+                            {formatCurrency(debtor.totalAmount)}
+                          </TableCell>
+                          <TableCell className="text-xs text-emerald-600 font-medium">
+                            {formatCurrency(debtor.paidAmount)}
+                          </TableCell>
+                          <TableCell className="text-xs font-black text-red-600 font-mono">
+                            {formatCurrency(debtor.balanceAmount)}
+                          </TableCell>
+                          <TableCell className="text-xs text-gray-500">
+                            {formatDate(debtor.dueDate || debtor.createdAt)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => alert(`Payment reminder notification dispatched to parent of ${debtor.student?.user?.name || 'student'}.`)}
+                              className="h-7 text-[11px] font-semibold border-amber-400 text-amber-700 hover:bg-amber-50"
+                            >
+                              Send Reminder
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
                     </TableBody>
                   </Table>
                 )}

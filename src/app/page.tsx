@@ -97,7 +97,7 @@ export default async function HomePage() {
       {/* Main Navbar */}
       <header className="sticky top-0 z-40 bg-white/95 dark:bg-gray-900/95 border-b border-gray-200/80 dark:border-gray-800 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/20">
               <GraduationCap className="h-6 w-6" />
             </div>
@@ -109,12 +109,25 @@ export default async function HomePage() {
                 School Management & Learning Portal
               </p>
             </div>
-          </div>
+          </Link>
 
-          <div className="flex items-center gap-3">
+          <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold text-gray-600 dark:text-gray-300">
+            <Link href="/" className="text-blue-600 font-bold">Home</Link>
+            <Link href="/about" className="hover:text-blue-600 transition">About Us</Link>
+            <Link href="/gallery" className="hover:text-blue-600 transition">Campus Gallery</Link>
+            <Link href="/news" className="hover:text-blue-600 transition">News & Circulars</Link>
+            <Link href="/contact" className="hover:text-blue-600 transition">Contact</Link>
+          </nav>
+
+          <div className="flex items-center gap-2.5">
+            <Link href="/admissions/apply">
+              <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-xs font-bold shadow-sm">
+                Apply for Admission
+              </Button>
+            </Link>
             <Link href="/login">
-              <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-xs font-semibold px-5">
-                Sign In to Portal
+              <Button size="sm" variant="outline" className="text-xs font-semibold px-4">
+                Portal Sign In
               </Button>
             </Link>
           </div>
@@ -137,9 +150,14 @@ export default async function HomePage() {
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <Link href="/admissions/apply">
+              <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-sm font-bold gap-2 shadow-lg shadow-emerald-500/25">
+                Apply for Admission 2025/2026 <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
             <Link href="/login">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-sm font-bold gap-2 shadow-lg shadow-blue-500/25">
-                Enter School Portal <ArrowRight className="w-4 h-4" />
+              <Button size="lg" variant="outline" className="text-sm font-bold gap-2">
+                Enter School Portal
               </Button>
             </Link>
           </div>

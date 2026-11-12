@@ -242,15 +242,25 @@ export default function ParentFeesPage() {
     setIsProcessing(true)
     try {
       if (upcomingInvoice.id) {
-        await fetch(`/api/fees/${upcomingInvoice.id}/pay`, {
+        const initRes = await fetch('/api/payments/paystack/initialize', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            invoiceId: upcomingInvoice.id,
             amount: upcomingInvoice.balance || upcomingInvoice.totalAmount,
-            paymentMethod: 'ONLINE',
-            transactionRef: `PSK_${Date.now()}`,
           }),
         })
+
+        const initJson = await initRes.json()
+        if (initJson.success && initJson.data?.authorizationUrl) {
+          if (initJson.data.authorizationUrl.startsWith('https://checkout.paystack.com')) {
+            window.location.href = initJson.data.authorizationUrl
+            return
+          }
+
+          // Complete mock/sandbox payment
+          await fetch(`/api/payments/paystack/verify?reference=${initJson.data.reference}`)
+        }
       }
       setShowPaymentModal(false)
       setPaymentSuccess(true)

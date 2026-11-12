@@ -118,6 +118,7 @@ export function Sidebar({ role, isOpen, onClose }: SidebarProps) {
             section: 'Administration',
             items: [
               { label: 'Executive Dashboard', href: '/admin', icon: LayoutDashboard },
+              { label: 'Admissions Registry', href: '/admin/admissions', icon: GraduationCap },
               { label: 'Students', href: '/admin/students', icon: Users },
               { label: 'Teachers & Staff', href: '/admin/teachers', icon: Users },
               { label: 'Parents', href: '/admin/parents', icon: Users },

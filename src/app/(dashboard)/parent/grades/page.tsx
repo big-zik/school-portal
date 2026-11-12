@@ -1,11 +1,13 @@
 import React from 'react'
-import { GraduationCap, Award, Download, FileText, CheckCircle2 } from 'lucide-react'
+import Link from 'next/link'
+import { GraduationCap, Award, Download, FileText, CheckCircle2, Lock, CreditCard } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import { DashboardLayout } from '@/components/shared/layout/DashboardLayout'
 import { getServerUser } from '@/lib/auth/helpers'
+import { formatCurrency } from '@/lib/utils'
 import prisma from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
@@ -35,6 +37,11 @@ export default async function ParentGradesPage() {
                   term: true,
                 },
               },
+              invoices: {
+                where: {
+                  status: { in: ['PENDING', 'PARTIAL', 'OVERDUE'] },
+                },
+              },
             },
           },
         },
@@ -60,6 +67,41 @@ export default async function ParentGradesPage() {
         {children.map((child) => {
           const reportCard = child.reportCards[0]
           const results = child.results
+          const outstandingBalance = child.invoices?.reduce((acc: number, inv: any) => acc + (inv.balanceAmount || 0), 0) || 0
+
+          if (outstandingBalance > 0) {
+            return (
+              <Card key={child.id} className="border-amber-300 dark:border-amber-900 bg-gradient-to-br from-amber-50/50 via-white to-orange-50/30 dark:from-gray-900 dark:to-gray-900 p-8 text-center space-y-4 shadow-sm">
+                <div className="h-14 w-14 rounded-2xl bg-amber-100 dark:bg-amber-950/60 flex items-center justify-center mx-auto text-amber-600 shadow-inner">
+                  <Lock className="w-7 h-7" />
+                </div>
+                <div className="space-y-1.5">
+                  <Badge variant="outline" className="border-amber-400 text-amber-700 bg-amber-50 text-[10px]">
+                    Bursary Clearance Gate
+                  </Badge>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                    Official Report Card Locked for {child.user.name}
+                  </h3>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 max-w-md mx-auto leading-relaxed">
+                    Terminal report card and subject broadsheet are locked pending clearance of outstanding school fee balance of <strong className="text-amber-700 font-bold">{formatCurrency(outstandingBalance)}</strong>.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                  <Link href="/parent/fees">
+                    <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-xs font-bold gap-1.5 shadow-sm">
+                      <CreditCard className="w-3.5 h-3.5" /> Pay Outstanding Balance ({formatCurrency(outstandingBalance)})
+                    </Button>
+                  </Link>
+                  <Link href="/parent/fees">
+                    <Button size="sm" variant="outline" className="text-xs font-semibold border-amber-400 text-amber-700 hover:bg-amber-50">
+                      Upload Bank Transfer Teller
+                    </Button>
+                  </Link>
+                </div>
+              </Card>
+            )
+          }
 
           return (
             <div key={child.id} className="space-y-4">
