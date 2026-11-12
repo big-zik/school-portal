@@ -15,6 +15,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'CHOSEN GENERATION SCHOOL | School Portal',
   description: 'Enterprise School Management, Academic Records, Fees, Attendance & Administration Portal',
+  manifest: '/manifest.json',
+  themeColor: '#4f46e5',
 }
 
 export default function RootLayout({

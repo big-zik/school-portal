@@ -68,7 +68,7 @@ export interface LogAuditParams {
  *   userAgent: request.headers.get('user-agent') ?? undefined,
  * })
  */
-export async function logAudit(params: LogAuditParams): Promise<void> {
+export async function logAudit(params: LogAuditParams): Promise<any> {
   const {
     userId,
     action,
@@ -82,7 +82,7 @@ export async function logAudit(params: LogAuditParams): Promise<void> {
   } = params
 
   try {
-    await prisma.auditLog.create({
+    return await prisma.auditLog.create({
       data: {
         userId,
         action,
@@ -106,5 +106,6 @@ export async function logAudit(params: LogAuditParams): Promise<void> {
       userId,
       error,
     })
+    return null
   }
 }

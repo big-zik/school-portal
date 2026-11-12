@@ -22,6 +22,12 @@ import {
   Library,
   Bell,
   AlertTriangle,
+  Laptop,
+  DollarSign,
+  HeartPulse,
+  Package,
+  Compass,
+  TrendingDown,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { UserRole } from '@/types'
@@ -52,9 +58,11 @@ export function Sidebar({ role, isOpen, onClose }: SidebarProps) {
               { label: 'Dashboard', href: '/student', icon: LayoutDashboard },
               { label: 'Class Timetable', href: '/student/timetable', icon: Calendar },
               { label: 'My Attendance', href: '/student/attendance', icon: ClipboardCheck },
+              { label: 'CBT Quizzes & Tests', href: '/student/cbt', icon: Laptop },
               { label: 'Assignments', href: '/student/assignments', icon: FileText, badge: '2 Due' },
               { label: 'Grades & Results', href: '/student/grades', icon: GraduationCap },
               { label: 'Learning Resources', href: '/student/resources', icon: BookOpen },
+              { label: 'Clubs & Societies', href: '/student/clubs', icon: Compass },
             ],
           },
           {
@@ -131,8 +139,15 @@ export function Sidebar({ role, isOpen, onClose }: SidebarProps) {
             section: 'Operations & Finance',
             items: [
               { label: 'Fee Management', href: '/admin/fees', icon: CreditCard },
+              { label: 'Staff Payroll', href: '/admin/payroll', icon: DollarSign },
+              { label: 'Operating Expenses', href: '/admin/expenses', icon: TrendingDown },
+              { label: 'CBT Examinations', href: '/admin/cbt', icon: Laptop },
+              { label: 'External Exams (WAEC/NECO)', href: '/admin/examinations/external', icon: GraduationCap },
               { label: 'Attendance Analytics', href: '/admin/attendance', icon: ClipboardCheck },
               { label: 'Examinations & Reports', href: '/admin/reports', icon: GraduationCap },
+              { label: 'Health & Sick Bay', href: '/admin/health', icon: HeartPulse },
+              { label: 'Stores & Inventory', href: '/admin/inventory', icon: Package },
+              { label: 'Clubs & Societies', href: '/admin/clubs', icon: Compass },
               { label: 'Calendar & Events', href: '/admin/events', icon: Calendar },
               { label: 'Conduct & Discipline', href: '/admin/discipline', icon: AlertTriangle },
               { label: 'Administrative Messages', href: '/admin/messages', icon: MessageSquare },
