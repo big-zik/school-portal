@@ -19,18 +19,51 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Loader2, AlertCircle } from 'lucide-react'
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
-  const [topic, setTopic] = useState('Admissions Inquiry')
+  const [topic, setTopic] = useState('Admissions & Entrance Exam')
   const [message, setMessage] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSubmitted(true)
+    setSubmitError('')
+    setIsSubmitting(true)
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          topic,
+          message,
+        }),
+      })
+
+      const data = await res.json()
+      if (res.ok && data.success) {
+        setSubmitted(true)
+        setName('')
+        setEmail('')
+        setPhone('')
+        setMessage('')
+      } else {
+        setSubmitError(data.error || 'Failed to submit inquiry')
+      }
+    } catch (err: any) {
+      setSubmitError(err.message || 'Error connecting to school server')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -186,6 +219,12 @@ export default function ContactPage() {
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-4">
+                    {submitError && (
+                      <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700 flex items-center gap-2">
+                        <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+                        <span>{submitError}</span>
+                      </div>
+                    )}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-1">
                         <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">Your Full Name *</label>
@@ -254,8 +293,14 @@ export default function ContactPage() {
                     </div>
 
                     <div className="flex justify-end pt-2">
-                      <Button type="submit" size="lg" className="bg-blue-900 hover:bg-blue-800 text-white font-bold text-xs gap-2 px-8">
-                        <Send className="w-4 h-4" /> Dispatch Inquiry
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        size="lg"
+                        className="bg-blue-900 hover:bg-blue-800 text-white font-bold text-xs gap-2 px-8"
+                      >
+                        {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                        Dispatch Inquiry
                       </Button>
                     </div>
                   </form>
