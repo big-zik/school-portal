@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import {
   GraduationCap,
   Award,
@@ -9,6 +10,8 @@ import {
   Printer,
   ChevronRight,
   BookOpen,
+  Lock,
+  CreditCard,
 } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -16,6 +19,7 @@ import { Button } from '@/components/ui/button'
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import { DashboardLayout } from '@/components/shared/layout/DashboardLayout'
 import { getServerUser } from '@/lib/auth/helpers'
+import { formatCurrency } from '@/lib/utils'
 import prisma from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
@@ -43,8 +47,16 @@ export default async function StudentGradesPage() {
         orderBy: { createdAt: 'desc' },
         take: 1,
       },
+      invoices: {
+        where: {
+          status: { in: ['PENDING', 'PARTIAL', 'OVERDUE'] },
+        },
+      },
     },
   })
+
+  const outstandingBalance =
+    student?.invoices?.reduce((acc: number, inv: any) => acc + (inv.balanceAmount || 0), 0) || 0
 
   const results = student?.results ?? []
   const reportCard = student?.reportCards?.[0]
@@ -94,6 +106,54 @@ export default async function StudentGradesPage() {
         ],
   }
 
+  if (outstandingBalance > 0) {
+    return (
+      <DashboardLayout user={user} role="STUDENT">
+        <div className="space-y-6">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 flex items-center gap-2.5">
+              <GraduationCap className="w-6 h-6 text-purple-600" />
+              Academic Results & Report Card
+            </h1>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Official terminal report card and academic assessment records
+            </p>
+          </div>
+
+          <Card className="border-amber-300 dark:border-amber-900 bg-gradient-to-br from-amber-50/50 via-white to-orange-50/30 dark:from-gray-900 dark:to-gray-900 p-8 text-center space-y-4 shadow-sm">
+            <div className="h-14 w-14 rounded-2xl bg-amber-100 dark:bg-amber-950/60 flex items-center justify-center mx-auto text-amber-600 shadow-inner">
+              <Lock className="w-7 h-7" />
+            </div>
+            <div className="space-y-1.5">
+              <Badge variant="outline" className="border-amber-400 text-amber-700 bg-amber-50 text-[10px]">
+                Bursary Clearance Gate
+              </Badge>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                Official Report Card Locked
+              </h3>
+              <p className="text-xs text-gray-600 dark:text-gray-400 max-w-md mx-auto leading-relaxed">
+                Terminal report card and continuous assessment scores are locked pending clearance of outstanding school fee balance of <strong className="text-amber-700 font-bold">{formatCurrency(outstandingBalance)}</strong>.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+              <Link href="/student/fees">
+                <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-xs font-bold gap-1.5 shadow-sm">
+                  <CreditCard className="w-3.5 h-3.5" /> Pay Outstanding Balance ({formatCurrency(outstandingBalance)})
+                </Button>
+              </Link>
+              <Link href="/student/fees">
+                <Button size="sm" variant="outline" className="text-xs font-semibold border-amber-400 text-amber-700 hover:bg-amber-50">
+                  Upload Bank Teller / Receipt
+                </Button>
+              </Link>
+            </div>
+          </Card>
+        </div>
+      </DashboardLayout>
+    )
+  }
+
   return (
     <DashboardLayout user={user} role="STUDENT">
       <div className="space-y-6">
@@ -113,9 +173,15 @@ export default async function StudentGradesPage() {
             <Button variant="outline" size="sm" className="text-xs gap-1.5">
               <Printer className="w-3.5 h-3.5" /> Print
             </Button>
-            <Button size="sm" className="text-xs gap-1.5 bg-purple-600 hover:bg-purple-700 font-semibold">
-              <Download className="w-3.5 h-3.5" /> Download PDF Report Card
-            </Button>
+            <a
+              href={`/api/results/report-card/pdf?studentId=${student?.id || ''}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button size="sm" className="text-xs gap-1.5 bg-purple-600 hover:bg-purple-700 font-semibold">
+                <Download className="w-3.5 h-3.5" /> Download PDF Report Card
+              </Button>
+            </a>
           </div>
         </div>
 

@@ -3,6 +3,7 @@ import prisma from '@/lib/db'
 import { verifyPaystackWebhookSignature } from '@/lib/payments/paystack'
 import { PaymentStatus, InvoiceStatus, PaymentMethod } from '@prisma/client'
 import { logAudit } from '@/lib/auth/audit'
+import { notifyPaymentReceipt } from '@/lib/notifications'
 
 // POST /api/webhooks/paystack — idempotent webhook listener for Paystack charges
 export async function POST(request: NextRequest) {
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ status: 'invoice_not_found' }, { status: 200 })
       }
 
-      await prisma.$transaction(async (tx) => {
+      const receiptResult = await prisma.$transaction(async (tx) => {
         // 1. Update or create payment record
         if (payment) {
           payment = await tx.payment.update({
@@ -87,10 +88,12 @@ export async function POST(request: NextRequest) {
         })
 
         // 3. Update Invoice
+        let updatedBalance = 0
         const currentInvoice = await tx.invoice.findUnique({ where: { id: targetInvoiceId } })
         if (currentInvoice) {
           const newPaidAmount = currentInvoice.paidAmount + amountPaid
           const newBalanceAmount = Math.max(0, currentInvoice.balanceAmount - amountPaid)
+          updatedBalance = newBalanceAmount
           const newStatus = newBalanceAmount <= 0 ? InvoiceStatus.PAID : InvoiceStatus.PARTIAL
 
           await tx.invoice.update({
@@ -102,6 +105,9 @@ export async function POST(request: NextRequest) {
             },
           })
         }
+
+        // Return receipt details for notification
+        return { receiptNumber, updatedBalance }
       })
 
       if (payment) {
@@ -113,6 +119,18 @@ export async function POST(request: NextRequest) {
           entityId: payment.id,
           newValue: { reference, amount: amountPaid },
         })
+
+        // Dispatch payment receipt notifications (SendGrid email, Twilio SMS, In-App)
+        notifyPaymentReceipt({
+          receiptNumber: (receiptResult as any)?.receiptNumber || `REC-${reference.slice(-6)}`,
+          amount: amountPaid,
+          paymentMethod: 'ONLINE (Paystack)',
+          paymentDate: new Date(),
+          invoiceTitle: payment.invoice ? `Invoice #${payment.invoice.invoiceNumber}` : 'School Tuition Fees',
+          balanceRemaining: (receiptResult as any)?.updatedBalance ?? 0,
+          studentId: payment.studentId,
+          paidById: payment.paidById,
+        }).catch((err) => console.error('[Paystack Webhook] Notification error:', err))
       }
 
       return NextResponse.json({ status: 'success' }, { status: 200 })

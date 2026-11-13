@@ -22,6 +22,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import { DashboardLayout } from '@/components/shared/layout/DashboardLayout'
+import { calculateNigerianPAYE } from '@/lib/utils/payroll'
 
 interface Payslip {
   teacherId: string
@@ -56,57 +57,47 @@ export default function AdminPayrollPage() {
   const [activeSlip, setActiveSlip] = useState<Payslip | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
 
+  // Fallback demo payroll run with genuine Nigerian PITA progressive PAYE tax computation
+  const demoTeachers = [
+    { id: 't-1', name: 'Dr. Robert Smith', staffNo: 'TCH2024001', dept: 'Sciences (Mathematics)', base: 25000000 },
+    { id: 't-2', name: 'Mrs. Folashade Adebayo', staffNo: 'TCH2024002', dept: 'Languages & Arts', base: 27500000 },
+    { id: 't-3', name: 'Mr. Emmanuel Okon', staffNo: 'TCH2024003', dept: 'Commercial Studies', base: 24000000 },
+  ]
+
+  const fallbackSlips: Payslip[] = demoTeachers.map((t) => {
+    const housingKobo = Math.round(t.base * 0.2)
+    const transportKobo = Math.round(t.base * 0.1)
+    const grossKobo = t.base + housingKobo + transportKobo
+    const pensionKobo = Math.round(t.base * 0.08)
+    const paye = calculateNigerianPAYE(grossKobo, pensionKobo)
+    const taxKobo = paye.monthlyTaxKobo
+    const totalDeductionsKobo = pensionKobo + taxKobo
+    const netPayKobo = grossKobo - totalDeductionsKobo
+
+    return {
+      teacherId: t.id,
+      staffName: t.name,
+      staffNo: t.staffNo,
+      department: t.dept,
+      baseSalaryKobo: t.base,
+      housingKobo,
+      transportKobo,
+      grossKobo,
+      pensionKobo,
+      taxKobo,
+      totalDeductionsKobo,
+      netPayKobo,
+    }
+  })
+
   const sampleRun: PayrollRun = {
     id: 'pay-feb-2026',
     month: 'February 2026',
-    staffCount: 5,
-    totalGrossKobo: 165000000, // 1.65m NGN
-    totalDeductionsKobo: 23100000,
-    totalNetKobo: 141900000,
-    slips: [
-      {
-        teacherId: 't-1',
-        staffName: 'Dr. Robert Smith',
-        staffNo: 'TCH2024001',
-        department: 'Sciences (Mathematics)',
-        baseSalaryKobo: 25000000,
-        housingKobo: 5000000,
-        transportKobo: 2500000,
-        grossKobo: 32500000,
-        pensionKobo: 2000000,
-        taxKobo: 2275000,
-        totalDeductionsKobo: 4275000,
-        netPayKobo: 28225000,
-      },
-      {
-        teacherId: 't-2',
-        staffName: 'Mrs. Folashade Adebayo',
-        staffNo: 'TCH2024002',
-        department: 'Languages & Arts',
-        baseSalaryKobo: 27500000,
-        housingKobo: 5500000,
-        transportKobo: 2750000,
-        grossKobo: 35750000,
-        pensionKobo: 2200000,
-        taxKobo: 2502500,
-        totalDeductionsKobo: 4702500,
-        netPayKobo: 31047500,
-      },
-      {
-        teacherId: 't-3',
-        staffName: 'Mr. Emmanuel Okon',
-        staffNo: 'TCH2024003',
-        department: 'Commercial Studies',
-        baseSalaryKobo: 24000000,
-        housingKobo: 4800000,
-        transportKobo: 2400000,
-        grossKobo: 31200000,
-        pensionKobo: 1920000,
-        taxKobo: 2184000,
-        totalDeductionsKobo: 4104000,
-        netPayKobo: 27096000,
-      },
-    ],
+    staffCount: fallbackSlips.length,
+    totalGrossKobo: fallbackSlips.reduce((acc, s) => acc + s.grossKobo, 0),
+    totalDeductionsKobo: fallbackSlips.reduce((acc, s) => acc + s.totalDeductionsKobo, 0),
+    totalNetKobo: fallbackSlips.reduce((acc, s) => acc + s.netPayKobo, 0),
+    slips: fallbackSlips,
   }
 
   const fetchPayroll = async () => {

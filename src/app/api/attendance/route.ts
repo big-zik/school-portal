@@ -3,6 +3,7 @@ import prisma from '@/lib/db'
 import { auth } from '@/auth'
 import { logAudit } from '@/lib/auth/audit'
 import { AttendanceStatus } from '@prisma/client'
+import { notifyAttendanceAbsence } from '@/lib/notifications'
 import type { ApiResponse } from '@/types'
 
 // GET /api/attendance — query records with filters + summary counts
@@ -185,6 +186,15 @@ export async function POST(request: NextRequest) {
         },
       })
       results.push(rec)
+
+      // When marked ABSENT, dispatch multi-channel notification (in-app, email, SMS)
+      if (r.status === 'ABSENT') {
+        notifyAttendanceAbsence({
+          studentId: r.studentId,
+          date: recordDate,
+          remarks: r.remarks,
+        }).catch((err) => console.error('[Attendance] Notification error:', err))
+      }
     }
 
     await logAudit({

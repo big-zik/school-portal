@@ -221,3 +221,42 @@ export async function sendEventReminderSms(
 
   return sendSms(phone, body);
 }
+
+// ---------------------------------------------------------------------------
+// Payment Receipt SMS
+// ---------------------------------------------------------------------------
+
+export async function sendPaymentReceiptSms(
+  phone: string,
+  parentName: string,
+  studentName: string,
+  amount: number,
+  receiptNumber: string,
+  balanceRemaining: number = 0
+): Promise<SmsResult> {
+  const formattedAmount = `NGN ${amount.toLocaleString()}`;
+  const formattedBalance = `NGN ${balanceRemaining.toLocaleString()}`;
+  const body =
+    `Dear ${parentName}, payment of ${formattedAmount} for ${studentName} was confirmed. ` +
+    `Receipt: ${receiptNumber}. Bal: ${formattedBalance}. - ${SCHOOL_NAME}`;
+
+  return sendSms(phone, body);
+}
+
+// ---------------------------------------------------------------------------
+// Admission Application Received SMS
+// ---------------------------------------------------------------------------
+
+export async function sendAdmissionConfirmationSms(
+  phone: string,
+  parentName: string,
+  applicantName: string,
+  applicationNumber: string
+): Promise<SmsResult> {
+  const body =
+    `Dear ${parentName}, admission application for ${applicantName} has been received (Ref: ${applicationNumber}). ` +
+    `You will receive an invite for the entrance assessment shortly. - ${SCHOOL_NAME}`;
+
+  return sendSms(phone, body);
+}
+

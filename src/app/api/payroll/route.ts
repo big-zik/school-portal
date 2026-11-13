@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/db'
 import { auth } from '@/auth'
 import { logAudit } from '@/lib/auth/audit'
+import { calculateNigerianPAYE } from '@/lib/utils/payroll'
 import type { ApiResponse } from '@/types'
 
 // GET /api/payroll — list payroll records & runs
@@ -69,7 +70,8 @@ export async function POST(request: NextRequest) {
       const grossKobo = baseSalaryKobo + housingKobo + transportKobo
 
       const pensionKobo = Math.round(baseSalaryKobo * 0.08) // 8% statutory employee pension
-      const taxKobo = Math.round(grossKobo * 0.07) // PAYE tax
+      const payeCalculation = calculateNigerianPAYE(grossKobo, pensionKobo)
+      const taxKobo = payeCalculation.monthlyTaxKobo // Nigerian PITA progressive PAYE tax
       const totalDeductionsKobo = pensionKobo + taxKobo
       const netPayKobo = grossKobo - totalDeductionsKobo
 
@@ -84,6 +86,8 @@ export async function POST(request: NextRequest) {
         grossKobo,
         pensionKobo,
         taxKobo,
+        effectiveTaxRate: payeCalculation.effectiveTaxRate,
+        craKobo: payeCalculation.annualCraKobo,
         totalDeductionsKobo,
         netPayKobo,
       }

@@ -76,3 +76,42 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json<ApiResponse>({ success: false, error: error.message || 'Server error' }, { status: 500 })
   }
 }
+
+// POST /api/notifications — create in-app notification (for authorized triggers)
+export async function POST(request: NextRequest) {
+  try {
+    const session = await auth()
+    if (!session?.user?.id) {
+      return NextResponse.json<ApiResponse>({ success: false, error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const body = await request.json().catch(() => ({}))
+    const { userId, title, body: content, type, link } = body
+
+    if (!userId || !title || !content || !type) {
+      return NextResponse.json<ApiResponse>(
+        { success: false, error: 'userId, title, body, and type are required' },
+        { status: 400 },
+      )
+    }
+
+    const notification = await prisma.notification.create({
+      data: {
+        userId,
+        title,
+        body: content,
+        type,
+        link: link ?? null,
+      },
+    })
+
+    return NextResponse.json<ApiResponse>(
+      { success: true, message: 'Notification created successfully', data: notification },
+      { status: 201 },
+    )
+  } catch (error: any) {
+    console.error('POST /api/notifications error:', error)
+    return NextResponse.json<ApiResponse>({ success: false, error: error.message || 'Server error' }, { status: 500 })
+  }
+}
+

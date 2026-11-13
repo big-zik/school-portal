@@ -3,7 +3,8 @@ import prisma from '@/lib/db'
 import { auth } from '@/auth'
 import { logAudit } from '@/lib/auth/audit'
 import { z } from 'zod'
-import { PaymentStatus, InvoiceStatus } from '@prisma/client'
+import { PaymentStatus, InvoiceStatus, NotificationType } from '@prisma/client'
+import { notifyPaymentReceipt, createInAppNotification } from '@/lib/notifications'
 import type { ApiResponse } from '@/types'
 
 const patchApprovalSchema = z.object({
@@ -185,6 +186,18 @@ export async function PATCH(request: NextRequest) {
         },
       })
 
+      // Dispatch payment receipt notifications (SendGrid email, Twilio SMS, In-App)
+      notifyPaymentReceipt({
+        receiptNumber: result.receipt.receiptNumber,
+        amount: payment.amount,
+        paymentMethod: 'Bank Transfer (Bursar Approved)',
+        paymentDate: new Date(),
+        invoiceTitle: payment.invoice ? `Invoice #${payment.invoice.invoiceNumber}` : 'School Tuition Fees',
+        balanceRemaining: result.invoice.balanceAmount,
+        studentId: payment.studentId,
+        paidById: payment.paidById,
+      }).catch((err) => console.error('[Fee Approval] Notification error:', err))
+
       return NextResponse.json<ApiResponse>({
         success: true,
         message: 'Payment approved successfully. Receipt issued and invoice updated.',
@@ -216,6 +229,17 @@ export async function PATCH(request: NextRequest) {
         entityId: payment.id,
         newValue: { paymentId, reason: notes },
       })
+
+      // In-App Notification of Rejection
+      if (payment.paidById) {
+        createInAppNotification({
+          userId: payment.paidById,
+          title: 'Bank Transfer Verification Declined',
+          body: `Your payment teller for ${payment.invoice ? `Invoice #${payment.invoice.invoiceNumber}` : 'school fees'} was declined: ${notes || 'Unable to verify against bank statement'}. Please re-upload valid proof.`,
+          type: NotificationType.PAYMENT,
+          link: '/parent/fees',
+        }).catch((err) => console.error('[Fee Approval] Rejection notification error:', err))
+      }
 
       return NextResponse.json<ApiResponse>({
         success: true,

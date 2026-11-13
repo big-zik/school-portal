@@ -123,10 +123,16 @@ export default async function ParentGradesPage() {
                     <p className="text-[11px] text-gray-400">Class Position</p>
                     <p className="text-sm font-bold text-purple-600">{reportCard?.position ? `${reportCard.position}th in Class` : '2nd in Class'}</p>
                   </div>
-                  <Button size="sm" variant="outline" className="text-xs flex items-center gap-1.5">
-                    <Download className="w-3.5 h-3.5" />
-                    Download PDF
-                  </Button>
+                  <a
+                    href={`/api/results/report-card/pdf?studentId=${child.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button size="sm" variant="outline" className="text-xs flex items-center gap-1.5">
+                      <Download className="w-3.5 h-3.5" />
+                      Download PDF
+                    </Button>
+                  </a>
                 </div>
               </div>
 

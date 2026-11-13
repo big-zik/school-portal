@@ -4,6 +4,7 @@ import { auth } from '@/auth'
 import { logAudit } from '@/lib/auth/audit'
 import { z } from 'zod'
 import { Gender, AdmissionStatus } from '@prisma/client'
+import { notifyAdmissionSubmission } from '@/lib/notifications'
 import type { ApiResponse } from '@/types'
 
 const admissionSubmitSchema = z.object({
@@ -125,12 +126,25 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    const applicationNumber = `ADM-${application.id.slice(-6).toUpperCase()}`
+
+    // Multi-channel notification: SendGrid email to parent, Twilio SMS to parent, In-App to admins
+    notifyAdmissionSubmission({
+      applicationId: application.id,
+      applicationNumber,
+      applicantName: application.applicantName,
+      appliedClassName: application.appliedClass?.name || 'Class',
+      parentName: data.parentName.trim(),
+      parentEmail: data.parentEmail.toLowerCase().trim(),
+      parentPhone: data.parentPhone.trim(),
+    }).catch((err) => console.error('[Admissions] Notification error:', err))
+
     return NextResponse.json<ApiResponse>(
       {
         success: true,
         message: 'Your admission application has been received successfully!',
         data: {
-          applicationNumber: `ADM-${application.id.slice(-6).toUpperCase()}`,
+          applicationNumber,
           id: application.id,
           applicantName: application.applicantName,
           appliedClass: application.appliedClass?.name,

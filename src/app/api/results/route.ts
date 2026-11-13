@@ -46,6 +46,76 @@ export async function GET(request: NextRequest) {
     if (termId) where.termId = termId
     if (studentId) where.studentId = studentId
 
+    const userRoles: string[] = (session.user as any)?.roles || []
+    const isPrivileged = userRoles.some((r) => ['ADMIN', 'SUPER_ADMIN', 'TEACHER'].includes(r))
+
+    let targetStudentId = studentId
+
+    // Enforce role-based student scoping and fee check for unprivileged users (STUDENT and PARENT)
+    if (!isPrivileged) {
+      if (userRoles.includes('STUDENT')) {
+        const studentRecord = await prisma.student.findUnique({
+          where: { userId: session.user.id },
+          select: { id: true },
+        })
+        if (!studentRecord) {
+          return NextResponse.json<ApiResponse>({ success: false, error: 'Student profile not found' }, { status: 404 })
+        }
+        targetStudentId = studentRecord.id
+        where.studentId = studentRecord.id
+      } else if (userRoles.includes('PARENT')) {
+        const guardian = await prisma.guardian.findUnique({
+          where: { userId: session.user.id },
+          include: { studentGuardians: { select: { studentId: true } } },
+        })
+        const childIds = guardian?.studentGuardians.map((sg) => sg.studentId) || []
+        if (targetStudentId && !childIds.includes(targetStudentId)) {
+          return NextResponse.json<ApiResponse>({ success: false, error: 'Forbidden: Access to requested student results denied' }, { status: 403 })
+        }
+        if (!targetStudentId) {
+          targetStudentId = childIds[0]
+        }
+        if (targetStudentId) {
+          where.studentId = targetStudentId
+        }
+      }
+
+      // Check for outstanding fee balance (Fee-Based Result Lock)
+      if (targetStudentId) {
+        const unpaidInvoices = await prisma.invoice.findMany({
+          where: {
+            studentId: targetStudentId,
+            status: { in: ['PENDING', 'PARTIAL', 'OVERDUE'] },
+            balanceAmount: { gt: 0 },
+          },
+          select: {
+            id: true,
+            invoiceNumber: true,
+            balanceAmount: true,
+            totalAmount: true,
+            dueDate: true,
+          },
+        })
+
+        const totalBalance = unpaidInvoices.reduce((acc, inv) => acc + (inv.balanceAmount || 0), 0)
+        if (totalBalance > 0) {
+          return NextResponse.json<ApiResponse>(
+            {
+              success: false,
+              error: 'Fee-based result lock: Terminal academic records are locked pending tuition clearance.',
+              data: {
+                locked: true,
+                studentId: targetStudentId,
+                outstandingBalance: totalBalance,
+                invoices: unpaidInvoices,
+              },
+            },
+            { status: 403 },
+          )
+        }
+      }
+    }
+
     const results = await prisma.result.findMany({
       where,
       include: {

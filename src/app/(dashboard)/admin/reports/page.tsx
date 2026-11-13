@@ -58,9 +58,11 @@ export default function AdminReportsPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button size="sm" className="text-xs gap-1.5 bg-purple-600 hover:bg-purple-700 font-semibold shadow-sm text-white">
-              <Download className="w-3.5 h-3.5" /> Bulk Export All PDFs
-            </Button>
+            <a href="/api/results/report-card/pdf" target="_blank" rel="noopener noreferrer">
+              <Button size="sm" className="text-xs gap-1.5 bg-purple-600 hover:bg-purple-700 font-semibold shadow-sm text-white">
+                <Download className="w-3.5 h-3.5" /> Bulk Export All PDFs
+              </Button>
+            </a>
           </div>
         </div>
 
@@ -123,9 +125,11 @@ export default function AdminReportsPage() {
                     <h4 className="text-xs font-bold text-gray-900 dark:text-gray-100 line-clamp-1">{rep.title}</h4>
                     <p className="text-[11px] text-gray-500 line-clamp-2">{rep.desc}</p>
                     <div className="pt-2">
-                      <Button variant="outline" size="sm" className="w-full text-xs h-7 gap-1">
-                        <Download className="w-3 h-3" /> Export Report
-                      </Button>
+                      <a href="/api/results/report-card/pdf" target="_blank" rel="noopener noreferrer">
+                        <Button variant="outline" size="sm" className="w-full text-xs h-7 gap-1">
+                          <Download className="w-3 h-3" /> Export Report
+                        </Button>
+                      </a>
                     </div>
                   </CardContent>
                 </Card>

@@ -311,3 +311,10 @@ export function chunk<T>(arr: T[], size: number): T[][] {
   }
   return result
 }
+
+// ─────────────────────────────────────────────
+// Nigerian PAYE Tax Calculator
+// ─────────────────────────────────────────────
+export { calculateNigerianPAYE } from './payroll'
+export type { NigerianPAYEResult, NigerianTaxBracket } from './payroll'
+
