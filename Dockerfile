@@ -4,7 +4,7 @@ RUN apk add --no-cache openssl libc6-compat
 WORKDIR /app
 COPY package*.json ./
 COPY prisma ./prisma/
-RUN npm ci && npx prisma generate
+RUN npm ci --legacy-peer-deps && npx prisma generate
 
 FROM node:20-alpine AS builder
 RUN apk add --no-cache openssl libc6-compat
