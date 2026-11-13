@@ -4,13 +4,11 @@ import { NextResponse } from 'next/server'
 const PUBLIC_ROUTES = [
   '/',
   '/login',
-  '/register',
   '/forgot-password',
   '/reset-password',
   '/verify-email',
   // Backward compatibility redirects if any old links hit /auth/*
   '/auth/login',
-  '/auth/register',
   '/auth/forgot-password',
   '/auth/reset-password',
   '/auth/verify-email',

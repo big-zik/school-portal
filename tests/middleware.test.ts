@@ -33,7 +33,7 @@ const redirectTarget = (res: Response) => {
 }
 
 describe('middleware: public routes', () => {
-  it.each(['/', '/login', '/register', '/forgot-password', '/reset-password', '/verify-email'])(
+  it.each(['/', '/login', '/forgot-password', '/reset-password', '/verify-email'])(
     'lets unauthenticated users through to %s',
     (path) => {
       expect(isPassThrough(run(path, null))).toBe(true)
@@ -46,6 +46,13 @@ describe('middleware: public routes', () => {
       expect(isPassThrough(run(path, null))).toBe(true)
     },
   )
+})
+
+describe('middleware: removed routes', () => {
+  it('no longer treats /register as public (there is no self-registration page)', () => {
+    const target = redirectTarget(run('/register', null))
+    expect(target?.pathname).toBe('/login')
+  })
 })
 
 describe('middleware: legacy /auth/* redirects', () => {

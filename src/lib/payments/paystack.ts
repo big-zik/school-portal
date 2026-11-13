@@ -150,12 +150,19 @@ export function verifyPaystackWebhookSignature(
   rawBody: string,
   signatureHeader?: string | null,
 ): boolean {
-  if (!PAYSTACK_SECRET_KEY || !signatureHeader) return true
+  // Without a secret key there is nothing to verify against. Allow this only
+  // outside production (sandbox/dev); in production fail closed so a missing
+  // env var can never turn the webhook into an open endpoint.
+  if (!PAYSTACK_SECRET_KEY) return process.env.NODE_ENV !== 'production'
 
-  const hash = crypto
-    .createHmac('sha512', PAYSTACK_SECRET_KEY)
-    .update(rawBody)
-    .digest('hex')
+  // A configured key means every request must be signed.
+  if (!signatureHeader) return false
 
-  return hash === signatureHeader
+  const expected = Buffer.from(
+    crypto.createHmac('sha512', PAYSTACK_SECRET_KEY).update(rawBody).digest('hex'),
+  )
+  const received = Buffer.from(signatureHeader)
+
+  // timingSafeEqual throws on length mismatch, so check that first.
+  return expected.length === received.length && crypto.timingSafeEqual(expected, received)
 }

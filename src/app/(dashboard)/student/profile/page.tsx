@@ -26,6 +26,8 @@ export default function StudentProfilePage() {
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [passwordError, setPasswordError] = useState('')
+  const [passwordLoading, setPasswordLoading] = useState(false)
 
   const student = {
     fullName: 'Daniel Johnson',
@@ -53,12 +55,38 @@ export default function StudentProfilePage() {
     },
   }
 
-  const handlePasswordSubmit = (e: React.FormEvent) => {
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setPasswordSaved(true)
-    setCurrentPassword('')
-    setNewPassword('')
-    setConfirmPassword('')
+    setPasswordSaved(false)
+    setPasswordError('')
+
+    if (newPassword !== confirmPassword) {
+      setPasswordError('Passwords do not match')
+      return
+    }
+
+    setPasswordLoading(true)
+    try {
+      const res = await fetch('/api/account/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentPassword, password: newPassword, confirmPassword }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        const first = json.errors ? (Object.values(json.errors).flat()[0] as string | undefined) : undefined
+        setPasswordError(first || json.error || 'Could not update password')
+        return
+      }
+      setPasswordSaved(true)
+      setCurrentPassword('')
+      setNewPassword('')
+      setConfirmPassword('')
+    } catch {
+      setPasswordError('Network error. Please try again.')
+    } finally {
+      setPasswordLoading(false)
+    }
   }
 
   return (
@@ -201,6 +229,12 @@ export default function StudentProfilePage() {
                   </div>
                 )}
 
+                {passwordError && (
+                  <div role="alert" className="p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-800">
+                    {passwordError}
+                  </div>
+                )}
+
                 <form onSubmit={handlePasswordSubmit} className="space-y-3">
                   <div className="space-y-1">
                     <label className="text-[11px] font-semibold text-gray-600">Current Password</label>
@@ -238,8 +272,8 @@ export default function StudentProfilePage() {
                     />
                   </div>
 
-                  <Button type="submit" size="sm" className="w-full text-xs font-semibold bg-blue-600 hover:bg-blue-700 mt-2">
-                    Update Security Password
+                  <Button type="submit" size="sm" disabled={passwordLoading} className="w-full text-xs font-semibold bg-blue-600 hover:bg-blue-700 mt-2">
+                    {passwordLoading ? 'Updating…' : 'Update Security Password'}
                   </Button>
                 </form>
               </CardContent>

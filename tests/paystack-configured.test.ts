@@ -167,15 +167,38 @@ describe('Paystack with a secret key configured', () => {
       expect(verifyPaystackWebhookSignature(body, 'deadbeef')).toBe(false)
     })
 
-    // KNOWN DEFECT: `!signatureHeader` returns true even when a secret key is set,
-    // so an attacker can forge a payment confirmation by omitting the header.
-    // `it.failing` passes while the bug exists and will start failing once it is
-    // fixed, at which point change it to a normal `it`.
-    it.failing('rejects a request with no signature header when a secret key is configured', () => {
+    it('rejects a request with no signature header when a secret key is configured', () => {
       const { verifyPaystackWebhookSignature } = loadWithKey(SECRET)
       expect(verifyPaystackWebhookSignature(body, undefined)).toBe(false)
       expect(verifyPaystackWebhookSignature(body, null)).toBe(false)
       expect(verifyPaystackWebhookSignature(body, '')).toBe(false)
+    })
+
+    it('rejects a signature of the wrong length without throwing', () => {
+      const { verifyPaystackWebhookSignature } = loadWithKey(SECRET)
+      expect(() => verifyPaystackWebhookSignature(body, 'abc')).not.toThrow()
+      expect(verifyPaystackWebhookSignature(body, 'abc')).toBe(false)
+    })
+
+    describe('when no secret key is configured', () => {
+      const env = process.env as Record<string, string | undefined>
+      const original = env.NODE_ENV
+      afterEach(() => {
+        env.NODE_ENV = original
+      })
+
+      it('allows unsigned requests outside production (sandbox)', () => {
+        env.NODE_ENV = 'development'
+        const { verifyPaystackWebhookSignature } = loadWithKey('')
+        expect(verifyPaystackWebhookSignature(body, null)).toBe(true)
+      })
+
+      it('fails closed in production', () => {
+        env.NODE_ENV = 'production'
+        const { verifyPaystackWebhookSignature } = loadWithKey('')
+        expect(verifyPaystackWebhookSignature(body, null)).toBe(false)
+        expect(verifyPaystackWebhookSignature(body, 'anything')).toBe(false)
+      })
     })
   })
 })
