@@ -32,6 +32,16 @@ const optionalDateString = z.string().optional().refine(
   { message: 'Invalid date' },
 )
 
+/**
+ * Database Entity ID validator.
+ * Accepts RFC 4122 UUIDs, Prisma CUIDs, and prefixed entity IDs (e.g. class-grade-10).
+ */
+const entityIdRegex =
+  /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$|^c[a-z0-9]{24,32}$|^[a-z0-9]+-[a-z0-9_-]+$/i
+
+const entityId = (message = 'Invalid ID') =>
+  z.string().refine((val) => entityIdRegex.test(val), { message })
+
 // ─────────────────────────────────────────────
 // Auth schemas
 // ─────────────────────────────────────────────
@@ -118,8 +128,8 @@ export const studentProfileSchema = z.object({
     .optional(),
   admissionDate: optionalDateString,
   admissionNumber: z.string().max(50).optional(),
-  currentClassId: z.string().uuid('Invalid class').optional(),
-  currentSectionId: z.string().uuid('Invalid section').optional(),
+  currentClassId: entityId('Invalid class').optional(),
+  currentSectionId: entityId('Invalid section').optional(),
 })
 export type StudentProfileInput = z.infer<typeof studentProfileSchema>
 
@@ -141,8 +151,8 @@ export const teacherProfileSchema = z.object({
     'VOLUNTEER',
   ]),
   joiningDate: optionalDateString,
-  subjectIds: z.array(z.string().uuid()).optional(),
-  classIds: z.array(z.string().uuid()).optional(),
+  subjectIds: z.array(entityId('Invalid subject')).optional(),
+  classIds: z.array(entityId('Invalid class')).optional(),
 })
 export type TeacherProfileInput = z.infer<typeof teacherProfileSchema>
 
@@ -160,7 +170,7 @@ export const classSchema = z.object({
     .max(1000)
     .optional(),
   description: z.string().max(500).optional(),
-  classTeacherId: z.string().uuid('Invalid teacher').optional(),
+  classTeacherId: entityId('Invalid teacher').optional(),
 })
 export type ClassInput = z.infer<typeof classSchema>
 
@@ -179,8 +189,8 @@ export const subjectSchema = z.object({
     .optional(),
   isElective: z.boolean().default(false),
   description: z.string().max(500).optional(),
-  classIds: z.array(z.string().uuid()).min(1, 'Select at least one class'),
-  teacherId: z.string().uuid('Invalid teacher').optional(),
+  classIds: z.array(entityId('Invalid class')).min(1, 'Select at least one class'),
+  teacherId: entityId('Invalid teacher').optional(),
 })
 export type SubjectInput = z.infer<typeof subjectSchema>
 
@@ -195,10 +205,10 @@ const daysOfWeekValues = DAYS_OF_WEEK.map((d) => d.value) as [
 
 export const timetableSchema = z
   .object({
-    classId: z.string().uuid('Invalid class'),
-    sectionId: z.string().uuid('Invalid section').optional(),
-    subjectId: z.string().uuid('Invalid subject'),
-    teacherId: z.string().uuid('Invalid teacher'),
+    classId: entityId('Invalid class'),
+    sectionId: entityId('Invalid section').optional(),
+    subjectId: entityId('Invalid subject'),
+    teacherId: entityId('Invalid teacher'),
     dayOfWeek: z.enum(daysOfWeekValues as [string, ...string[]]),
     startTime: z
       .string()
@@ -207,7 +217,7 @@ export const timetableSchema = z
       .string()
       .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Invalid time format (HH:MM)'),
     room: z.string().max(50).optional(),
-    academicYearId: z.string().uuid('Invalid academic year').optional(),
+    academicYearId: entityId('Invalid academic year').optional(),
   })
   .refine(
     (data) => data.startTime < data.endTime,
@@ -220,16 +230,16 @@ export type TimetableInput = z.infer<typeof timetableSchema>
 // ─────────────────────────────────────────────
 
 const attendanceEntrySchema = z.object({
-  studentId: z.string().uuid('Invalid student'),
+  studentId: entityId('Invalid student'),
   status: z.enum(['PRESENT', 'ABSENT', 'LATE', 'EXCUSED', 'SICK']),
   remarks: z.string().max(255).optional(),
 })
 
 export const attendanceSchema = z.object({
   date: dateString,
-  classId: z.string().uuid('Invalid class'),
-  sectionId: z.string().uuid('Invalid section').optional(),
-  subjectId: z.string().uuid('Invalid subject').optional(),
+  classId: entityId('Invalid class'),
+  sectionId: entityId('Invalid section').optional(),
+  subjectId: entityId('Invalid subject').optional(),
   entries: z
     .array(attendanceEntrySchema)
     .min(1, 'At least one attendance entry is required'),
@@ -244,9 +254,9 @@ export const assignmentSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters').max(255),
   description: z.string().max(2000).optional(),
   instructions: z.string().max(5000).optional(),
-  subjectId: z.string().uuid('Invalid subject'),
-  classId: z.string().uuid('Invalid class'),
-  sectionId: z.string().uuid('Invalid section').optional(),
+  subjectId: entityId('Invalid subject'),
+  classId: entityId('Invalid class'),
+  sectionId: entityId('Invalid section').optional(),
   dueDate: dateString,
   totalMarks: z
     .number({ invalid_type_error: 'Total marks must be a number' })
@@ -264,14 +274,14 @@ export type AssignmentInput = z.infer<typeof assignmentSchema>
 // ─────────────────────────────────────────────
 
 export const submissionSchema = z.object({
-  assignmentId: z.string().uuid('Invalid assignment'),
+  assignmentId: entityId('Invalid assignment'),
   remarks: z.string().max(1000).optional(),
   fileUrls: z.array(z.string().url()).optional(),
 })
 export type SubmissionInput = z.infer<typeof submissionSchema>
 
 export const gradeSchema = z.object({
-  submissionId: z.string().uuid('Invalid submission'),
+  submissionId: entityId('Invalid submission'),
   marksObtained: z
     .number({ invalid_type_error: 'Marks must be a number' })
     .min(0, 'Marks cannot be negative'),
@@ -311,10 +321,10 @@ export const announcementSchema = z.object({
 export type AnnouncementInput = z.infer<typeof announcementSchema>
 
 export const messageSchema = z.object({
-  recipientId: z.string().uuid('Invalid recipient'),
+  recipientId: entityId('Invalid recipient'),
   subject: z.string().min(1, 'Subject is required').max(255),
   content: z.string().min(1, 'Message cannot be empty').max(10000),
-  parentMessageId: z.string().uuid().optional(),
+  parentMessageId: entityId('Invalid message').optional(),
   attachmentUrls: z.array(z.string().url()).optional(),
 })
 export type MessageInput = z.infer<typeof messageSchema>
@@ -324,10 +334,10 @@ export type MessageInput = z.infer<typeof messageSchema>
 // ─────────────────────────────────────────────
 
 export const feeStructureSchema = z.object({
-  feeCategoryId: z.string().uuid('Invalid fee category'),
-  classId: z.string().uuid('Invalid class'),
-  termId: z.string().uuid('Invalid term').optional(),
-  academicYearId: z.string().uuid('Invalid academic year').optional(),
+  feeCategoryId: entityId('Invalid fee category'),
+  classId: entityId('Invalid class'),
+  termId: entityId('Invalid term').optional(),
+  academicYearId: entityId('Invalid academic year').optional(),
   amount: z
     .number({ invalid_type_error: 'Amount must be a number' })
     .min(0, 'Amount cannot be negative'),
@@ -338,7 +348,7 @@ export const feeStructureSchema = z.object({
 export type FeeStructureInput = z.infer<typeof feeStructureSchema>
 
 export const paymentSchema = z.object({
-  invoiceId: z.string().uuid('Invalid invoice'),
+  invoiceId: entityId('Invalid invoice'),
   amount: z
     .number({ invalid_type_error: 'Amount must be a number' })
     .min(0.01, 'Amount must be greater than 0'),
@@ -438,7 +448,7 @@ export const admissionApplicationSchema = z.object({
   applicantName: z.string().min(2, 'Applicant name is required').max(150),
   dateOfBirth: dateString,
   gender: z.enum(['MALE', 'FEMALE', 'OTHER', 'PREFER_NOT_TO_SAY']),
-  appliedClassId: z.string().uuid('Invalid class selection'),
+  appliedClassId: entityId('Invalid class selection'),
   parentName: z.string().min(2, 'Parent/guardian name is required').max(150),
   parentEmail: z.string().email('Invalid parent email').toLowerCase(),
   parentPhone: z
