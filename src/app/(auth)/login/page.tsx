@@ -4,10 +4,20 @@ import React, { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
-import { GraduationCap, Lock, Mail, AlertCircle, ArrowRight, CheckCircle2 } from 'lucide-react'
+import {
+  GraduationCap,
+  Lock,
+  Mail,
+  AlertCircle,
+  ArrowRight,
+  CheckCircle2,
+  HelpCircle,
+  UserCheck,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card'
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 
 function LoginFormContent() {
   const router = useRouter()
@@ -19,7 +29,7 @@ function LoginFormContent() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState(
-    errorParam === 'SessionExpired' ? 'Your session expired. Please log in again.' : ''
+    errorParam === 'SessionExpired' ? 'Your session expired. Please sign in again.' : ''
   )
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -37,11 +47,9 @@ function LoginFormContent() {
       if (res?.error) {
         setErrorMessage(res.error)
       } else {
-        // Redirect to callbackUrl or default dashboard
         if (callbackUrl) {
           router.push(callbackUrl)
         } else {
-          // If logged in, check role or navigate to root which redirects to role dashboard
           router.push('/')
           router.refresh()
         }
@@ -53,7 +61,7 @@ function LoginFormContent() {
     }
   }
 
-  // Quick Demo Logins
+  // Quick Demo Logins for verification
   const setDemoRole = (roleEmail: string) => {
     setEmail(roleEmail)
     setPassword('Password@123')
@@ -61,167 +69,220 @@ function LoginFormContent() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-slate-50 via-blue-50/40 to-indigo-100/50 dark:from-gray-950 dark:via-gray-900 dark:to-slate-900 p-4">
-      {/* School Emblem / Header */}
-      <div className="flex flex-col items-center mb-6 text-center">
-        <div className="h-14 w-14 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-xl shadow-blue-500/25 mb-3">
-          <GraduationCap className="h-8 w-8" />
+    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-[var(--cgs-canvas)] text-[var(--cgs-text)]">
+      {/* Left Brand Panel (Figma Node 2:676 Brand panel) */}
+      <div className="hidden lg:flex lg:col-span-5 bg-[var(--cgs-navy)] text-white flex-col justify-between p-12 relative overflow-hidden">
+        {/* Subtle decorative glow */}
+        <div className="absolute top-0 right-0 w-80 h-80 bg-[var(--cgs-sky)]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-[var(--cgs-primary)]/20 rounded-full blur-3xl pointer-events-none" />
+
+        {/* White Crest Tile (Figma Node 2:677) */}
+        <div className="relative z-10">
+          <Link href="/" className="inline-flex items-center gap-3 bg-white px-4 py-2.5 rounded-2xl shadow-md">
+            <div className="h-10 w-10 rounded-xl bg-[var(--cgs-navy)] text-white font-bold flex items-center justify-center text-lg">
+              CG
+            </div>
+            <div className="flex flex-col text-[var(--cgs-heading)]">
+              <span className="text-sm font-bold leading-tight">CHOSEN GENERATION</span>
+              <span className="text-[11px] font-semibold text-[var(--cgs-primary)] tracking-wider uppercase">Born to Excel</span>
+            </div>
+          </Link>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-          CHOSEN GENERATION SCHOOL
-        </h1>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 max-w-sm">
-          Unified School Management, Learning & Administration Portal
-        </p>
+
+        {/* Center Editorial Visual Card (Figma Node 2:683) */}
+        <div className="relative z-10 space-y-6 my-auto max-w-md">
+          <div className="p-8 rounded-3xl bg-white/10 backdrop-blur-md border border-white/15 space-y-4">
+            <div className="h-12 w-12 rounded-2xl bg-[var(--cgs-gold)] text-[var(--cgs-text)] font-bold flex items-center justify-center text-xl shadow-sm">
+              <GraduationCap className="h-6 w-6" />
+            </div>
+            <h2 className="text-3xl font-bold tracking-tight text-white leading-tight">
+              Born to Excel.
+            </h2>
+            <p className="text-base text-blue-100 leading-relaxed">
+              A connected school. A supported child. Empowering teachers, engaging parents, and elevating students.
+            </p>
+          </div>
+        </div>
+
+        {/* Footer info */}
+        <div className="relative z-10 text-xs text-blue-200/80">
+          <p>Chosen Generation School &middot; Academic Portal v2.0</p>
+          <p className="mt-0.5">&copy; 2026 All rights reserved.</p>
+        </div>
       </div>
 
-      <Card className="w-full max-w-md shadow-xl border-gray-200/80 dark:border-gray-800 backdrop-blur-sm bg-white/95 dark:bg-gray-900/95">
-        <CardHeader className="space-y-1 pb-4">
-          <CardTitle className="text-xl font-bold text-center">Sign in to your portal</CardTitle>
-          <CardDescription className="text-xs text-center">
-            Enter your school credentials to access your dashboard
-          </CardDescription>
-        </CardHeader>
+      {/* Right Sign-in Form Panel */}
+      <div className="lg:col-span-7 flex flex-col justify-center items-center p-6 sm:p-12 lg:p-16">
+        <div className="w-full max-w-lg space-y-8">
+          {/* Mobile Brand Logo */}
+          <div className="lg:hidden flex justify-center">
+            <Link href="/" className="inline-flex items-center gap-3 bg-white px-4 py-2.5 rounded-2xl shadow-sm border border-[var(--cgs-border)]">
+              <div className="h-10 w-10 rounded-xl bg-[var(--cgs-navy)] text-white font-bold flex items-center justify-center text-lg">
+                CG
+              </div>
+              <div className="flex flex-col text-[var(--cgs-heading)]">
+                <span className="text-sm font-bold leading-tight">CHOSEN GENERATION</span>
+                <span className="text-[11px] font-semibold text-[var(--cgs-primary)]">Born to Excel</span>
+              </div>
+            </Link>
+          </div>
 
-        <CardContent className="space-y-4">
+          {/* Form Header (Figma Nodes 2:692 - 2:693) */}
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold tracking-tight text-[var(--cgs-heading)]">
+              Welcome back
+            </h1>
+            <p className="text-sm text-[var(--cgs-subdued)]">
+              Sign in to your school account with your email or admission number.
+            </p>
+          </div>
+
+          {/* Error Notice */}
           {errorMessage && (
-            <div className="flex items-center gap-2 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 p-3 text-xs text-red-700 dark:text-red-300">
+            <div className="flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 p-3.5 text-xs text-[#BA362A]">
               <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{errorMessage}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-3.5">
+          {/* Authentication Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Field: Email or admission number (Figma Node 2:694) */}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                School Email
+              <label className="text-xs font-semibold text-[var(--cgs-heading)] block">
+                Email or admission number
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+                <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-[var(--cgs-subdued)]" />
                 <Input
-                  type="email"
-                  required
-                  placeholder="name@school.com"
+                  type="text"
+                  placeholder="e.g. CGS/2026/0142 or parent.johnson@school.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-9 text-xs"
+                  className="pl-10 h-12 rounded-xl bg-[var(--cgs-surface)] border-[var(--cgs-border)] text-sm focus:border-[var(--cgs-primary)] focus:ring-[var(--cgs-primary)]"
+                  required
                 />
               </div>
             </div>
 
+            {/* Field: Password (Figma Node 2:697) */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                <label className="text-xs font-semibold text-[var(--cgs-heading)]">
                   Password
                 </label>
                 <Link
                   href="/forgot-password"
-                  className="text-[11px] text-blue-600 hover:underline dark:text-blue-400"
+                  className="text-xs font-semibold text-[var(--cgs-primary)] hover:underline"
                 >
                   Forgot password?
                 </Link>
               </div>
               <div className="relative">
-                <Lock className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+                <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-[var(--cgs-subdued)]" />
                 <Input
                   type="password"
-                  required
                   placeholder="••••••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-9 text-xs"
+                  className="pl-10 h-12 rounded-xl bg-[var(--cgs-surface)] border-[var(--cgs-border)] text-sm focus:border-[var(--cgs-primary)] focus:ring-[var(--cgs-primary)]"
+                  required
                 />
               </div>
             </div>
 
+            {/* Remember Me (Figma Node 2:700) */}
+            <div className="flex items-center gap-2 pt-1">
+              <input
+                id="remember"
+                type="checkbox"
+                defaultChecked
+                className="h-4 w-4 rounded border-[var(--cgs-border)] text-[var(--cgs-primary)] focus:ring-[var(--cgs-primary)]"
+              />
+              <label htmlFor="remember" className="text-xs text-[var(--cgs-subdued)] cursor-pointer select-none">
+                Keep me signed in
+              </label>
+            </div>
+
+            {/* Submit Primary Button */}
             <Button
               type="submit"
               disabled={loading}
-              className="w-full font-semibold gap-2 mt-2"
+              className="w-full h-12 text-sm font-semibold rounded-xl shadow-sm transition-all"
             >
-              {loading ? 'Authenticating...' : 'Sign In'}
-              <ArrowRight className="w-4 h-4" />
+              {loading ? 'Verifying credentials...' : 'Sign in &rarr;'}
             </Button>
           </form>
 
-          {/* Quick Demo Login Picker */}
-          <div className="pt-4 border-t border-gray-100 dark:border-gray-800">
-            <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider text-center mb-2.5">
-              🚀 1-Click Demo Accounts (Password: Password@123)
-            </p>
-            <div className="grid grid-cols-2 gap-2 text-xs">
+          {/* Role Quick Selector */}
+          <div className="pt-4 border-t border-[var(--cgs-border)] space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-semibold text-[var(--cgs-subdued)] uppercase tracking-wider">
+                Instant Demo Access
+              </span>
+              <span className="text-[10px] text-[var(--cgs-subdued)]">All: Password@123</span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               <button
                 type="button"
                 onClick={() => setDemoRole('student.daniel@school.com')}
-                className="flex items-center gap-1.5 p-2 rounded-lg border border-gray-200 dark:border-gray-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 text-left transition-all"
+                className="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--cgs-surface)] border border-[var(--cgs-border)] hover:border-[var(--cgs-primary)] text-left truncate transition-colors"
               >
-                <span className="text-sm">🎓</span>
-                <div>
-                  <p className="font-semibold text-[11px]">Student</p>
-                  <p className="text-[10px] text-gray-500 truncate">student.daniel</p>
-                </div>
+                Student
               </button>
-
               <button
                 type="button"
                 onClick={() => setDemoRole('parent.johnson@school.com')}
-                className="flex items-center gap-1.5 p-2 rounded-lg border border-gray-200 dark:border-gray-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-left transition-all"
+                className="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--cgs-surface)] border border-[var(--cgs-border)] hover:border-[var(--cgs-primary)] text-left truncate transition-colors"
               >
-                <span className="text-sm">👨‍👧</span>
-                <div>
-                  <p className="font-semibold text-[11px]">Parent</p>
-                  <p className="text-[10px] text-gray-500 truncate">parent.johnson</p>
-                </div>
+                Parent
               </button>
-
               <button
                 type="button"
                 onClick={() => setDemoRole('teacher.smith@school.com')}
-                className="flex items-center gap-1.5 p-2 rounded-lg border border-gray-200 dark:border-gray-800 hover:bg-purple-50 dark:hover:bg-purple-950/40 text-left transition-all"
+                className="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--cgs-surface)] border border-[var(--cgs-border)] hover:border-[var(--cgs-primary)] text-left truncate transition-colors"
               >
-                <span className="text-sm">👨‍🏫</span>
-                <div>
-                  <p className="font-semibold text-[11px]">Teacher</p>
-                  <p className="text-[10px] text-gray-500 truncate">teacher.smith</p>
-                </div>
+                Teacher
               </button>
-
               <button
                 type="button"
                 onClick={() => setDemoRole('admin@school.com')}
-                className="flex items-center gap-1.5 p-2 rounded-lg border border-gray-200 dark:border-gray-800 hover:bg-amber-50 dark:hover:bg-amber-950/40 text-left transition-all"
+                className="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--cgs-surface)] border border-[var(--cgs-border)] hover:border-[var(--cgs-primary)] text-left truncate transition-colors"
               >
-                <span className="text-sm">🏫</span>
-                <div>
-                  <p className="font-semibold text-[11px]">Admin</p>
-                  <p className="text-[10px] text-gray-500 truncate">admin@school</p>
-                </div>
+                Admin
               </button>
-            </div>
-
-            <div className="mt-2 text-center">
+              <button
+                type="button"
+                onClick={() => setDemoRole('accountant@school.com')}
+                className="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--cgs-surface)] border border-[var(--cgs-border)] hover:border-[var(--cgs-primary)] text-left truncate transition-colors"
+              >
+                Accountant
+              </button>
               <button
                 type="button"
                 onClick={() => setDemoRole('superadmin@school.com')}
-                className="text-[11px] text-blue-600 hover:underline font-medium"
+                className="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[var(--cgs-surface)] border border-[var(--cgs-border)] hover:border-[var(--cgs-primary)] text-left truncate transition-colors"
               >
-                👑 Or sign in as Super Administrator (superadmin@school.com)
+                Super Admin
               </button>
             </div>
           </div>
-        </CardContent>
 
-        <CardFooter className="flex justify-center border-t border-gray-100 dark:border-gray-800 pt-4 text-xs text-gray-500">
-          <span>CHOSEN GENERATION SCHOOL © 2026. All rights reserved.</span>
-        </CardFooter>
-      </Card>
+          {/* Help & Support Note (Figma Node 2:706) */}
+          <div className="text-center pt-2">
+            <p className="text-xs text-[var(--cgs-subdued)]">
+              Need help? Contact the school office &middot; Your account opens the dashboard for your assigned role.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
 
 export default function LoginPage() {
   return (
-    <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading portal...</div>}>
+    <React.Suspense fallback={<div className="min-h-screen bg-[var(--cgs-canvas)] flex items-center justify-center">Loading...</div>}>
       <LoginFormContent />
     </React.Suspense>
   )

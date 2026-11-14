@@ -277,33 +277,36 @@ export default function ParentFeesPage() {
   return (
     <DashboardLayout role="PARENT">
       <div className="space-y-6">
-        {/* Header */}
+        {/* Header (Figma Node 2:67 Parent · Invoice) */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 flex items-center gap-2.5">
-              <CreditCard className="w-6 h-6 text-emerald-600" />
-              School Fees & Billing Account
+            <span className="text-[10px] font-bold tracking-wider text-[var(--cgs-primary)] uppercase">
+              CHOSEN GENERATION &middot; BURSARY &amp; FEE CLEARANCE
+            </span>
+            <h1 className="text-2xl font-bold tracking-tight text-[var(--cgs-heading)] flex items-center gap-2.5 mt-0.5">
+              <CreditCard className="w-6 h-6 text-[var(--cgs-primary)]" />
+              School Fees &amp; Billing Account
             </h1>
-            <p className="text-xs text-gray-500 mt-0.5">
-              Card payment, bank transfer teller receipt upload for bursar approval, and downloadable official receipts
+            <p className="text-xs text-[var(--cgs-subdued)] mt-0.5">
+              Pay term fees online via Paystack or submit bank teller receipt proof for bursary clearance
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2.5">
             <Button
               onClick={() => setShowUploadModal(true)}
               variant="outline"
               size="sm"
-              className="text-xs gap-1.5 border-emerald-600 text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 font-semibold"
+              className="text-xs gap-1.5"
             >
-              <UploadCloud className="w-4 h-4 text-emerald-600" /> Upload Bank Receipt / Teller
+              <UploadCloud className="w-4 h-4 text-[var(--cgs-primary)]" /> Upload Bank Slip
             </Button>
             <Button
               onClick={() => setShowPaymentModal(true)}
               size="sm"
-              className="text-xs gap-1.5 bg-emerald-600 hover:bg-emerald-700 font-semibold shadow-sm"
+              className="text-xs gap-1.5 font-semibold shadow-sm"
             >
-              <CreditCard className="w-4 h-4" /> Pay with Card Online
+              <CreditCard className="w-4 h-4" /> Pay with Card Online &rarr;
             </Button>
           </div>
         </div>

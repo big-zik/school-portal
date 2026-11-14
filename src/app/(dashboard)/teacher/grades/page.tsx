@@ -360,14 +360,17 @@ export default function TeacherGradesEntryPage() {
   return (
     <DashboardLayout role="TEACHER">
       <div className="space-y-6">
-        {/* Header */}
+        {/* Header (Figma Node 2:1745 Continuous assessment desk) */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 flex items-center gap-2.5">
-              <GraduationCap className="w-6 h-6 text-blue-600" />
-              Continuous Assessment (CA) & Exam Score Entry
+            <span className="text-[10px] font-bold tracking-wider text-[var(--cgs-primary)] uppercase">
+              CHOSEN GENERATION &middot; TEACHER ASSESSMENT DESK
+            </span>
+            <h1 className="text-2xl font-bold tracking-tight text-[var(--cgs-heading)] flex items-center gap-2.5 mt-0.5">
+              <GraduationCap className="w-6 h-6 text-[var(--cgs-primary)]" />
+              Continuous Assessment (CA) & Exam Desk
             </h1>
-            <p className="text-xs text-gray-500 mt-0.5">
+            <p className="text-xs text-[var(--cgs-subdued)] mt-0.5">
               Enter CA 1 (20 Marks), CA 2 (20 Marks), and Terminal Exam (60 Marks) with live Nigerian grading & class positions
             </p>
           </div>
@@ -379,11 +382,11 @@ export default function TeacherGradesEntryPage() {
               onClick={handleDownloadCSV}
               className="text-xs gap-1.5"
             >
-              <Download className="w-3.5 h-3.5 text-emerald-600" /> Download Excel/CSV
+              <Download className="w-3.5 h-3.5 text-emerald-600" /> Export Broadsheet
             </Button>
 
-            <label className="cursor-pointer inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 text-gray-700 dark:text-gray-200">
-              <Upload className="w-3.5 h-3.5 text-blue-600" /> Upload CSV
+            <label className="cursor-pointer inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-[var(--cgs-border)] bg-[var(--cgs-surface)] hover:bg-[var(--cgs-surface-subtle)] text-[var(--cgs-text)]">
+              <Upload className="w-3.5 h-3.5 text-[var(--cgs-primary)]" /> Upload CSV
               <input type="file" accept=".csv" onChange={handleUploadCSV} className="hidden" />
             </label>
 
@@ -391,7 +394,7 @@ export default function TeacherGradesEntryPage() {
               onClick={handleSaveScores}
               disabled={saving}
               size="sm"
-              className="text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
+              className="text-xs gap-1.5 shadow-sm"
             >
               {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
               Save & Lock Scores

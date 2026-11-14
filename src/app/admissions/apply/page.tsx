@@ -147,26 +147,26 @@ export default function PublicAdmissionApplyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[var(--cgs-canvas)] text-[var(--cgs-text)] flex flex-col font-sans">
       {/* Top Header */}
-      <header className="sticky top-0 z-40 bg-white/95 dark:bg-gray-900/95 border-b border-gray-200/80 dark:border-gray-800 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <header className="sticky top-0 z-40 bg-[var(--cgs-surface)]/95 border-b border-[var(--cgs-border)] backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-blue-900 text-white flex items-center justify-center font-bold shadow-md">
-              <GraduationCap className="w-5 h-5" />
+            <div className="h-11 w-11 rounded-xl bg-[var(--cgs-tint)] border border-[var(--cgs-sky)]/40 flex items-center justify-center font-bold text-lg text-[var(--cgs-heading)] shadow-sm">
+              CG
             </div>
             <div>
-              <span className="font-extrabold text-base tracking-tight text-blue-950 dark:text-blue-100">
+              <span className="font-bold text-base tracking-tight text-[var(--cgs-heading)] leading-none">
                 CHOSEN GENERATION
               </span>
-              <p className="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">
-                Online Admissions Portal
+              <p className="text-[10px] text-[var(--cgs-primary)] uppercase tracking-wider font-semibold mt-1">
+                Online Admissions &middot; Born to Excel
               </p>
             </div>
           </Link>
 
           <div className="flex items-center gap-3 text-xs">
-            <Link href="/" className="text-gray-600 hover:text-blue-600 font-semibold flex items-center gap-1">
+            <Link href="/" className="text-[var(--cgs-subdued)] hover:text-[var(--cgs-text)] font-semibold flex items-center gap-1">
               <Home className="w-3.5 h-3.5" /> Back to Home
             </Link>
             <Link href="/login">

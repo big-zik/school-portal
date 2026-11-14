@@ -126,14 +126,22 @@ function ResetPasswordForm() {
 
 export default function ResetPasswordPage() {
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-slate-50 via-blue-50/40 to-indigo-100/50 dark:from-gray-950 dark:via-gray-900 dark:to-slate-900 p-4">
-      <Card className="w-full max-w-md shadow-xl border-gray-200/80 dark:border-gray-800">
+    <div className="min-h-screen flex flex-col justify-center items-center bg-[var(--cgs-canvas)] text-[var(--cgs-text)] p-4">
+      {/* Brand Badge */}
+      <Link href="/" className="inline-flex items-center gap-2.5 bg-white px-4 py-2 rounded-2xl shadow-sm border border-[var(--cgs-border)] mb-6">
+        <div className="h-9 w-9 rounded-xl bg-[var(--cgs-navy)] text-white font-bold flex items-center justify-center text-sm">
+          CG
+        </div>
+        <div className="flex flex-col text-[var(--cgs-heading)]">
+          <span className="text-xs font-bold leading-tight">CHOSEN GENERATION</span>
+          <span className="text-[10px] font-semibold text-[var(--cgs-primary)]">Born to Excel</span>
+        </div>
+      </Link>
+
+      <Card className="w-full max-w-md shadow-lg border-[var(--cgs-border)] bg-[var(--cgs-surface)]">
         <CardHeader className="space-y-1 text-center">
-          <div className="mx-auto h-12 w-12 rounded-xl bg-blue-600 flex items-center justify-center text-white mb-2">
-            <GraduationCap className="h-6 w-6" />
-          </div>
-          <CardTitle className="text-xl font-bold">Choose a New Password</CardTitle>
-          <CardDescription className="text-xs">Enter a new password for your account.</CardDescription>
+          <CardTitle className="text-2xl font-bold text-[var(--cgs-heading)]">Choose a New Password</CardTitle>
+          <CardDescription className="text-xs text-[var(--cgs-subdued)]">Enter a new password for your account.</CardDescription>
         </CardHeader>
 
         <CardContent>

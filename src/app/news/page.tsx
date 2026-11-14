@@ -97,58 +97,54 @@ export default function NewsPage() {
   })
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[var(--cgs-canvas)] text-[var(--cgs-text)] flex flex-col font-sans">
       {/* Top Bar */}
-      <div className="bg-blue-900 text-blue-100 py-2 px-4 text-xs border-b border-blue-800">
+      <div className="bg-[var(--cgs-navy)] text-white py-2 px-4 text-xs">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
-              <Phone className="w-3 h-3" /> +234 1 234 5678
+              <Phone className="w-3 h-3 text-[var(--cgs-sky)]" /> +234 (0) 800 CHOSEN SCH
             </span>
             <span className="flex items-center gap-1">
-              <Mail className="w-3 h-3" /> info@chosengenerationschool.edu
+              <Mail className="w-3 h-3 text-[var(--cgs-sky)]" /> info@chosengeneration.edu.ng
             </span>
           </div>
           <div>
-            <span>42 Academic Way, Victoria Island, Lagos</span>
+            <span>Chosen Generation Campus, Lagos, Nigeria &middot; Born to Excel</span>
           </div>
         </div>
       </div>
 
       {/* Main Navbar */}
-      <header className="sticky top-0 z-40 bg-white/95 dark:bg-gray-900/95 border-b border-gray-200/80 dark:border-gray-800 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+      <header className="sticky top-0 z-40 bg-[var(--cgs-surface)]/95 border-b border-[var(--cgs-border)] backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-blue-900 text-white flex items-center justify-center font-bold shadow-md">
-              <GraduationCap className="w-6 h-6" />
+            <div className="h-11 w-11 rounded-xl bg-[var(--cgs-tint)] border border-[var(--cgs-sky)]/40 flex items-center justify-center font-bold text-lg text-[var(--cgs-heading)] shadow-sm">
+              CG
             </div>
             <div>
-              <h1 className="text-base font-extrabold tracking-tight text-blue-950 dark:text-blue-100">
-                CHOSEN GENERATION SCHOOL
+              <h1 className="text-base font-bold tracking-tight text-[var(--cgs-heading)] leading-none">
+                CHOSEN GENERATION
               </h1>
-              <p className="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">
-                Nursery • Primary • Secondary
+              <p className="text-[10px] text-[var(--cgs-primary)] uppercase tracking-wider font-semibold mt-1">
+                Born to Excel
               </p>
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-6 text-xs font-semibold text-gray-600 dark:text-gray-300">
-            <Link href="/" className="hover:text-blue-600 transition">Home</Link>
-            <Link href="/about" className="hover:text-blue-600 transition">About Us</Link>
-            <Link href="/gallery" className="hover:text-blue-600 transition">Campus Gallery</Link>
-            <Link href="/news" className="text-blue-600 font-bold">News & Circulars</Link>
-            <Link href="/contact" className="hover:text-blue-600 transition">Contact</Link>
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
+            <Link href="/" className="text-[var(--cgs-subdued)] hover:text-[var(--cgs-text)] transition-colors">Home</Link>
+            <Link href="/about" className="text-[var(--cgs-subdued)] hover:text-[var(--cgs-text)] transition-colors">About</Link>
+            <Link href="/admissions" className="text-[var(--cgs-subdued)] hover:text-[var(--cgs-text)] transition-colors">Admissions</Link>
+            <Link href="/news" className="text-[var(--cgs-primary)] font-semibold">News</Link>
+            <Link href="/gallery" className="text-[var(--cgs-subdued)] hover:text-[var(--cgs-text)] transition-colors">Gallery</Link>
+            <Link href="/contact" className="text-[var(--cgs-subdued)] hover:text-[var(--cgs-text)] transition-colors">Contact</Link>
           </nav>
 
-          <div className="flex items-center gap-2.5">
-            <Link href="/admissions/apply">
-              <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-xs font-bold shadow-sm">
-                Apply for Admission
-              </Button>
-            </Link>
+          <div className="flex items-center gap-3">
             <Link href="/login">
-              <Button size="sm" variant="outline" className="text-xs font-semibold">
-                Sign In
+              <Button className="h-10 px-5 rounded-lg font-semibold shadow-sm">
+                School portal
               </Button>
             </Link>
           </div>
