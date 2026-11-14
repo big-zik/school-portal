@@ -7,12 +7,13 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: 'border-transparent bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200',
-        secondary: 'border-transparent bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200',
-        destructive: 'border-transparent bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200',
-        success: 'border-transparent bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-200',
-        warning: 'border-transparent bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200',
-        outline: 'text-gray-950 dark:text-gray-50 border-gray-300 dark:border-gray-700',
+        default: 'border-transparent bg-[var(--cgs-tint)] text-[var(--cgs-primary)] border border-[var(--cgs-sky)]/30',
+        secondary: 'border-transparent bg-[var(--cgs-surface-subtle)] text-[var(--cgs-text)] border border-[var(--cgs-border)]',
+        destructive: 'border-transparent bg-red-100 text-[#BA362A] dark:bg-red-950/60 dark:text-[#E05D50]',
+        success: 'border-transparent bg-emerald-100 text-[#047857] dark:bg-emerald-950/60 dark:text-[#22C55E]',
+        warning: 'border-transparent bg-amber-100 text-[#8C6314] dark:bg-amber-950/60 dark:text-[#E5B24E]',
+        gold: 'border-transparent bg-[#C8962E] text-[#0F2A44] font-bold shadow-sm',
+        outline: 'text-[var(--cgs-text)] border border-[var(--cgs-border)]',
       },
     },
     defaultVariants: {

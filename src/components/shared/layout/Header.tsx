@@ -30,7 +30,7 @@ export function Header({ user, onToggleSidebar }: HeaderProps) {
   const primaryRole = user?.roles?.[0] || 'STUDENT'
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-gray-200/80 bg-white/80 dark:bg-gray-900/80 dark:border-gray-800 px-4 md:px-6 backdrop-blur-md">
+    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-[var(--cgs-border)] bg-[var(--cgs-surface)]/90 text-[var(--cgs-text)] px-4 md:px-6 backdrop-blur-md">
       {/* Left: Mobile hamburger & search */}
       <div className="flex items-center gap-4">
         {onToggleSidebar && (

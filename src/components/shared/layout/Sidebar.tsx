@@ -181,22 +181,22 @@ export function Sidebar({ role, isOpen, onClose }: SidebarProps) {
 
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-gray-200/80 bg-white dark:bg-gray-900 dark:border-gray-800 transition-transform duration-300 ease-in-out md:static md:translate-x-0',
+          'fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-[var(--cgs-border)] bg-[var(--cgs-surface)] text-[var(--cgs-text)] transition-transform duration-300 ease-in-out md:static md:translate-x-0',
           isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
         )}
       >
         {/* Brand Header */}
-        <div className="flex h-16 items-center justify-between border-b border-gray-200/80 dark:border-gray-800 px-6">
+        <div className="flex h-16 items-center justify-between border-b border-[var(--cgs-border)] px-6">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-500/20">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--cgs-primary)] text-white shadow-md shadow-blue-900/20">
               <GraduationCap className="h-5 w-5" />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-bold tracking-tight text-gray-900 dark:text-gray-100">
+              <span className="text-sm font-bold tracking-tight text-[var(--cgs-heading)]">
                 CHOSEN GENERATION
               </span>
-              <span className="text-[10px] font-medium text-blue-600 dark:text-blue-400">
-                School Portal
+              <span className="text-[10px] font-semibold text-[var(--cgs-primary)] tracking-wide">
+                Born to Excel
               </span>
             </div>
           </Link>
@@ -235,16 +235,16 @@ export function Sidebar({ role, isOpen, onClose }: SidebarProps) {
                       className={cn(
                         'flex items-center justify-between gap-3 rounded-lg px-3 py-2 text-xs font-medium transition-all',
                         isActive
-                          ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 shadow-sm font-semibold'
-                          : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200'
+                          ? 'bg-[var(--cgs-tint)] text-[var(--cgs-primary)] border border-[var(--cgs-sky)]/40 shadow-sm font-semibold'
+                          : 'text-[var(--cgs-subdued)] hover:bg-[var(--cgs-surface-subtle)] hover:text-[var(--cgs-text)]'
                       )}
                     >
                       <div className="flex items-center gap-2.5">
-                        <Icon className={cn('h-4 w-4 shrink-0', isActive ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400')} />
+                        <Icon className={cn('h-4 w-4 shrink-0', isActive ? 'text-[var(--cgs-primary)]' : 'text-gray-400')} />
                         <span>{item.label}</span>
                       </div>
                       {item.badge && (
-                        <span className="rounded-full bg-blue-100 dark:bg-blue-900/60 px-2 py-0.5 text-[10px] font-semibold text-blue-700 dark:text-blue-300">
+                        <span className="rounded-full bg-[var(--cgs-tint)] px-2 py-0.5 text-[10px] font-semibold text-[var(--cgs-primary)] border border-[var(--cgs-sky)]/30">
                           {item.badge}
                         </span>
                       )}

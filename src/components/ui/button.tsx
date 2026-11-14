@@ -8,13 +8,13 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-blue-600 text-white hover:bg-blue-700 shadow-sm active:scale-[0.98]',
-        destructive: 'bg-red-600 text-white hover:bg-red-700 shadow-sm active:scale-[0.98]',
-        outline: 'border border-gray-300 dark:border-gray-700 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200',
-        secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700',
-        ghost: 'hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-100',
-        link: 'text-blue-600 underline-offset-4 hover:underline dark:text-blue-400',
-        success: 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm active:scale-[0.98]',
+        default: 'bg-[var(--cgs-primary)] text-[var(--cgs-on-primary)] hover:bg-[var(--cgs-primary-hover)] shadow-sm active:scale-[0.98]',
+        destructive: 'bg-[var(--cgs-danger)] text-white hover:opacity-90 shadow-sm active:scale-[0.98]',
+        outline: 'border border-[var(--cgs-border)] bg-transparent hover:bg-[var(--cgs-surface-subtle)] text-[var(--cgs-text)]',
+        secondary: 'bg-[var(--cgs-surface-subtle)] text-[var(--cgs-text)] hover:opacity-90 border border-[var(--cgs-border)]',
+        ghost: 'hover:bg-[var(--cgs-surface-subtle)] text-[var(--cgs-text)]',
+        link: 'text-[var(--cgs-primary)] underline-offset-4 hover:underline',
+        success: 'bg-[var(--cgs-success)] text-white hover:opacity-90 shadow-sm active:scale-[0.98]',
       },
       size: {
         default: 'h-10 px-4 py-2',

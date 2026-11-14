@@ -18,7 +18,7 @@ export function DashboardLayout({ children, user, role = 'STUDENT' }: DashboardL
   const effectiveRole = user?.roles?.[0] || role
 
   return (
-    <div className="flex min-h-screen bg-gray-50/60 dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans antialiased">
+    <div className="flex min-h-screen bg-[var(--cgs-canvas)] text-[var(--cgs-text)] font-sans antialiased">
       {/* Sidebar */}
       <Sidebar
         role={effectiveRole}

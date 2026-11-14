@@ -1,26 +1,100 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand Core Swatches */
+  --cgs-primary: #0D5EA7;
+  --cgs-primary-hover: #084478;
+  --cgs-on-primary: #FFFFFF;
+
+  --cgs-navy: #0B3A6B;
+  --cgs-sky: #98D8E8;
+  --cgs-tint: #E8F4F8;
+  --cgs-gold: #C8962E;
+
+  --cgs-danger: #BA362A;
+  --cgs-success: #047857;
+
+  /* Classic Neutral System (60% Palette) */
+  --cgs-canvas: #FBF7EE;
+  --cgs-surface: #FFFFFF;
+  --cgs-surface-subtle: #F4EFE2;
+  --cgs-border: #E5DEC9;
+
+  /* Typography */
+  --cgs-text: #0F2A44;
+  --cgs-heading: #0B3A6B;
+  --cgs-subdued: #4B5E71;
+  --cgs-muted: #64748B;
+
+  /* Geometry & Rhythm */
+  --cgs-radius-control: 0.5rem;
+  --cgs-radius-card: 1rem;
+  --cgs-radius-sheet: 1.5rem;
+  --cgs-touch: 2.75rem;
+
+  /* Base Next.js variables */
+  --background: var(--cgs-canvas);
+  --foreground: var(--cgs-text);
+}
+
+.dark,
+[data-theme="dark"] {
+  /* Evening Dark Mode Tokens */
+  --cgs-canvas: #0A192C;
+  --cgs-surface: #10243E;
+  --cgs-surface-subtle: #183354;
+  --cgs-border: #213D60;
+
+  --cgs-primary: #56A5E8;
+  --cgs-primary-hover: #98D8E8;
+  --cgs-on-primary: #0A192C;
+
+  --cgs-text: #E1EAF2;
+  --cgs-heading: #FFFFFF;
+  --cgs-subdued: #A2B7CC;
+  --cgs-muted: #A2B7CC;
+
+  --cgs-gold: #E5B24E;
+  --cgs-danger: #E05D50;
+  --cgs-success: #22C55E;
+
+  --background: var(--cgs-canvas);
+  --foreground: var(--cgs-text);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-sans: var(--font-geist-sans), Inter, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Semantic CGS Theme Colors */
+  --color-cgs-primary: var(--cgs-primary);
+  --color-cgs-primary-hover: var(--cgs-primary-hover);
+  --color-cgs-on-primary: var(--cgs-on-primary);
+  --color-cgs-navy: var(--cgs-navy);
+  --color-cgs-sky: var(--cgs-sky);
+  --color-cgs-tint: var(--cgs-tint);
+  --color-cgs-gold: var(--cgs-gold);
+  --color-cgs-danger: var(--cgs-danger);
+  --color-cgs-success: var(--cgs-success);
+  --color-cgs-canvas: var(--cgs-canvas);
+  --color-cgs-surface: var(--cgs-surface);
+  --color-cgs-surface-subtle: var(--cgs-surface-subtle);
+  --color-cgs-border: var(--cgs-border);
+  --color-cgs-text: var(--cgs-text);
+  --color-cgs-heading: var(--cgs-heading);
+  --color-cgs-subdued: var(--cgs-subdued);
+  --color-cgs-muted: var(--cgs-muted);
+
+  --radius-control: var(--cgs-radius-control);
+  --radius-card: var(--cgs-radius-card);
+  --radius-sheet: var(--cgs-radius-sheet);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--cgs-canvas);
+  color: var(--cgs-text);
+  font-family: var(--font-sans);
+  min-height: 100vh;
 }
