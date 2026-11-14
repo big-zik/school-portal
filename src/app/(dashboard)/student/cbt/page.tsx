@@ -278,19 +278,22 @@ export default function StudentCBTPage() {
         {/* MODE 2: ACTIVE LIVE TEST ROOM */}
         {activeExam && !result && (
           <div className="space-y-4">
-            {/* Top Bar with Timer */}
-            <Card className="border border-indigo-200 dark:border-indigo-900/60 bg-indigo-50/40 dark:bg-indigo-950/20 p-4">
+            {/* Top Bar with Timer (Figma Node 2:2247 Test header) */}
+            <Card className="border border-[var(--cgs-border)] bg-[var(--cgs-tint)] p-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <h2 className="text-sm font-bold text-gray-900 dark:text-gray-100">{activeExam.title}</h2>
-                  <p className="text-xs text-gray-500">{activeExam.subjectName} &bull; {activeExam.className}</p>
+                  <span className="text-[10px] font-bold tracking-wider text-[var(--cgs-primary)] uppercase">
+                    CHOSEN GENERATION &middot; DIGITAL TEST ROOM
+                  </span>
+                  <h2 className="text-base font-bold text-[var(--cgs-heading)] mt-0.5">{activeExam.title}</h2>
+                  <p className="text-xs text-[var(--cgs-subdued)]">{activeExam.subjectName} &bull; {activeExam.className}</p>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <div className={`px-4 py-2 rounded-lg font-mono font-bold text-sm flex items-center gap-2 ${
+                  <div className={`px-4 py-2 rounded-xl font-mono font-bold text-sm flex items-center gap-2 shadow-sm ${
                     timeLeftSeconds < 120
-                      ? 'bg-red-100 text-red-700 animate-pulse'
-                      : 'bg-white dark:bg-gray-800 border text-indigo-700 dark:text-indigo-300'
+                      ? 'bg-red-100 text-red-700 animate-pulse border border-red-300'
+                      : 'bg-white dark:bg-gray-800 border border-[var(--cgs-border)] text-[var(--cgs-primary)]'
                   }`}>
                     <Clock className="w-4 h-4" /> Time Left: {formatTimer(timeLeftSeconds)}
                   </div>
@@ -299,30 +302,30 @@ export default function StudentCBTPage() {
                     size="sm"
                     onClick={handleSubmitTest}
                     disabled={submitting}
-                    className="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-semibold gap-1.5"
+                    className="text-xs font-semibold gap-1.5 shadow-sm"
                   >
                     {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                    Submit & Finish
+                    Finish Test
                   </Button>
                 </div>
               </div>
             </Card>
 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
-              {/* Main Question Panel */}
+              {/* Main Question Panel (Figma Node 2:2254 Question) */}
               <div className="md:col-span-9 space-y-4">
                 {activeExam.questions[currentQIndex] && (
-                  <Card className="border border-gray-200 dark:border-gray-800 shadow-sm p-6 space-y-5">
-                    <div className="flex items-center justify-between border-b pb-3 border-gray-100 dark:border-gray-800">
-                      <span className="text-xs font-bold text-indigo-600 uppercase tracking-wider">
+                  <Card className="border border-[var(--cgs-border)] shadow-sm p-6 space-y-5">
+                    <div className="flex items-center justify-between border-b pb-3 border-[var(--cgs-border)]">
+                      <span className="text-xs font-bold text-[var(--cgs-primary)] uppercase tracking-wider">
                         Question {currentQIndex + 1} of {activeExam.questions.length}
                       </span>
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-[var(--cgs-subdued)]">
                         {activeExam.questions[currentQIndex].marks} Marks
                       </span>
                     </div>
 
-                    <p className="text-sm sm:text-base font-semibold text-gray-900 dark:text-gray-100 leading-relaxed">
+                    <p className="text-sm sm:text-base font-semibold text-[var(--cgs-heading)] leading-relaxed">
                       {activeExam.questions[currentQIndex].questionText}
                     </p>
 
@@ -338,15 +341,15 @@ export default function StudentCBTPage() {
                             onClick={() => selectOption(optKey)}
                             className={`p-3.5 rounded-xl border text-xs sm:text-sm cursor-pointer transition-all flex items-center gap-3 ${
                               isSelected
-                                ? 'border-indigo-600 bg-indigo-50/80 dark:bg-indigo-950/60 font-semibold text-indigo-900 dark:text-indigo-200 shadow-sm'
-                                : 'border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900/40 text-gray-800 dark:text-gray-200'
+                                ? 'border-[var(--cgs-primary)] bg-[var(--cgs-tint)] font-semibold text-[var(--cgs-heading)] shadow-sm'
+                                : 'border-[var(--cgs-border)] hover:bg-[var(--cgs-surface-subtle)] text-[var(--cgs-text)]'
                             }`}
                           >
                             <span
-                              className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs ${
+                              className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs ${
                                 isSelected
-                                  ? 'bg-indigo-600 text-white'
-                                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600'
+                                  ? 'bg-[var(--cgs-primary)] text-white'
+                                  : 'bg-[var(--cgs-surface-subtle)] text-[var(--cgs-subdued)] border border-[var(--cgs-border)]'
                               }`}
                             >
                               {optKey}
@@ -358,7 +361,7 @@ export default function StudentCBTPage() {
                     </div>
 
                     {/* Navigation Buttons */}
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-800">
+                    <div className="flex items-center justify-between pt-4 border-t border-[var(--cgs-border)]">
                       <Button
                         size="sm"
                         variant="outline"
@@ -373,7 +376,7 @@ export default function StudentCBTPage() {
                         <Button
                           size="sm"
                           onClick={() => setCurrentQIndex((prev) => prev + 1)}
-                          className="text-xs gap-1 bg-indigo-600 hover:bg-indigo-700 text-white"
+                          className="text-xs gap-1"
                         >
                           Next Question <ChevronRight className="w-3.5 h-3.5" />
                         </Button>
@@ -381,9 +384,11 @@ export default function StudentCBTPage() {
                         <Button
                           size="sm"
                           onClick={handleSubmitTest}
-                          className="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-semibold"
+                          disabled={submitting}
+                          className="text-xs font-semibold gap-1.5"
                         >
-                          Submit Examination
+                          {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                          Submit Examination &rarr;
                         </Button>
                       )}
                     </div>
@@ -391,10 +396,10 @@ export default function StudentCBTPage() {
                 )}
               </div>
 
-              {/* Question Navigator Palette */}
+              {/* Question Navigator Palette (Figma Node 2:2269) */}
               <div className="md:col-span-3 space-y-3">
-                <Card className="border border-gray-200 dark:border-gray-800 shadow-sm p-4">
-                  <h4 className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-3">
+                <Card className="border border-[var(--cgs-border)] shadow-sm p-4">
+                  <h4 className="text-xs font-bold text-[var(--cgs-heading)] uppercase tracking-wider mb-3">
                     Question Palette
                   </h4>
                   <div className="grid grid-cols-4 gap-2">
@@ -408,10 +413,10 @@ export default function StudentCBTPage() {
                           onClick={() => setCurrentQIndex(idx)}
                           className={`h-9 rounded-lg font-bold text-xs transition-all ${
                             isCurrent
-                              ? 'ring-2 ring-indigo-600 ring-offset-2 bg-indigo-600 text-white'
+                              ? 'ring-2 ring-[var(--cgs-primary)] ring-offset-2 bg-[var(--cgs-primary)] text-white shadow-sm'
                               : isAnswered
-                              ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300'
-                              : 'bg-gray-100 dark:bg-gray-800 text-gray-600'
+                              ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 font-semibold'
+                              : 'bg-[var(--cgs-surface-subtle)] text-[var(--cgs-subdued)] border border-[var(--cgs-border)]'
                           }`}
                         >
                           {idx + 1}
@@ -420,13 +425,13 @@ export default function StudentCBTPage() {
                     })}
                   </div>
 
-                  <div className="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800 text-[11px] space-y-1.5 text-gray-500">
+                  <div className="pt-4 mt-4 border-t border-[var(--cgs-border)] text-[11px] space-y-1.5 text-[var(--cgs-subdued)]">
                     <div className="flex items-center gap-2">
                       <span className="w-3 h-3 rounded-full bg-emerald-500" />
                       <span>{Object.keys(answers).length} Answered</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="w-3 h-3 rounded-full bg-gray-300" />
+                      <span className="w-3 h-3 rounded-full bg-[var(--cgs-border)]" />
                       <span>{activeExam.questions.length - Object.keys(answers).length} Unattempted</span>
                     </div>
                   </div>
@@ -436,53 +441,50 @@ export default function StudentCBTPage() {
           </div>
         )}
 
-        {/* MODE 3: INSTANT RESULT SCORE CARD */}
+        {/* MODE 3: INSTANT RESULT SCORE CARD (Figma Node 2:5923 Instant score celebration modal) */}
         {result && (
-          <div className="max-w-xl mx-auto space-y-6 py-6">
-            <Card className="border border-gray-200 dark:border-gray-800 shadow-xl overflow-hidden text-center p-8">
-              <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-4 bg-emerald-100 text-emerald-600">
+          <div className="max-w-xl mx-auto space-y-6 py-8 animate-in zoom-in-95">
+            <Card className="border border-[var(--cgs-border)] shadow-2xl overflow-hidden text-center p-8 relative bg-[var(--cgs-surface)]">
+              {/* Celebration Ribbon (Figma Node 2:5924) */}
+              <div className="h-2.5 w-full bg-[var(--cgs-gold)] absolute top-0 left-0" />
+
+              <div className="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center mb-4 bg-[var(--cgs-tint)] text-[var(--cgs-primary)] shadow-sm mt-2">
                 <Award className="w-8 h-8" />
               </div>
 
               <Badge
-                className={`text-xs px-3 py-1 font-bold ${
-                  result.passed
-                    ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
-                    : 'bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300'
-                }`}
+                className="text-xs px-3 py-1 font-bold"
+                variant={result.passed ? 'success' : 'destructive'}
               >
-                {result.passed ? 'PASSED / CLEARED' : 'NEEDS IMPROVEMENT'}
+                {result.passed ? 'EXCELLENCE CONFIRMED' : 'ATTEMPT COMPLETED'}
               </Badge>
 
-              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mt-3">
-                {result.examTitle}
+              <h2 className="text-2xl font-bold text-[var(--cgs-heading)] mt-3">
+                Well done!
               </h2>
-              <p className="text-xs text-gray-500 mt-1">Official Automated CBT Scoring System</p>
+              <p className="text-xs text-[var(--cgs-subdued)] mt-1">
+                You&apos;ve completed your {result.examTitle}.
+              </p>
 
-              <div className="grid grid-cols-2 gap-4 my-6">
-                <div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-800">
-                  <p className="text-xs text-gray-500 font-medium">Marks Obtained</p>
-                  <p className="text-2xl font-bold text-indigo-600 mt-1">
-                    {result.marksObtained} / {result.totalMarks}
-                  </p>
-                </div>
-                <div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-800">
-                  <p className="text-xs text-gray-500 font-medium">Percentage Score</p>
-                  <p className="text-2xl font-bold text-emerald-600 mt-1">
-                    {result.percentage}%
-                  </p>
-                </div>
+              <div className="p-6 rounded-2xl bg-[var(--cgs-surface-subtle)] border border-[var(--cgs-border)] my-6 space-y-2">
+                <p className="text-xs font-semibold text-[var(--cgs-subdued)] uppercase tracking-wider">Score Achieved</p>
+                <p className="text-4xl font-extrabold text-[var(--cgs-primary)]">
+                  {result.marksObtained} / {result.totalMarks}
+                </p>
+                <p className="text-xs text-[var(--cgs-subdued)]">
+                  {result.percentage}% &middot; Result saved &middot; Submitted to Academic Registry
+                </p>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Button
                   onClick={() => {
                     setActiveExam(null)
                     setResult(null)
                   }}
-                  className="w-full text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-semibold"
+                  className="w-full text-xs font-semibold h-11"
                 >
-                  Return to CBT Portal
+                  Back to my learning &rarr;
                 </Button>
               </div>
             </Card>
