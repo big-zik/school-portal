@@ -1,521 +1,252 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import {
-  GraduationCap,
-  Users,
-  Calendar,
-  UploadCloud,
-  CheckCircle2,
-  AlertCircle,
-  FileText,
-  ArrowRight,
-  ShieldCheck,
-  Building,
-  Phone,
-  Mail,
-  Loader2,
-  Clock,
-  Printer,
-  ChevronRight,
-  Home,
-} from 'lucide-react'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { SiteShell } from '@/components/site/SiteShell'
 
-export default function PublicAdmissionApplyPage() {
-  const [classes, setClasses] = useState<any[]>([])
-  const [loadingClasses, setLoadingClasses] = useState(true)
+interface ClassOption { id: string; name: string }
+interface Doc { name: string; url: string; type: string; size: number }
+interface Submitted { applicationNumber: string; appliedClass?: string }
 
-  // Form State
-  const [applicantName, setApplicantName] = useState('')
-  const [dateOfBirth, setDateOfBirth] = useState('')
-  const [gender, setGender] = useState<'MALE' | 'FEMALE' | 'OTHER'>('MALE')
-  const [appliedClassId, setAppliedClassId] = useState('')
+const STEPS = ['Child’s details', 'Parent / guardian', 'Documents', 'Review']
+const DOC_SLOTS = ['Birth certificate', 'Recent school report', 'Passport photograph']
+const MAX_BYTES = 5 * 1024 * 1024
+const ACCEPT = ['image/jpeg', 'image/png', 'application/pdf']
+
+const input =
+  'mt-2 h-12 w-full rounded-lg font-normal border border-[var(--cgs-control)] bg-[var(--cgs-surface)] px-4 text-sm text-[var(--cgs-text)] placeholder:text-[var(--cgs-muted)]'
+const label = 'block text-sm font-semibold text-[var(--cgs-navy)]'
+const primaryBtn =
+  'inline-flex h-12 items-center justify-center rounded-lg bg-[var(--cgs-primary)] px-8 text-sm font-semibold text-[var(--cgs-on-primary)] hover:bg-[var(--cgs-primary-hover)] disabled:opacity-60'
+const backBtn =
+  'inline-flex h-12 min-w-[120px] items-center justify-center rounded-lg border border-[var(--cgs-primary)] bg-[var(--cgs-tint)] px-8 text-sm font-semibold text-[var(--cgs-navy)]'
+
+export default function ApplyPage() {
+  const [step, setStep] = useState(0)
+  const [classes, setClasses] = useState<ClassOption[]>([])
+
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [dob, setDob] = useState('')
+  const [classId, setClassId] = useState('')
+  const [previousSchool, setPreviousSchool] = useState('')
+  const [address, setAddress] = useState('')
+  const [needs, setNeeds] = useState('')
 
   const [parentName, setParentName] = useState('')
+  const [relationship, setRelationship] = useState('')
   const [parentEmail, setParentEmail] = useState('')
   const [parentPhone, setParentPhone] = useState('')
-  const [address, setAddress] = useState('')
-  const [previousSchool, setPreviousSchool] = useState('')
+  const [altContact, setAltContact] = useState('')
 
-  // Documents
-  const [documents, setDocuments] = useState<Array<{ name: string; url: string; type: string }>>([])
-  const [uploadingDoc, setUploadingDoc] = useState(false)
-  const [docType, setDocType] = useState('Birth Certificate')
-
-  // Submission state
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [errorMsg, setErrorMsg] = useState('')
-  const [submittedData, setSubmittedData] = useState<any | null>(null)
+  const [docs, setDocs] = useState<Record<string, Doc>>({})
+  const [uploading, setUploading] = useState('')
+  const [confirmed, setConfirmed] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  const [done, setDone] = useState<Submitted | null>(null)
 
   useEffect(() => {
-    async function loadClasses() {
-      try {
-        const res = await fetch('/api/classes')
-        if (res.ok) {
-          const json = await res.json()
-          if (json.data && json.data.length > 0) {
-            setClasses(json.data)
-            setAppliedClassId(json.data[0].id)
-          }
-        }
-      } catch (err) {
-        console.error('Failed to load classes', err)
-      } finally {
-        setLoadingClasses(false)
-      }
-    }
-    loadClasses()
+    fetch('/api/public/classes')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => j?.data && setClasses(j.data))
+      .catch(() => undefined)
   }, [])
 
-  const handleDocumentUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+  const className = classes.find((c) => c.id === classId)?.name ?? done?.appliedClass ?? ''
+  const go = (n: number) => {
+    setError('')
+    setStep(n)
+    if (typeof window !== 'undefined') window.scrollTo({ top: 0 })
+  }
 
-    setUploadingDoc(true)
-    setErrorMsg('')
+  const upload = async (slot: string, file: File) => {
+    setError('')
+    if (!ACCEPT.includes(file.type)) return setError('Accepted files are JPG, PNG or PDF.')
+    if (file.size > MAX_BYTES) return setError('Each file must be 5MB or smaller.')
+    setUploading(slot)
     try {
-      const formData = new FormData()
-      formData.append('file', file)
-      formData.append('folder', 'admissions-documents')
-
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      })
+      const fd = new FormData()
+      fd.append('file', file)
+      fd.append('folder', 'admissions-documents')
+      const res = await fetch('/api/public/admissions-upload', { method: 'POST', body: fd })
       const json = await res.json()
-      if (json.success && json.data?.url) {
-        setDocuments((prev) => [
-          ...prev,
-          { name: file.name, url: json.data.url, type: docType },
-        ])
-      } else {
-        setErrorMsg(json.error || 'Failed to upload document')
-      }
-    } catch (err: any) {
-      setErrorMsg(err.message || 'Error uploading file')
+      if (res.ok && json.success) setDocs((d) => ({ ...d, [slot]: { name: file.name, url: json.data.url, type: slot, size: file.size } }))
+      else setError(json.error || 'Failed to upload document')
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Error uploading file')
     } finally {
-      setUploadingDoc(false)
+      setUploading('')
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!appliedClassId && classes.length > 0) {
-      setErrorMsg('Please select the grade level or class applied for')
-      return
-    }
-
-    setIsSubmitting(true)
-    setErrorMsg('')
-
+  const submit = async () => {
+    if (!confirmed) return setError('Please confirm the details are correct before submitting.')
+    setBusy(true)
+    setError('')
     try {
-      const payload = {
-        applicantName,
-        dateOfBirth: dateOfBirth || undefined,
-        gender,
-        appliedClassId: appliedClassId || (classes[0]?.id ?? 'cls-default'),
-        parentName,
-        parentEmail,
-        parentPhone,
-        address,
-        previousSchool: previousSchool || undefined,
-        documents,
-      }
-
+      // Relationship, alternative contact and access needs have no dedicated API field yet,
+      // so they travel with the parent name / address and stay visible to the school office.
+      const extra = [altContact && `Alternative contact: ${altContact}`, needs && `Learning or access needs: ${needs}`].filter(Boolean)
       const res = await fetch('/api/admissions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          applicantName: `${firstName} ${lastName}`.trim(),
+          dateOfBirth: dob || undefined,
+          appliedClassId: classId || classes[0]?.id || 'cls-default',
+          parentName: relationship ? `${parentName} (${relationship})` : parentName,
+          parentEmail,
+          parentPhone,
+          address: [address, ...extra].join('\n'),
+          previousSchool: previousSchool || undefined,
+          documents: Object.values(docs).map(({ name, url, type }) => ({ name, url, type })),
+        }),
       })
-
       const json = await res.json()
-      if (json.success) {
-        setSubmittedData(json.data)
-      } else {
-        setErrorMsg(json.error || 'Failed to submit application. Please check all fields.')
-      }
-    } catch (err: any) {
-      setErrorMsg(err.message || 'Error contacting admissions server')
+      if (json.success) setDone(json.data)
+      else setError(json.error || 'Failed to submit application. Please check all fields.')
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Error contacting admissions server')
     } finally {
-      setIsSubmitting(false)
+      setBusy(false)
     }
   }
 
+  const fmtDob = dob ? new Date(dob).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : ''
+
   return (
-    <div className="min-h-screen bg-[var(--cgs-canvas)] text-[var(--cgs-text)] flex flex-col font-sans">
-      {/* Top Header */}
-      <header className="sticky top-0 z-40 bg-[var(--cgs-surface)]/95 border-b border-[var(--cgs-border)] backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="h-11 w-11 rounded-xl bg-[var(--cgs-tint)] border border-[var(--cgs-sky)]/40 flex items-center justify-center font-bold text-lg text-[var(--cgs-heading)] shadow-sm">
-              CG
-            </div>
-            <div>
-              <span className="font-bold text-base tracking-tight text-[var(--cgs-heading)] leading-none">
-                CHOSEN GENERATION
-              </span>
-              <p className="text-[10px] text-[var(--cgs-primary)] uppercase tracking-wider font-semibold mt-1">
-                Online Admissions &middot; Born to Excel
-              </p>
-            </div>
-          </Link>
+    <SiteShell active="/admissions">
+      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <p className="text-xs font-semibold uppercase tracking-wider text-[var(--cgs-primary)]">Admissions / 2026–2027 session</p>
+        <h1 className="mt-6 font-serif text-4xl font-semibold text-[var(--cgs-navy)] sm:text-5xl lg:text-[56px]">A new beginning starts here.</h1>
+        <p className="mt-6 text-lg text-[var(--cgs-text)]">Save your progress and return at any time. Fields marked * are required.</p>
 
-          <div className="flex items-center gap-3 text-xs">
-            <Link href="/" className="text-[var(--cgs-subdued)] hover:text-[var(--cgs-text)] font-semibold flex items-center gap-1">
-              <Home className="w-3.5 h-3.5" /> Back to Home
-            </Link>
-            <Link href="/login">
-              <Button size="sm" variant="outline" className="text-xs font-semibold">
-                Portal Sign In
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+        <ol className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label="Application steps">
+          {STEPS.map((s, i) => (
+            <li
+              key={s}
+              aria-current={i === step && !done ? 'step' : undefined}
+              className={`flex h-14 items-center rounded-lg px-4 text-sm font-semibold ${i === (done ? 0 : step) ? 'bg-[var(--cgs-navy)] text-white' : 'bg-[var(--cgs-tint)] text-[var(--cgs-navy)]'}`}
+            >
+              <span className="mr-2">{i + 1}</span>
+              {s}
+            </li>
+          ))}
+        </ol>
 
-      {/* Main Body */}
-      <main className="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
-        {submittedData ? (
-          /* SUCCESS SCREEN */
-          <Card className="border-emerald-200 dark:border-emerald-900 shadow-xl overflow-hidden animate-in zoom-in-95">
-            <div className="bg-emerald-600 p-8 text-center text-white space-y-2">
-              <CheckCircle2 className="w-16 h-16 mx-auto text-emerald-100 animate-bounce" />
-              <h2 className="text-2xl font-extrabold tracking-tight">Application Successfully Received!</h2>
-              <p className="text-xs text-emerald-100 max-w-lg mx-auto">
-                Thank you for applying to CHOSEN GENERATION SCHOOL. Your admission file has been logged in our registry.
-              </p>
-            </div>
+        <div className="mt-10 grid items-start gap-8 lg:grid-cols-[1.9fr_1fr]">
+          {done ? (
+            <section className="rounded-3xl bg-[var(--cgs-tint)] p-8 lg:min-h-[380px]" aria-live="polite">
+              <h2 className="mt-8 text-4xl font-semibold text-[var(--cgs-navy)]">Application received</h2>
+              <p className="mt-10 text-xl">Thank you, {parentName}. We have received {firstName}’s application for {className}.</p>
+              <p className="mt-16 text-lg">Reference: {done.applicationNumber}</p>
+              <p className="mt-8 max-w-2xl text-lg">The school office will review your documents and contact you about the next step. Keep this reference when you contact us.</p>
+              <Link href="/" className={`${primaryBtn} mt-16 w-full max-w-[400px]`}>Back to home</Link>
+            </section>
+          ) : (
+            <form
+              className="rounded-3xl bg-[var(--cgs-tint)]/50 p-8"
+              onSubmit={(e) => {
+                e.preventDefault()
+                if (step < 3) go(step + 1)
+                else submit()
+              }}
+            >
+              {error && <p role="alert" className="mb-6 rounded-lg border border-[var(--cgs-danger)] bg-[var(--cgs-danger-soft)] p-4 text-sm text-[var(--cgs-danger)]">{error}</p>}
 
-            <CardContent className="p-6 md:p-8 space-y-6">
-              <div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Application Reference Number</span>
-                  <h3 className="text-2xl font-black font-mono text-blue-600">{submittedData.applicationNumber}</h3>
-                  <p className="text-xs text-gray-500 mt-0.5">Applicant: <strong>{submittedData.applicantName}</strong></p>
-                </div>
-                <div className="text-right">
-                  <Badge className="bg-amber-500 text-white text-xs">Under Review</Badge>
-                  <p className="text-[11px] text-gray-400 mt-1">Submitted on {new Date().toLocaleDateString()}</p>
-                </div>
-              </div>
-
-              {/* Next Steps */}
-              <div className="space-y-3">
-                <h4 className="text-xs font-bold text-gray-900 dark:text-gray-100 uppercase tracking-wider">
-                  Next Steps in Your Admission Process
-                </h4>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                  <div className="p-3.5 rounded-xl border border-gray-200 dark:border-gray-800 space-y-1">
-                    <span className="h-6 w-6 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-[11px]">1</span>
-                    <p className="font-bold text-gray-900 dark:text-gray-100">Document Verification</p>
-                    <p className="text-[11px] text-gray-500">Our academic registrar reviews academic transcripts and birth certificate.</p>
-                  </div>
-                  <div className="p-3.5 rounded-xl border border-gray-200 dark:border-gray-800 space-y-1">
-                    <span className="h-6 w-6 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-[11px]">2</span>
-                    <p className="font-bold text-gray-900 dark:text-gray-100">Entrance Assessment</p>
-                    <p className="text-[11px] text-gray-500">You will receive an email invite for the entrance interview and diagnostic test.</p>
-                  </div>
-                  <div className="p-3.5 rounded-xl border border-gray-200 dark:border-gray-800 space-y-1">
-                    <span className="h-6 w-6 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-[11px]">3</span>
-                    <p className="font-bold text-gray-900 dark:text-gray-100">Admission Letter</p>
-                    <p className="text-[11px] text-gray-500">Upon acceptance, official student credentials and fee invoices are released.</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-gray-100 dark:border-gray-800">
-                <Button variant="outline" size="sm" onClick={() => window.print()} className="text-xs gap-1.5">
-                  <Printer className="w-3.5 h-3.5" /> Print Application Slip
-                </Button>
-                <Link href="/">
-                  <Button size="sm" className="text-xs bg-blue-900 hover:bg-blue-800 font-semibold gap-1.5">
-                    Return to Homepage <ArrowRight className="w-3.5 h-3.5" />
-                  </Button>
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
-        ) : (
-          /* APPLICATION FORM */
-          <div className="space-y-6">
-            <div className="text-center space-y-1">
-              <Badge className="bg-blue-600 text-white text-[10px]">2025/2026 Academic Session</Badge>
-              <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-blue-950 dark:text-blue-100">
-                Student Admission Application
-              </h1>
-              <p className="text-xs text-gray-500 max-w-md mx-auto">
-                Complete all required biodata and attach supporting academic credentials for your child.
-              </p>
-            </div>
-
-            {errorMsg && (
-              <div className="p-4 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-xs text-red-700 dark:text-red-300 flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 shrink-0" />
-                <span>{errorMsg}</span>
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Section 1: Candidate Biodata */}
-              <Card>
-                <CardHeader className="py-4 px-6 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50">
-                  <CardTitle className="text-sm font-bold flex items-center gap-2">
-                    <GraduationCap className="w-4 h-4 text-blue-600" />
-                    1. Applicant Information
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-6 space-y-4">
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                      Applicant Full Name (First Name, Middle Name, Surname) *
-                    </label>
-                    <Input
-                      required
-                      placeholder="e.g. Chukwuemeka David Adeleke"
-                      value={applicantName}
-                      onChange={(e) => setApplicantName(e.target.value)}
-                      className="text-xs h-9.5"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                        Date of Birth *
-                      </label>
-                      <Input
-                        type="date"
-                        required
-                        value={dateOfBirth}
-                        onChange={(e) => setDateOfBirth(e.target.value)}
-                        className="text-xs h-9.5"
-                      />
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                        Gender *
-                      </label>
-                      <select
-                        value={gender}
-                        onChange={(e) => setGender(e.target.value as any)}
-                        className="h-9.5 w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 text-xs"
-                      >
-                        <option value="MALE">Male</option>
-                        <option value="FEMALE">Female</option>
+              {step === 0 && (
+                <>
+                  <h2 className="text-3xl font-semibold text-[var(--cgs-navy)]">Tell us about your child</h2>
+                  <div className="mt-8 grid gap-x-9 gap-y-8 sm:grid-cols-2">
+                    <label className={label}>First name *<input required className={input} value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="e.g. Chiamaka" /></label>
+                    <label className={label}>Last name *<input required className={input} value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="e.g. Okafor" /></label>
+                    <label className={label}>Date of birth *<input required type="date" className={input} value={dob} onChange={(e) => setDob(e.target.value)} /></label>
+                    <label className={label}>Applying for *
+                      <select required className={input} value={classId} onChange={(e) => setClassId(e.target.value)}>
+                        <option value="">Select class</option>
+                        {classes.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
                       </select>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                        Class Applied For *
-                      </label>
-                      <select
-                        value={appliedClassId}
-                        onChange={(e) => setAppliedClassId(e.target.value)}
-                        className="h-9.5 w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 text-xs font-medium"
-                      >
-                        {classes.length > 0 ? (
-                          classes.map((cls) => (
-                            <option key={cls.id} value={cls.id}>
-                              {cls.name} ({cls.level})
-                            </option>
-                          ))
-                        ) : (
-                          <>
-                            <option value="cls-p1">Primary 1 (Lower Primary)</option>
-                            <option value="cls-p4">Primary 4 (Upper Primary)</option>
-                            <option value="cls-j1">JSS 1 (Junior Secondary)</option>
-                            <option value="cls-10">Grade 10 / SS 1 (Senior Secondary)</option>
-                          </>
-                        )}
-                      </select>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Section 2: Parent / Guardian Biodata */}
-              <Card>
-                <CardHeader className="py-4 px-6 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50">
-                  <CardTitle className="text-sm font-bold flex items-center gap-2">
-                    <Users className="w-4 h-4 text-emerald-600" />
-                    2. Parent / Guardian Contact Details
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-6 space-y-4">
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                      Parent / Primary Guardian Full Name *
                     </label>
-                    <Input
-                      required
-                      placeholder="e.g. Engr. Babatunde Adeleke"
-                      value={parentName}
-                      onChange={(e) => setParentName(e.target.value)}
-                      className="text-xs h-9.5"
-                    />
                   </div>
+                  <label className={`${label} mt-8`}>Current school<input className={input} value={previousSchool} onChange={(e) => setPreviousSchool(e.target.value)} placeholder="School name" /></label>
+                  <label className={`${label} mt-8`}>Home address *<input required minLength={5} className={input} value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Street and area" /></label>
+                  <label className={`${label} mt-8`}>Learning or access needs
+                    <span className="mt-3 block text-base font-normal text-[var(--cgs-text)]">Tell us how we can support your child. This will not affect admission decisions.</span>
+                    <textarea rows={2} className={`${input} h-auto py-3`} value={needs} onChange={(e) => setNeeds(e.target.value)} />
+                  </label>
+                  <div className="mt-10"><button type="submit" className={`${primaryBtn} w-full max-w-[300px]`}>Save and continue</button></div>
+                </>
+              )}
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                        Email Address (Admission status updates will be sent here) *
-                      </label>
-                      <Input
-                        type="email"
-                        required
-                        placeholder="parent@example.com"
-                        value={parentEmail}
-                        onChange={(e) => setParentEmail(e.target.value)}
-                        className="text-xs h-9.5"
-                      />
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                        Phone Number (SMS alerts) *
-                      </label>
-                      <Input
-                        type="tel"
-                        required
-                        placeholder="+234 802 345 6789"
-                        value={parentPhone}
-                        onChange={(e) => setParentPhone(e.target.value)}
-                        className="text-xs h-9.5"
-                      />
-                    </div>
+              {step === 1 && (
+                <>
+                  <h2 className="text-3xl font-semibold text-[var(--cgs-navy)]">Parent / guardian details</h2>
+                  <div className="mt-8 space-y-8">
+                    <label className={label}>Full name *<input required minLength={3} className={input} value={parentName} onChange={(e) => setParentName(e.target.value)} /></label>
+                    <label className={label}>Relationship *<input required className={input} value={relationship} onChange={(e) => setRelationship(e.target.value)} placeholder="e.g. Mother" /></label>
+                    <label className={label}>Email address *<input required type="email" className={input} value={parentEmail} onChange={(e) => setParentEmail(e.target.value)} /></label>
+                    <label className={label}>Phone number *<input required type="tel" minLength={7} className={input} value={parentPhone} onChange={(e) => setParentPhone(e.target.value)} /></label>
+                    <label className={label}>Alternative contact<input className={input} value={altContact} onChange={(e) => setAltContact(e.target.value)} placeholder="e.g. another parent or guardian" /></label>
                   </div>
+                  <div className="mt-12 flex gap-10"><button type="button" onClick={() => go(0)} className={backBtn}>Back</button><button type="submit" className={`${primaryBtn} flex-1`}>Save and continue</button></div>
+                </>
+              )}
 
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                      Residential Home Address *
-                    </label>
-                    <Input
-                      required
-                      placeholder="House number, Street name, Estate, City, State"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      className="text-xs h-9.5"
-                    />
+              {step === 2 && (
+                <>
+                  <h2 className="text-3xl font-semibold text-[var(--cgs-navy)]">Upload supporting documents</h2>
+                  <div className="mt-8 space-y-6">
+                    {DOC_SLOTS.map((slot) => {
+                      const d = docs[slot]
+                      return (
+                        <div key={slot} className="rounded-lg border border-[var(--cgs-control)] bg-[var(--cgs-surface)] p-5">
+                          <h3 className="text-xl font-semibold text-[var(--cgs-navy)]">{slot}</h3>
+                          <p className="mt-4 text-sm">{d ? `${d.name} · ${Math.max(1, Math.round(d.size / 1024))}KB · Uploaded` : uploading === slot ? 'Uploading…' : 'Not uploaded yet'}</p>
+                          <label className="mt-4 inline-block cursor-pointer text-sm font-semibold text-[var(--cgs-primary)] hover:underline">
+                            {d ? 'Replace document →' : 'Choose file →'}
+                            <input type="file" accept=".jpg,.jpeg,.png,.pdf" className="sr-only" onChange={(e) => e.target.files?.[0] && upload(slot, e.target.files[0])} />
+                          </label>
+                        </div>
+                      )
+                    })}
                   </div>
-                </CardContent>
-              </Card>
+                  <div className="mt-12 flex gap-10"><button type="button" onClick={() => go(1)} className={backBtn}>Back</button><button type="submit" className={`${primaryBtn} flex-1`}>Save and continue</button></div>
+                </>
+              )}
 
-              {/* Section 3: Academic Background */}
-              <Card>
-                <CardHeader className="py-4 px-6 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50">
-                  <CardTitle className="text-sm font-bold flex items-center gap-2">
-                    <Building className="w-4 h-4 text-purple-600" />
-                    3. Academic Background
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-6 space-y-4">
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                      Previous School Attended (if applicable)
-                    </label>
-                    <Input
-                      placeholder="e.g. Corona Primary School, Victoria Island"
-                      value={previousSchool}
-                      onChange={(e) => setPreviousSchool(e.target.value)}
-                      className="text-xs h-9.5"
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Section 4: Document Attachments */}
-              <Card>
-                <CardHeader className="py-4 px-6 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50">
-                  <CardTitle className="text-sm font-bold flex items-center gap-2">
-                    <UploadCloud className="w-4 h-4 text-blue-600" />
-                    4. Supporting Document Uploads
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-6 space-y-4">
-                  <p className="text-xs text-gray-500">
-                    Upload birth certificates, passport photographs, and previous term report cards (PDF, JPG, PNG).
-                  </p>
-
-                  <div className="flex flex-col sm:flex-row items-center gap-3">
-                    <select
-                      value={docType}
-                      onChange={(e) => setDocType(e.target.value)}
-                      className="h-9 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 text-xs"
-                    >
-                      <option>Birth Certificate</option>
-                      <option>Previous Term Report Sheet</option>
-                      <option>Passport Photograph</option>
-                      <option>Immunization / Medical Record</option>
-                    </select>
-
-                    <div className="relative flex-1 w-full">
-                      <Input
-                        type="file"
-                        accept="image/*,application/pdf"
-                        disabled={uploadingDoc}
-                        onChange={handleDocumentUpload}
-                        className="text-xs"
-                      />
-                    </div>
-                  </div>
-
-                  {uploadingDoc && (
-                    <p className="text-xs text-blue-600 flex items-center gap-1.5">
-                      <Loader2 className="w-3.5 h-3.5 animate-spin" /> Uploading document to secure vault...
-                    </p>
-                  )}
-
-                  {documents.length > 0 && (
-                    <div className="pt-2 space-y-2">
-                      <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Attached Documents ({documents.length})</p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {documents.map((doc, idx) => (
-                          <div key={idx} className="flex items-center justify-between p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-xs">
-                            <div className="flex items-center gap-2 truncate">
-                              <FileText className="w-4 h-4 text-blue-600 shrink-0" />
-                              <div className="truncate">
-                                <p className="font-semibold text-gray-800 dark:text-gray-200 truncate">{doc.name}</p>
-                                <span className="text-[10px] text-gray-400">{doc.type}</span>
-                              </div>
-                            </div>
-                            <Badge variant="outline" className="text-[10px] text-emerald-600 border-emerald-400 shrink-0">Attached</Badge>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              <div className="flex items-center justify-end gap-3 pt-4">
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  size="lg"
-                  className="w-full sm:w-auto px-8 bg-blue-900 hover:bg-blue-800 text-white font-bold text-xs gap-2"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" /> Submitting Application...
-                    </>
-                  ) : (
-                    <>
-                      Submit Application <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </Button>
-              </div>
+              {step === 3 && (
+                <>
+                  <h2 className="text-3xl font-semibold text-[var(--cgs-navy)]">Review your application</h2>
+                  <h3 className="mt-10 font-semibold text-[var(--cgs-navy)]">Child</h3>
+                  <p className="mt-4 text-lg leading-relaxed">{firstName} {lastName} · Applying for {className}<br />Date of birth: {fmtDob}{previousSchool && <><br />Current school: {previousSchool}</>}</p>
+                  <h3 className="mt-10 font-semibold text-[var(--cgs-navy)]">Parent / guardian</h3>
+                  <p className="mt-4 text-lg leading-relaxed">{parentName} · {relationship}<br />{parentEmail} · {parentPhone}</p>
+                  <h3 className="mt-10 font-semibold text-[var(--cgs-navy)]">Documents</h3>
+                  <p className="mt-4 text-lg">{DOC_SLOTS.map((s) => (docs[s] ? `✓ ${s}` : `Missing: ${s}`)).join('   ')}</p>
+                  <label className="mt-10 flex items-start gap-3 text-lg">
+                    <input type="checkbox" checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} className="mt-1.5 h-5 w-5 accent-[var(--cgs-primary)]" />
+                    I confirm these details are correct and agree to the school processing this application.
+                  </label>
+                  <p className="mt-8 text-sm">Submission does not guarantee admission. The school office will contact you about the next steps.</p>
+                  <div className="mt-12 flex gap-10"><button type="button" onClick={() => go(2)} className={backBtn}>Back</button><button type="submit" disabled={busy} className={`${primaryBtn} flex-1`}>{busy ? 'Submitting…' : 'Submit application'}</button></div>
+                </>
+              )}
             </form>
-          </div>
-        )}
-      </main>
-    </div>
+          )}
+
+          <aside className="rounded-3xl bg-[var(--cgs-tint)] p-7 lg:min-h-[650px]">
+            <h2 className="text-3xl font-semibold text-[var(--cgs-navy)]">Before you begin</h2>
+            <p className="mt-8 text-lg">Have these ready:</p>
+            <ul className="mt-6 space-y-1 text-lg">
+              <li>• Child’s birth certificate</li><li>• Recent school report</li><li>• Parent contact details</li><li>• Passport photograph</li>
+            </ul>
+            <p className="mt-8 text-lg">Accepted files: JPG, PNG or PDF.<br />Maximum 5MB per file.</p>
+            <h2 className="mt-28 text-2xl font-semibold text-[var(--cgs-navy)]">Need help?</h2>
+            <p className="mt-6 text-lg">Contact the school office. Your application is private and secure.</p>
+          </aside>
+        </div>
+      </div>
+    </SiteShell>
   )
 }

@@ -7,6 +7,15 @@ const PUBLIC_ROUTES = [
   '/forgot-password',
   '/reset-password',
   '/verify-email',
+  // Public marketing site and admissions
+  '/about',
+  '/news',
+  '/gallery',
+  '/contact',
+  '/admissions',
+  // Public form endpoints (the admissions GET handler enforces its own auth)
+  '/api/contact',
+  '/api/admissions',
   // Backward compatibility redirects if any old links hit /auth/*
   '/auth/login',
   '/auth/forgot-password',
@@ -14,7 +23,7 @@ const PUBLIC_ROUTES = [
   '/auth/verify-email',
 ]
 
-const PUBLIC_PREFIXES = ['/api/auth', '/api/public']
+const PUBLIC_PREFIXES = ['/api/auth', '/api/public', '/admissions/']
 
 const PROTECTED_ROUTES = [
   { prefix: '/super-admin', roles: ['SUPER_ADMIN'] },
