@@ -123,7 +123,7 @@ export default async function AdminDashboardPage() {
 
           <div className="flex flex-wrap items-center gap-2">
             <Link href="/admin/students">
-              <Button size="sm" className="text-xs bg-blue-600 hover:bg-blue-700 gap-1.5 font-semibold">
+              <Button size="sm" className="text-white text-xs bg-blue-600 hover:bg-blue-700 gap-1.5 font-semibold">
                 <PlusCircle className="w-4 h-4" /> Enrol Student
               </Button>
             </Link>
@@ -140,7 +140,7 @@ export default async function AdminDashboardPage() {
           <Card className="hover:shadow-md transition-shadow">
             <CardContent className="p-5 flex items-center justify-between">
               <div>
-                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Total Enrolment</p>
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-300">Total Enrolment</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">
                   {studentCount}
                 </h3>
@@ -157,7 +157,7 @@ export default async function AdminDashboardPage() {
           <Card className="hover:shadow-md transition-shadow">
             <CardContent className="p-5 flex items-center justify-between">
               <div>
-                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Teaching Faculty</p>
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-300">Teaching Faculty</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">
                   {teacherCount} Staff
                 </h3>
@@ -172,7 +172,7 @@ export default async function AdminDashboardPage() {
           <Card className="hover:shadow-md transition-shadow">
             <CardContent className="p-5 flex items-center justify-between">
               <div>
-                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Classes & Divisions</p>
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-300">Classes & Divisions</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">
                   {classCount}
                 </h3>
@@ -187,7 +187,7 @@ export default async function AdminDashboardPage() {
           <Card className="hover:shadow-md transition-shadow">
             <CardContent className="p-5 flex items-center justify-between">
               <div>
-                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Fee Collections</p>
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-300">Fee Collections</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">
                   {collectionRate}%
                 </h3>

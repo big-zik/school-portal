@@ -127,7 +127,7 @@ export function Header({ user, onToggleSidebar }: HeaderProps) {
               <span className="text-xs font-semibold leading-tight text-gray-900 dark:text-gray-100">
                 {user?.name || 'Academic User'}
               </span>
-              <span className="text-[10px] text-gray-500 dark:text-gray-400 capitalize">
+              <span className="text-[10px] text-gray-500 dark:text-gray-300 capitalize">
                 {primaryRole.toLowerCase().replace('_', ' ')}
               </span>
             </div>

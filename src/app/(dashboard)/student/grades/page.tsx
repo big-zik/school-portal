@@ -131,14 +131,14 @@ export default async function StudentGradesPage() {
               <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
                 Official Report Card Locked
               </h3>
-              <p className="text-xs text-gray-600 dark:text-gray-400 max-w-md mx-auto leading-relaxed">
+              <p className="text-xs text-gray-600 dark:text-gray-300 max-w-md mx-auto leading-relaxed">
                 Terminal report card and continuous assessment scores are locked pending clearance of outstanding school fee balance of <strong className="text-amber-700 font-bold">{formatCurrency(outstandingBalance)}</strong>.
               </p>
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
               <Link href="/student/fees">
-                <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-xs font-bold gap-1.5 shadow-sm">
+                <Button size="sm" className="text-white bg-emerald-600 hover:bg-emerald-700 text-xs font-bold gap-1.5 shadow-sm">
                   <CreditCard className="w-3.5 h-3.5" /> Pay Outstanding Balance ({formatCurrency(outstandingBalance)})
                 </Button>
               </Link>

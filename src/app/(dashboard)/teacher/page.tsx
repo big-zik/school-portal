@@ -159,7 +159,7 @@ export default async function TeacherDashboardPage() {
               </Button>
             </Link>
             <Link href="/teacher/attendance">
-              <Button variant="default" size="sm" className="gap-1.5 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700">
+              <Button variant="default" size="sm" className="text-white gap-1.5 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700">
                 <ClipboardCheck className="w-4 h-4" /> Mark Attendance
               </Button>
             </Link>
@@ -171,7 +171,7 @@ export default async function TeacherDashboardPage() {
           <Card className="hover:shadow-md transition-shadow">
             <CardContent className="p-5 flex items-center justify-between">
               <div>
-                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Total Students</p>
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-300">Total Students</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">{teacherData.totalStudents}</h3>
                 <span className="text-[11px] text-gray-500">Across {teacherData.classesTeaching.length} classes</span>
               </div>
@@ -184,7 +184,7 @@ export default async function TeacherDashboardPage() {
           <Card className="hover:shadow-md transition-shadow">
             <CardContent className="p-5 flex items-center justify-between">
               <div>
-                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Today's Lectures</p>
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-300">Today's Lectures</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">3 Periods</h3>
                 <span className="text-[11px] text-emerald-600 font-medium">1 completed</span>
               </div>
@@ -197,7 +197,7 @@ export default async function TeacherDashboardPage() {
           <Card className="hover:shadow-md transition-shadow">
             <CardContent className="p-5 flex items-center justify-between">
               <div>
-                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">To Grade</p>
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-300">To Grade</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">20 Submissions</h3>
                 <span className="text-[11px] text-amber-600 font-medium">Needs assessment</span>
               </div>
@@ -210,7 +210,7 @@ export default async function TeacherDashboardPage() {
           <Card className="hover:shadow-md transition-shadow">
             <CardContent className="p-5 flex items-center justify-between">
               <div>
-                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Class Average</p>
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-300">Class Average</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">79.4%</h3>
                 <span className="text-[11px] text-emerald-600 font-medium flex items-center gap-1">
                   <TrendingUp className="w-3 h-3" /> +3.2% from Term 1
@@ -261,7 +261,7 @@ export default async function TeacherDashboardPage() {
                         </Badge>
                       ) : (
                         <Link href="/teacher/attendance">
-                          <Button size="sm" className="text-xs bg-blue-600 hover:bg-blue-700">
+                          <Button size="sm" className="text-white text-xs bg-blue-600 hover:bg-blue-700">
                             Take Attendance
                           </Button>
                         </Link>

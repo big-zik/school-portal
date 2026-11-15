@@ -449,7 +449,7 @@ export default function AdminCBTPage() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                           <div className="flex items-center gap-2">
-                            <span className="text-[11px] font-semibold text-gray-600 dark:text-gray-400">
+                            <span className="text-[11px] font-semibold text-gray-600 dark:text-gray-300">
                               Correct Choice:
                             </span>
                             <select

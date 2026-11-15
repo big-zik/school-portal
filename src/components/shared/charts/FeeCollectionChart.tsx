@@ -48,22 +48,22 @@ export function FeeCollectionChart({ data, className }: FeeCollectionChartProps)
           <XAxis
             dataKey="category"
             tick={{ fill: 'currentColor' }}
-            className="text-xs text-gray-600 dark:text-gray-400"
+            className="text-xs text-gray-600 dark:text-gray-300"
           />
           <YAxis
             tickFormatter={formatNairaShorthand}
             tick={{ fill: 'currentColor' }}
-            className="text-xs text-gray-600 dark:text-gray-400"
+            className="text-xs text-gray-600 dark:text-gray-300"
           />
           <Tooltip
             formatter={(value: any) => [
               formatNairaShorthand(Number(value) || 0),
             ]}
             contentStyle={{
-              backgroundColor: 'var(--tooltip-bg, #111827)',
-              borderColor: 'var(--tooltip-border, #374151)',
+              backgroundColor: 'var(--tooltip-bg, #0F2A44)',
+              borderColor: 'var(--tooltip-border, #2B4260)',
               borderRadius: '0.5rem',
-              color: '#f9fafb',
+              color: '#F4EFE2',
               fontSize: '0.875rem',
             }}
           />
@@ -77,14 +77,14 @@ export function FeeCollectionChart({ data, className }: FeeCollectionChartProps)
             dataKey="collected"
             name="Collected"
             stackId="feeStack"
-            fill="#3b82f6"
+            fill="var(--cgs-primary, #0D5EA7)"
             radius={[0, 0, 0, 0]}
           />
           <Bar
             dataKey="outstanding"
             name="Outstanding"
             stackId="feeStack"
-            fill="#f97316"
+            fill="var(--cgs-gold, #C8962E)"
             radius={[4, 4, 0, 0]}
           />
         </BarChart>

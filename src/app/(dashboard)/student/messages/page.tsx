@@ -299,7 +299,7 @@ export default function StudentMessagesPage() {
                 type="submit"
                 size="sm"
                 disabled={isSending}
-                className="h-9 px-4 text-xs font-semibold bg-blue-600 hover:bg-blue-700 gap-1.5"
+                className="text-white h-9 px-4 text-xs font-semibold bg-blue-600 hover:bg-blue-700 gap-1.5"
               >
                 {isSending ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" /> : <Send className="w-3.5 h-3.5" />} Send
               </Button>

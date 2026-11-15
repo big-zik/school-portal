@@ -154,12 +154,12 @@ export default function AdminParentsPage() {
                           ))}
                         </div>
                       </TableCell>
-                      <TableCell className="text-xs text-gray-600 dark:text-gray-400">
+                      <TableCell className="text-xs text-gray-600 dark:text-gray-300">
                         {g.occupation || 'Self-Employed'}
                       </TableCell>
                       <TableCell>
                         <div className="space-y-1 text-xs">
-                          <p className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400">
+                          <p className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
                             <Mail className="w-3.5 h-3.5 text-gray-400" />
                             {g.user.email}
                           </p>

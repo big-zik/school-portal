@@ -30,10 +30,10 @@ export function GradeDistributionChart({
           <Tooltip
             formatter={(value: any, name: any) => [`${value} students`, `Grade ${name}`]}
             contentStyle={{
-              backgroundColor: 'var(--tooltip-bg, #111827)',
-              borderColor: 'var(--tooltip-border, #374151)',
+              backgroundColor: 'var(--tooltip-bg, #0F2A44)',
+              borderColor: 'var(--tooltip-border, #2B4260)',
               borderRadius: '0.5rem',
-              color: '#f9fafb',
+              color: '#F4EFE2',
               fontSize: '0.875rem',
             }}
           />

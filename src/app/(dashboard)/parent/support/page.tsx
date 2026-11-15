@@ -355,7 +355,7 @@ export default function ParentSupportPage() {
                     <Button type="button" variant="outline" size="sm" onClick={() => setShowNewModal(false)} className="text-xs">
                       Cancel
                     </Button>
-                    <Button type="submit" disabled={submitting} className="text-xs bg-blue-600 hover:bg-blue-700 font-semibold gap-1.5">
+                    <Button type="submit" disabled={submitting} className="text-white text-xs bg-blue-600 hover:bg-blue-700 font-semibold gap-1.5">
                       {submitting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
                       Submit Message
                     </Button>

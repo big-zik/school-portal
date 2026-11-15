@@ -63,12 +63,12 @@ function getNodemailerTransport(): any {
 // Shared HTML wrapper / styling
 // ---------------------------------------------------------------------------
 
-const BRAND_COLOR = "#1e40af"; // Tailwind blue-800
-const ACCENT_COLOR = "#f59e0b"; // Tailwind amber-400
-const BG_COLOR = "#f8fafc";
+const BRAND_COLOR = "#0D5EA7"; // Tailwind blue-800
+const ACCENT_COLOR = "#C8962E"; // Brand gold (fill/accent only)
+const BG_COLOR = "#F7F4EA";
 const CARD_COLOR = "#ffffff";
-const TEXT_DARK = "#1e293b";
-const TEXT_MUTED = "#64748b";
+const TEXT_DARK = "#0F2A44";
+const TEXT_MUTED = "#4B5E71";
 
 function wrapTemplate(title: string, body: string): string {
   return `<!DOCTYPE html>
@@ -155,18 +155,18 @@ function wrapTemplate(title: string, body: string): string {
       margin: 8px 0 20px;
     }
     .btn:hover {
-      background: #1e3a8a;
+      background: #0B3A6B;
     }
     .divider {
       border: none;
-      border-top: 1px solid #e2e8f0;
+      border-top: 1px solid #E5DEC9;
       margin: 24px 0;
     }
     .footer {
       background: ${BG_COLOR};
       padding: 20px 32px;
       text-align: center;
-      border-top: 1px solid #e2e8f0;
+      border-top: 1px solid #E5DEC9;
     }
     .footer p {
       margin: 4px 0;
@@ -180,9 +180,9 @@ function wrapTemplate(title: string, body: string): string {
       font-size: 13px;
       font-weight: 600;
     }
-    .badge-absent  { background: #fee2e2; color: #991b1b; }
-    .badge-present { background: #dcfce7; color: #166534; }
-    .badge-late    { background: #fef3c7; color: #92400e; }
+    .badge-absent  { background: #FBECEA; color: #962A20; }
+    .badge-present { background: #E3F4EC; color: #065F46; }
+    .badge-late    { background: #FBF3DF; color: #6F4E10; }
   </style>
 </head>
 <body>
@@ -494,7 +494,7 @@ export async function sendFeeReminder(
     <div class="info-box">
       <p><strong>Student:</strong> ${studentName}</p>
       <p><strong>Invoice Number:</strong> ${invoiceNumber}</p>
-      <p><strong>Amount Due:</strong> <span style="font-size:16px;font-weight:700;color:#991b1b;">${amount}</span></p>
+      <p><strong>Amount Due:</strong> <span style="font-size:16px;font-weight:700;color:#962A20;">${amount}</span></p>
       <p><strong>Due Date:</strong> ${dueDate}</p>
     </div>
     <a class="btn" href="${paymentUrl}">Pay Now</a>

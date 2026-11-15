@@ -82,14 +82,14 @@ export default async function ParentGradesPage() {
                   <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
                     Official Report Card Locked for {child.user.name}
                   </h3>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 max-w-md mx-auto leading-relaxed">
+                  <p className="text-xs text-gray-600 dark:text-gray-300 max-w-md mx-auto leading-relaxed">
                     Terminal report card and subject broadsheet are locked pending clearance of outstanding school fee balance of <strong className="text-amber-700 font-bold">{formatCurrency(outstandingBalance)}</strong>.
                   </p>
                 </div>
 
                 <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
                   <Link href="/parent/fees">
-                    <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-xs font-bold gap-1.5 shadow-sm">
+                    <Button size="sm" className="text-white bg-emerald-600 hover:bg-emerald-700 text-xs font-bold gap-1.5 shadow-sm">
                       <CreditCard className="w-3.5 h-3.5" /> Pay Outstanding Balance ({formatCurrency(outstandingBalance)})
                     </Button>
                   </Link>
@@ -166,7 +166,7 @@ export default async function ParentGradesPage() {
                               {res.letterGrade ?? 'A'}
                             </Badge>
                           </TableCell>
-                          <TableCell className="text-gray-600 dark:text-gray-400 italic">
+                          <TableCell className="text-gray-600 dark:text-gray-300 italic">
                             {res.teacherRemark || 'Excellent analytical understanding'}
                           </TableCell>
                         </TableRow>
@@ -187,7 +187,7 @@ export default async function ParentGradesPage() {
                           <TableCell>
                             <Badge variant="default" className="bg-purple-600 text-white font-mono text-[10px]">{item.grade}</Badge>
                           </TableCell>
-                          <TableCell className="text-gray-600 dark:text-gray-400 italic">{item.remark}</TableCell>
+                          <TableCell className="text-gray-600 dark:text-gray-300 italic">{item.remark}</TableCell>
                         </TableRow>
                       ))
                     )}
@@ -198,14 +198,14 @@ export default async function ParentGradesPage() {
                 <div className="p-4 bg-gray-50/70 dark:bg-gray-800/40 border-t border-gray-100 dark:border-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                   <div className="p-3 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
                     <p className="font-bold text-gray-700 dark:text-gray-300">Class Teacher Remarks</p>
-                    <p className="text-gray-600 dark:text-gray-400 italic mt-1">
+                    <p className="text-gray-600 dark:text-gray-300 italic mt-1">
                       {reportCard?.classTeacherRemark ||
                         'A dedicated, inquisitive, and highly disciplined student who consistently exceeds academic expectations.'}
                     </p>
                   </div>
                   <div className="p-3 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
                     <p className="font-bold text-gray-700 dark:text-gray-300">Principal Remarks & Seal</p>
-                    <p className="text-gray-600 dark:text-gray-400 italic mt-1">
+                    <p className="text-gray-600 dark:text-gray-300 italic mt-1">
                       {reportCard?.principalRemark ||
                         'An exceptional scholar embodying the excellence of CHOSEN GENERATION SCHOOL. Keep aiming higher!'}
                     </p>

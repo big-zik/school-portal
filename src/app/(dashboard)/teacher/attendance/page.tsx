@@ -160,7 +160,7 @@ export default function TeacherAttendancePage() {
               size="sm"
               onClick={handleSaveAttendance}
               disabled={isSaving}
-              className="text-xs gap-1.5 bg-emerald-600 hover:bg-emerald-700 font-semibold"
+              className="text-white text-xs gap-1.5 bg-emerald-600 hover:bg-emerald-700 font-semibold"
             >
               {isSaving ? (
                 <>
@@ -300,7 +300,7 @@ export default function TeacherAttendancePage() {
                                   : status === 'EXCUSED'
                                   ? 'bg-blue-600 text-white shadow-sm'
                                   : 'bg-red-600 text-white shadow-sm'
-                                : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 hover:bg-gray-200'
+                                : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300 hover:bg-gray-200'
                             }`}
                           >
                             {status}

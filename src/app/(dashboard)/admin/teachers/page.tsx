@@ -304,7 +304,7 @@ export default function AdminTeachersPage() {
                       </TableCell>
                       <TableCell>
                         <div className="space-y-1 text-xs">
-                          <p className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400">
+                          <p className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
                             <Mail className="w-3.5 h-3.5 text-gray-400" />
                             {teacher.user.email}
                           </p>
@@ -322,7 +322,7 @@ export default function AdminTeachersPage() {
                             teacher.classSubjects.map((cs, idx) => (
                               <span
                                 key={idx}
-                                className="inline-block bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-[10px] text-gray-600 dark:text-gray-400 font-mono"
+                                className="inline-block bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-[10px] text-gray-600 dark:text-gray-300 font-mono"
                               >
                                 {cs.subject.code} ({cs.class.name})
                               </span>

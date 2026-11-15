@@ -50,12 +50,12 @@ const styles = StyleSheet.create({
     padding: 30,
     fontSize: 9,
     fontFamily: 'Helvetica',
-    color: '#1f2937',
+    color: '#0F2A44',
     backgroundColor: '#ffffff',
   },
   header: {
     borderBottomWidth: 2,
-    borderBottomColor: '#1e3a8a',
+    borderBottomColor: '#0B3A6B',
     paddingBottom: 10,
     marginBottom: 12,
     flexDirection: 'row',
@@ -68,24 +68,24 @@ const styles = StyleSheet.create({
   schoolName: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#1e3a8a',
+    color: '#0B3A6B',
     letterSpacing: 0.5,
     marginBottom: 2,
   },
   schoolMotto: {
     fontSize: 8,
     fontStyle: 'italic',
-    color: '#4b5563',
+    color: '#4B5E71',
     marginBottom: 3,
   },
   schoolContact: {
     fontSize: 7.5,
-    color: '#6b7280',
+    color: '#4B5E71',
   },
   docBadge: {
-    backgroundColor: '#eff6ff',
+    backgroundColor: '#E8F6FA',
     borderWidth: 1,
-    borderColor: '#bfdbfe',
+    borderColor: '#B9E2EE',
     borderRadius: 4,
     paddingVertical: 4,
     paddingHorizontal: 8,
@@ -94,12 +94,12 @@ const styles = StyleSheet.create({
   docBadgeText: {
     fontSize: 8,
     fontWeight: 'bold',
-    color: '#1e40af',
+    color: '#0D5EA7',
   },
   studentSection: {
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#F7F4EA',
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: '#E5DEC9',
     borderRadius: 6,
     padding: 8,
     marginBottom: 10,
@@ -116,23 +116,23 @@ const styles = StyleSheet.create({
   fieldLabel: {
     fontSize: 8,
     fontWeight: 'bold',
-    color: '#64748b',
+    color: '#4B5E71',
     width: 85,
   },
   fieldValue: {
     fontSize: 8.5,
     fontWeight: 'bold',
-    color: '#0f172a',
+    color: '#0F2A44',
   },
   table: {
     borderWidth: 1,
-    borderColor: '#cbd5e1',
+    borderColor: '#C9CFD9',
     borderRadius: 4,
     marginBottom: 10,
   },
   tableHeader: {
     flexDirection: 'row',
-    backgroundColor: '#1e3a8a',
+    backgroundColor: '#0B3A6B',
     color: '#ffffff',
     paddingVertical: 5,
     paddingHorizontal: 6,
@@ -142,13 +142,13 @@ const styles = StyleSheet.create({
   tableRow: {
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#f1f5f9',
+    borderBottomColor: '#F1ECDD',
     paddingVertical: 4,
     paddingHorizontal: 6,
     fontSize: 8,
   },
   tableRowAlt: {
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#F7F4EA',
   },
   colSubject: { width: '30%' },
   colCa: { width: '12%', textAlign: 'center' },
@@ -160,12 +160,12 @@ const styles = StyleSheet.create({
   summaryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#f1f5f9',
+    backgroundColor: '#F1ECDD',
     padding: 8,
     borderRadius: 4,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: '#E5DEC9',
   },
   summaryItem: {
     textAlign: 'center',
@@ -173,17 +173,17 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     fontSize: 7.5,
-    color: '#64748b',
+    color: '#4B5E71',
     marginBottom: 2,
   },
   summaryValue: {
     fontSize: 10,
     fontWeight: 'bold',
-    color: '#1e3a8a',
+    color: '#0B3A6B',
   },
   remarksSection: {
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: '#E5DEC9',
     borderRadius: 4,
     padding: 8,
     marginBottom: 10,
@@ -194,17 +194,17 @@ const styles = StyleSheet.create({
   remarkTitle: {
     fontSize: 8,
     fontWeight: 'bold',
-    color: '#1e3a8a',
+    color: '#0B3A6B',
     marginBottom: 2,
   },
   remarkText: {
     fontSize: 8,
     fontStyle: 'italic',
-    color: '#334155',
+    color: '#2B4260',
   },
   footer: {
     borderTopWidth: 1,
-    borderTopColor: '#e2e8f0',
+    borderTopColor: '#E5DEC9',
     paddingTop: 8,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -225,11 +225,11 @@ const styles = StyleSheet.create({
   qrTitle: {
     fontSize: 7.5,
     fontWeight: 'bold',
-    color: '#059669',
+    color: '#047857',
   },
   qrDesc: {
     fontSize: 6.5,
-    color: '#64748b',
+    color: '#4B5E71',
     marginTop: 1,
   },
   signatureBlock: {
@@ -238,17 +238,17 @@ const styles = StyleSheet.create({
   signatureLine: {
     width: 120,
     borderBottomWidth: 1,
-    borderBottomColor: '#0f172a',
+    borderBottomColor: '#0F2A44',
     marginBottom: 3,
   },
   signatoryTitle: {
     fontSize: 7.5,
     fontWeight: 'bold',
-    color: '#0f172a',
+    color: '#0F2A44',
   },
   stampText: {
     fontSize: 6.5,
-    color: '#64748b',
+    color: '#4B5E71',
   },
 })
 
@@ -267,7 +267,7 @@ export function ReportCardDocument({ data }: { data: ReportCardPdfData }) {
           </View>
           <View style={styles.docBadge}>
             <Text style={styles.docBadgeText}>OFFICIAL TERMINAL REPORT</Text>
-            <Text style={{ fontSize: 7, color: '#64748b', marginTop: 2, textAlign: 'center' }}>
+            <Text style={{ fontSize: 7, color: '#4B5E71', marginTop: 2, textAlign: 'center' }}>
               {data.academicYear} • {data.termName}
             </Text>
           </View>
@@ -297,7 +297,7 @@ export function ReportCardDocument({ data }: { data: ReportCardPdfData }) {
             </View>
             <View style={styles.fieldRow}>
               <Text style={styles.fieldLabel}>Class Position:</Text>
-              <Text style={[styles.fieldValue, { color: '#7c3aed' }]}>
+              <Text style={[styles.fieldValue, { color: '#0B3A6B' }]}>
                 {data.position} of {data.outOf} students
               </Text>
             </View>
@@ -329,7 +329,7 @@ export function ReportCardDocument({ data }: { data: ReportCardPdfData }) {
               <Text style={[styles.colSubject, { fontWeight: 'bold' }]}>{s.name}</Text>
               <Text style={styles.colCa}>{s.caScore}</Text>
               <Text style={styles.colExam}>{s.examScore}</Text>
-              <Text style={[styles.colTotal, { fontWeight: 'bold', color: '#1e3a8a' }]}>
+              <Text style={[styles.colTotal, { fontWeight: 'bold', color: '#0B3A6B' }]}>
                 {s.totalScore}
               </Text>
               <Text style={[styles.colGrade, { fontWeight: 'bold' }]}>{s.letterGrade}</Text>
@@ -352,11 +352,11 @@ export function ReportCardDocument({ data }: { data: ReportCardPdfData }) {
           </View>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Overall Grade</Text>
-            <Text style={[styles.summaryValue, { color: '#059669' }]}>{data.grade}</Text>
+            <Text style={[styles.summaryValue, { color: '#047857' }]}>{data.grade}</Text>
           </View>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Final Position</Text>
-            <Text style={[styles.summaryValue, { color: '#7c3aed' }]}>{data.position}</Text>
+            <Text style={[styles.summaryValue, { color: '#0B3A6B' }]}>{data.position}</Text>
           </View>
         </View>
 
@@ -383,7 +383,7 @@ export function ReportCardDocument({ data }: { data: ReportCardPdfData }) {
               <Text style={styles.qrDesc}>
                 Scan with any smartphone camera to authenticate genuine grades on the portal.
               </Text>
-              <Text style={{ fontSize: 6, color: '#94a3b8', marginTop: 2 }}>
+              <Text style={{ fontSize: 6, color: '#5D6B81', marginTop: 2 }}>
                 Ref: {data.verificationCode}
               </Text>
             </View>

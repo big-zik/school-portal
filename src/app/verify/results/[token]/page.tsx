@@ -225,7 +225,7 @@ export default async function VerifyResultsPage({
                       {sub.letterGrade}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-gray-600 dark:text-gray-400 italic">
+                  <TableCell className="text-gray-600 dark:text-gray-300 italic">
                     {sub.remark}
                   </TableCell>
                 </TableRow>
@@ -255,7 +255,7 @@ export default async function VerifyResultsPage({
             <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-1">
               Class Teacher Remark:
             </h4>
-            <p className="text-gray-600 dark:text-gray-400 italic">
+            <p className="text-gray-600 dark:text-gray-300 italic">
               {reportCard?.classTeacherRemark ||
                 'Consistently brilliant academic performance and exemplary conduct throughout the academic period.'}
             </p>
@@ -265,7 +265,7 @@ export default async function VerifyResultsPage({
             <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-1">
               Principal & Head of School Endorsement:
             </h4>
-            <p className="text-gray-600 dark:text-gray-400 italic">
+            <p className="text-gray-600 dark:text-gray-300 italic">
               {reportCard?.principalRemark ||
                 'Promoted with honors. A model student of CHOSEN GENERATION SCHOOL.'}
             </p>

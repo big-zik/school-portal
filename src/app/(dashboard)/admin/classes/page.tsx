@@ -433,7 +433,7 @@ export default function AdminClassesPage() {
                     type="submit"
                     size="sm"
                     disabled={isSubmitting}
-                    className="text-xs bg-blue-600 hover:bg-blue-700 font-semibold gap-1.5"
+                    className="text-white text-xs bg-blue-600 hover:bg-blue-700 font-semibold gap-1.5"
                   >
                     {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                     Save & Create Class

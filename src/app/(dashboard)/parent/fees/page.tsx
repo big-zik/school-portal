@@ -632,7 +632,7 @@ export default function ParentFeesPage() {
                       ) : (
                         <div className="space-y-1.5">
                           <UploadCloud className="w-7 h-7 text-gray-400 mx-auto" />
-                          <p className="text-xs text-gray-600 dark:text-gray-400">
+                          <p className="text-xs text-gray-600 dark:text-gray-300">
                             {isUploading ? 'Uploading file...' : 'Click to browse or drop teller receipt here'}
                           </p>
                           <p className="text-[10px] text-gray-400">Supports JPG, PNG, PDF (Max 10MB)</p>
@@ -660,7 +660,7 @@ export default function ParentFeesPage() {
                     <Button
                       type="submit"
                       disabled={isProcessing || isUploading || !receiptFileUrl}
-                      className="flex-1 text-xs bg-emerald-600 hover:bg-emerald-700 font-semibold gap-1.5"
+                      className="text-white flex-1 text-xs bg-emerald-600 hover:bg-emerald-700 font-semibold gap-1.5"
                     >
                       {isProcessing ? (
                         <>
@@ -739,7 +739,7 @@ export default function ParentFeesPage() {
                   <Button
                     onClick={handlePay}
                     disabled={isProcessing}
-                    className="flex-1 text-xs bg-emerald-600 hover:bg-emerald-700 font-semibold gap-1.5"
+                    className="text-white flex-1 text-xs bg-emerald-600 hover:bg-emerald-700 font-semibold gap-1.5"
                   >
                     {isProcessing ? (
                       <>

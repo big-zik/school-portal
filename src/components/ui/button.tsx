@@ -9,12 +9,12 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: 'bg-[var(--cgs-primary)] text-[var(--cgs-on-primary)] hover:bg-[var(--cgs-primary-hover)] shadow-sm active:scale-[0.98]',
-        destructive: 'bg-[var(--cgs-danger)] text-white hover:opacity-90 shadow-sm active:scale-[0.98]',
-        outline: 'border border-[var(--cgs-border)] bg-transparent hover:bg-[var(--cgs-surface-subtle)] text-[var(--cgs-text)]',
+        destructive: 'bg-[var(--cgs-danger)] text-[var(--cgs-on-danger)] hover:opacity-90 shadow-sm active:scale-[0.98]',
+        outline: 'border border-[var(--cgs-control)] bg-transparent hover:bg-[var(--cgs-surface-subtle)] text-[var(--cgs-text)]',
         secondary: 'bg-[var(--cgs-surface-subtle)] text-[var(--cgs-text)] hover:opacity-90 border border-[var(--cgs-border)]',
         ghost: 'hover:bg-[var(--cgs-surface-subtle)] text-[var(--cgs-text)]',
         link: 'text-[var(--cgs-primary)] underline-offset-4 hover:underline',
-        success: 'bg-[var(--cgs-success)] text-white hover:opacity-90 shadow-sm active:scale-[0.98]',
+        success: 'bg-[var(--cgs-success)] text-[var(--cgs-on-success)] hover:opacity-90 shadow-sm active:scale-[0.98]',
       },
       size: {
         default: 'h-10 px-4 py-2',

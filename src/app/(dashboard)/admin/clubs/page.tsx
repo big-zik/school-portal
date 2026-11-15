@@ -222,7 +222,7 @@ export default function AdminClubsPage() {
               </CardHeader>
 
               <CardContent className="space-y-3 pt-0 pb-4">
-                <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-3">
+                <p className="text-xs text-gray-600 dark:text-gray-300 line-clamp-3">
                   {club.description}
                 </p>
 

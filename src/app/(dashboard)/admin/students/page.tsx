@@ -185,14 +185,14 @@ export default function AdminStudentsPage() {
                       <TableCell className="text-xs font-medium text-gray-900 dark:text-gray-100">
                         {student.fullName}
                       </TableCell>
-                      <TableCell className="text-xs text-gray-600 dark:text-gray-400">
+                      <TableCell className="text-xs text-gray-600 dark:text-gray-300">
                         {student.currentClass?.name || 'Unassigned'}
                         {student.currentSection?.name ? ` - ${student.currentSection.name}` : ''}
                       </TableCell>
-                      <TableCell className="text-xs text-gray-600 dark:text-gray-400">
+                      <TableCell className="text-xs text-gray-600 dark:text-gray-300">
                         {student.gender || '—'}
                       </TableCell>
-                      <TableCell className="text-xs text-gray-600 dark:text-gray-400">
+                      <TableCell className="text-xs text-gray-600 dark:text-gray-300">
                         {student.email}
                       </TableCell>
                       <TableCell>

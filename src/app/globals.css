@@ -1,95 +1,694 @@
 @import "tailwindcss";
 
-:root {
-  /* Brand Core Swatches */
-  --cgs-primary: #0D5EA7;
-  --cgs-primary-hover: #084478;
-  --cgs-on-primary: #FFFFFF;
+/* Chosen Generation School: Palette v2 (see docs/PALETTE_V2.md).
+ * Classic is the default light palette. Opt into Calm with <html data-palette="calm">.
+ * Evening (dark) is applied by the .dark class or data-theme="dark" | "evening" on <html>.
+ * Every text/UI pair is WCAG 2.1 AA verified. Gold is a fill/accent only, never text on light. */
 
-  --cgs-navy: #0B3A6B;
-  --cgs-sky: #98D8E8;
-  --cgs-tint: #E8F4F8;
-  --cgs-gold: #C8962E;
+/* Make every dark: utility follow the same switch as the tokens (class or data-theme),
+ * instead of the OS preference, so tokens and utilities can never disagree. */
+@custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *, [data-theme="evening"], [data-theme="evening"] *));
 
-  --cgs-danger: #BA362A;
-  --cgs-success: #047857;
-
-  /* Classic Neutral System (60% Palette) */
+:root,
+[data-palette="classic"] {
   --cgs-canvas: #FBF7EE;
   --cgs-surface: #FFFFFF;
   --cgs-surface-subtle: #F4EFE2;
+  --cgs-tint: #E8F6FA;
   --cgs-border: #E5DEC9;
-
-  /* Typography */
   --cgs-text: #0F2A44;
   --cgs-heading: #0B3A6B;
   --cgs-subdued: #4B5E71;
-  --cgs-muted: #64748B;
+  --cgs-muted: #5D6B81;
+  --cgs-control: #64748B;
+  --cgs-primary: #0D5EA7;
+  --cgs-primary-hover: #084478;
+  --cgs-on-primary: #FFFFFF;
+  --cgs-focus: #0D5EA7;
+  --cgs-sidebar: #0B3A6B;
+  --cgs-on-sidebar: #FFFFFF;
+  --cgs-sidebar-muted: #C4D4E5;
+  --cgs-sidebar-hover: #124A80;
+  --cgs-sidebar-active: #0D5EA7;
+  --cgs-gold: #C8962E;
+  --cgs-on-accent: #0F2A44;
+  --cgs-danger: #BA362A;
+  --cgs-on-danger: #FFFFFF;
+  --cgs-danger-soft: #FBECEA;
+  --cgs-success: #047857;
+  --cgs-on-success: #FFFFFF;
+  --cgs-success-soft: #E3F4EC;
+  --cgs-warning: #7A5510;
+  --cgs-warning-soft: #FBF3DF;
+  --cgs-sky: #98D8E8;
+  --cgs-navy: #0B3A6B;
 
-  /* Geometry & Rhythm */
+  --cgs-elevation-1: 0 1px 2px rgb(11 58 107 / 0.06), 0 2px 8px rgb(11 58 107 / 0.05);
+  --cgs-elevation-2: 0 4px 12px rgb(11 58 107 / 0.10), 0 12px 32px rgb(11 58 107 / 0.08);
+  --cgs-elevation-3: 0 12px 28px rgb(11 58 107 / 0.16), 0 24px 56px rgb(11 58 107 / 0.12);
   --cgs-radius-control: 0.5rem;
   --cgs-radius-card: 1rem;
   --cgs-radius-sheet: 1.5rem;
+  --cgs-radius-pill: 999px;
   --cgs-touch: 2.75rem;
+}
 
-  /* Base Next.js variables */
-  --background: var(--cgs-canvas);
-  --foreground: var(--cgs-text);
+[data-palette="calm"] {
+  --cgs-canvas: #F4EFE6;
+  --cgs-surface-subtle: #E8F6FA;
+  --cgs-border: #DFD7CA;
+  --cgs-subdued: #4A5D70;
 }
 
 .dark,
-[data-theme="dark"] {
-  /* Evening Dark Mode Tokens */
+[data-theme="dark"],
+[data-theme="evening"] {
   --cgs-canvas: #0A192C;
   --cgs-surface: #10243E;
   --cgs-surface-subtle: #183354;
+  --cgs-tint: #183354;
   --cgs-border: #213D60;
-
-  --cgs-primary: #56A5E8;
-  --cgs-primary-hover: #98D8E8;
-  --cgs-on-primary: #0A192C;
-
   --cgs-text: #E1EAF2;
   --cgs-heading: #FFFFFF;
   --cgs-subdued: #A2B7CC;
   --cgs-muted: #A2B7CC;
-
+  --cgs-control: #7C93AB;
+  --cgs-primary: #56A5E8;
+  --cgs-primary-hover: #98D8E8;
+  --cgs-on-primary: #0A192C;
+  --cgs-focus: #98D8E8;
+  --cgs-sidebar: #071524;
+  --cgs-on-sidebar: #FFFFFF;
+  --cgs-sidebar-muted: #A2B7CC;
+  --cgs-sidebar-hover: #10243E;
+  --cgs-sidebar-active: #183354;
   --cgs-gold: #E5B24E;
-  --cgs-danger: #E05D50;
+  --cgs-on-accent: #0A192C;
+  --cgs-danger: #E77F75;
+  --cgs-on-danger: #0A192C;
+  --cgs-danger-soft: #3A1D22;
   --cgs-success: #22C55E;
+  --cgs-on-success: #0A192C;
+  --cgs-success-soft: #0F3A2C;
+  --cgs-warning: #E5B24E;
+  --cgs-warning-soft: #3A2C10;
+  --cgs-sky: #98D8E8;
+  --cgs-navy: #0B3A6B;
 
-  --background: var(--cgs-canvas);
-  --foreground: var(--cgs-text);
+  --cgs-elevation-1: 0 0 0 1px rgb(255 255 255 / 0.05);
+  --cgs-elevation-2: 0 8px 24px rgb(0 0 0 / 0.45), 0 0 0 1px rgb(255 255 255 / 0.06);
+  --cgs-elevation-3: 0 16px 40px rgb(0 0 0 / 0.55), 0 0 0 1px rgb(255 255 255 / 0.08);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--cgs-canvas);
+  --color-foreground: var(--cgs-text);
+  --color-ring: var(--cgs-focus);
   --font-sans: var(--font-geist-sans), Inter, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
 
-  /* Semantic CGS Theme Colors */
-  --color-cgs-primary: var(--cgs-primary);
-  --color-cgs-primary-hover: var(--cgs-primary-hover);
-  --color-cgs-on-primary: var(--cgs-on-primary);
-  --color-cgs-navy: var(--cgs-navy);
-  --color-cgs-sky: var(--cgs-sky);
-  --color-cgs-tint: var(--cgs-tint);
-  --color-cgs-gold: var(--cgs-gold);
-  --color-cgs-danger: var(--cgs-danger);
-  --color-cgs-success: var(--cgs-success);
   --color-cgs-canvas: var(--cgs-canvas);
   --color-cgs-surface: var(--cgs-surface);
   --color-cgs-surface-subtle: var(--cgs-surface-subtle);
+  --color-cgs-tint: var(--cgs-tint);
   --color-cgs-border: var(--cgs-border);
   --color-cgs-text: var(--cgs-text);
   --color-cgs-heading: var(--cgs-heading);
   --color-cgs-subdued: var(--cgs-subdued);
   --color-cgs-muted: var(--cgs-muted);
+  --color-cgs-control: var(--cgs-control);
+  --color-cgs-primary: var(--cgs-primary);
+  --color-cgs-primary-hover: var(--cgs-primary-hover);
+  --color-cgs-on-primary: var(--cgs-on-primary);
+  --color-cgs-focus: var(--cgs-focus);
+  --color-cgs-sidebar: var(--cgs-sidebar);
+  --color-cgs-on-sidebar: var(--cgs-on-sidebar);
+  --color-cgs-sidebar-muted: var(--cgs-sidebar-muted);
+  --color-cgs-sidebar-hover: var(--cgs-sidebar-hover);
+  --color-cgs-sidebar-active: var(--cgs-sidebar-active);
+  --color-cgs-gold: var(--cgs-gold);
+  --color-cgs-on-accent: var(--cgs-on-accent);
+  --color-cgs-danger: var(--cgs-danger);
+  --color-cgs-on-danger: var(--cgs-on-danger);
+  --color-cgs-danger-soft: var(--cgs-danger-soft);
+  --color-cgs-success: var(--cgs-success);
+  --color-cgs-on-success: var(--cgs-on-success);
+  --color-cgs-success-soft: var(--cgs-success-soft);
+  --color-cgs-warning: var(--cgs-warning);
+  --color-cgs-warning-soft: var(--cgs-warning-soft);
+  --color-cgs-sky: var(--cgs-sky);
+  --color-cgs-navy: var(--cgs-navy);
 
   --radius-control: var(--cgs-radius-control);
   --radius-card: var(--cgs-radius-card);
   --radius-sheet: var(--cgs-radius-sheet);
+
+  /* Navy-tinted, mode-aware elevation replaces Tailwind's neutral grey shadows. */
+  --shadow-xs: var(--cgs-elevation-1);
+  --shadow-sm: var(--cgs-elevation-1);
+  --shadow-md: var(--cgs-elevation-2);
+  --shadow-lg: var(--cgs-elevation-2);
+  --shadow-xl: var(--cgs-elevation-3);
+  --shadow-2xl: var(--cgs-elevation-3);
+}
+
+@theme {
+  /* Legacy Tailwind scales remapped to the Chosen Generation palette so existing
+   * utility classes (gray-*, blue-*, emerald-*, ...) pick up Palette v2 without a rewrite.
+   * Light steps are warm neutrals; dark steps are navy. See docs/PALETTE_V2.md. */
+  /* gray */
+  --color-gray-50: #F4EFE2;
+  --color-gray-100: #EDE7D6;
+  --color-gray-200: #E5DEC9;
+  --color-gray-300: #B4C3D4;
+  --color-gray-400: #5D6B81;
+  --color-gray-500: #4B5E71;
+  --color-gray-600: #3C506A;
+  --color-gray-700: #2B4260;
+  --color-gray-800: #1A3454;
+  --color-gray-900: #0F2A44;
+  --color-gray-950: #0A192C;
+  /* blue */
+  --color-blue-50: #E8F6FA;
+  --color-blue-100: #D6EEF6;
+  --color-blue-200: #B9E2EE;
+  --color-blue-300: #98D8E8;
+  --color-blue-400: #56A5E8;
+  --color-blue-500: #1B6BB2;
+  --color-blue-600: #0D5EA7;
+  --color-blue-700: #084478;
+  --color-blue-800: #0B3A6B;
+  --color-blue-900: #082E55;
+  --color-blue-950: #061F3A;
+  /* emerald */
+  --color-emerald-50: #ECF8F3;
+  --color-emerald-100: #D3F0E4;
+  --color-emerald-200: #A9E0C8;
+  --color-emerald-300: #6FD0A3;
+  --color-emerald-400: #3CCB8A;
+  --color-emerald-500: #22C55E;
+  --color-emerald-600: #047857;
+  --color-emerald-700: #065F46;
+  --color-emerald-800: #064E3B;
+  --color-emerald-900: #053C2E;
+  --color-emerald-950: #04271F;
+  /* amber */
+  --color-amber-50: #FBF3DF;
+  --color-amber-100: #F6E6BC;
+  --color-amber-200: #EBD08C;
+  --color-amber-300: #E5B24E;
+  --color-amber-400: #D9A441;
+  --color-amber-500: #C8962E;
+  --color-amber-600: #8C6314;
+  --color-amber-700: #6F4E10;
+  --color-amber-800: #583E0D;
+  --color-amber-900: #43300B;
+  --color-amber-950: #2A1E06;
+  /* red */
+  --color-red-50: #FBECEA;
+  --color-red-100: #F6D5D1;
+  --color-red-200: #EBAAA3;
+  --color-red-300: #EE9A91;
+  --color-red-400: #E77F75;
+  --color-red-500: #BF392D;
+  --color-red-600: #BA362A;
+  --color-red-700: #962A20;
+  --color-red-800: #78221A;
+  --color-red-900: #5C1B15;
+  --color-red-950: #3A100D;
+  /* purple */
+  --color-purple-50: #EEF1F6;
+  --color-purple-100: #DCE3EE;
+  --color-purple-200: #C2CEDF;
+  --color-purple-300: #A9BAD3;
+  --color-purple-400: #8FA4C2;
+  --color-purple-500: #516B92;
+  --color-purple-600: #46628A;
+  --color-purple-700: #355074;
+  --color-purple-800: #274060;
+  --color-purple-900: #1B2F4B;
+  --color-purple-950: #101E33;
+  /* slate -> gray */
+  --color-slate-50: #F4EFE2;
+  --color-slate-100: #EDE7D6;
+  --color-slate-200: #E5DEC9;
+  --color-slate-300: #B4C3D4;
+  --color-slate-400: #5D6B81;
+  --color-slate-500: #4B5E71;
+  --color-slate-600: #3C506A;
+  --color-slate-700: #2B4260;
+  --color-slate-800: #1A3454;
+  --color-slate-900: #0F2A44;
+  --color-slate-950: #0A192C;
+  /* zinc -> gray */
+  --color-zinc-50: #F4EFE2;
+  --color-zinc-100: #EDE7D6;
+  --color-zinc-200: #E5DEC9;
+  --color-zinc-300: #B4C3D4;
+  --color-zinc-400: #5D6B81;
+  --color-zinc-500: #4B5E71;
+  --color-zinc-600: #3C506A;
+  --color-zinc-700: #2B4260;
+  --color-zinc-800: #1A3454;
+  --color-zinc-900: #0F2A44;
+  --color-zinc-950: #0A192C;
+  /* neutral -> gray */
+  --color-neutral-50: #F4EFE2;
+  --color-neutral-100: #EDE7D6;
+  --color-neutral-200: #E5DEC9;
+  --color-neutral-300: #B4C3D4;
+  --color-neutral-400: #5D6B81;
+  --color-neutral-500: #4B5E71;
+  --color-neutral-600: #3C506A;
+  --color-neutral-700: #2B4260;
+  --color-neutral-800: #1A3454;
+  --color-neutral-900: #0F2A44;
+  --color-neutral-950: #0A192C;
+  /* stone -> gray */
+  --color-stone-50: #F4EFE2;
+  --color-stone-100: #EDE7D6;
+  --color-stone-200: #E5DEC9;
+  --color-stone-300: #B4C3D4;
+  --color-stone-400: #5D6B81;
+  --color-stone-500: #4B5E71;
+  --color-stone-600: #3C506A;
+  --color-stone-700: #2B4260;
+  --color-stone-800: #1A3454;
+  --color-stone-900: #0F2A44;
+  --color-stone-950: #0A192C;
+  /* indigo -> blue */
+  --color-indigo-50: #E8F6FA;
+  --color-indigo-100: #D6EEF6;
+  --color-indigo-200: #B9E2EE;
+  --color-indigo-300: #98D8E8;
+  --color-indigo-400: #56A5E8;
+  --color-indigo-500: #1B6BB2;
+  --color-indigo-600: #0D5EA7;
+  --color-indigo-700: #084478;
+  --color-indigo-800: #0B3A6B;
+  --color-indigo-900: #082E55;
+  --color-indigo-950: #061F3A;
+  /* cyan -> blue */
+  --color-cyan-50: #E8F6FA;
+  --color-cyan-100: #D6EEF6;
+  --color-cyan-200: #B9E2EE;
+  --color-cyan-300: #98D8E8;
+  --color-cyan-400: #56A5E8;
+  --color-cyan-500: #1B6BB2;
+  --color-cyan-600: #0D5EA7;
+  --color-cyan-700: #084478;
+  --color-cyan-800: #0B3A6B;
+  --color-cyan-900: #082E55;
+  --color-cyan-950: #061F3A;
+  /* teal -> blue */
+  --color-teal-50: #E8F6FA;
+  --color-teal-100: #D6EEF6;
+  --color-teal-200: #B9E2EE;
+  --color-teal-300: #98D8E8;
+  --color-teal-400: #56A5E8;
+  --color-teal-500: #1B6BB2;
+  --color-teal-600: #0D5EA7;
+  --color-teal-700: #084478;
+  --color-teal-800: #0B3A6B;
+  --color-teal-900: #082E55;
+  --color-teal-950: #061F3A;
+  /* sky -> blue */
+  --color-sky-50: #E8F6FA;
+  --color-sky-100: #D6EEF6;
+  --color-sky-200: #B9E2EE;
+  --color-sky-300: #98D8E8;
+  --color-sky-400: #56A5E8;
+  --color-sky-500: #1B6BB2;
+  --color-sky-600: #0D5EA7;
+  --color-sky-700: #084478;
+  --color-sky-800: #0B3A6B;
+  --color-sky-900: #082E55;
+  --color-sky-950: #061F3A;
+  /* violet -> purple */
+  --color-violet-50: #EEF1F6;
+  --color-violet-100: #DCE3EE;
+  --color-violet-200: #C2CEDF;
+  --color-violet-300: #A9BAD3;
+  --color-violet-400: #8FA4C2;
+  --color-violet-500: #516B92;
+  --color-violet-600: #46628A;
+  --color-violet-700: #355074;
+  --color-violet-800: #274060;
+  --color-violet-900: #1B2F4B;
+  --color-violet-950: #101E33;
+  /* fuchsia -> purple */
+  --color-fuchsia-50: #EEF1F6;
+  --color-fuchsia-100: #DCE3EE;
+  --color-fuchsia-200: #C2CEDF;
+  --color-fuchsia-300: #A9BAD3;
+  --color-fuchsia-400: #8FA4C2;
+  --color-fuchsia-500: #516B92;
+  --color-fuchsia-600: #46628A;
+  --color-fuchsia-700: #355074;
+  --color-fuchsia-800: #274060;
+  --color-fuchsia-900: #1B2F4B;
+  --color-fuchsia-950: #101E33;
+  /* pink -> red */
+  --color-pink-50: #FBECEA;
+  --color-pink-100: #F6D5D1;
+  --color-pink-200: #EBAAA3;
+  --color-pink-300: #EE9A91;
+  --color-pink-400: #E77F75;
+  --color-pink-500: #BF392D;
+  --color-pink-600: #BA362A;
+  --color-pink-700: #962A20;
+  --color-pink-800: #78221A;
+  --color-pink-900: #5C1B15;
+  --color-pink-950: #3A100D;
+  /* rose -> red */
+  --color-rose-50: #FBECEA;
+  --color-rose-100: #F6D5D1;
+  --color-rose-200: #EBAAA3;
+  --color-rose-300: #EE9A91;
+  --color-rose-400: #E77F75;
+  --color-rose-500: #BF392D;
+  --color-rose-600: #BA362A;
+  --color-rose-700: #962A20;
+  --color-rose-800: #78221A;
+  --color-rose-900: #5C1B15;
+  --color-rose-950: #3A100D;
+  /* green -> emerald */
+  --color-green-50: #ECF8F3;
+  --color-green-100: #D3F0E4;
+  --color-green-200: #A9E0C8;
+  --color-green-300: #6FD0A3;
+  --color-green-400: #3CCB8A;
+  --color-green-500: #22C55E;
+  --color-green-600: #047857;
+  --color-green-700: #065F46;
+  --color-green-800: #064E3B;
+  --color-green-900: #053C2E;
+  --color-green-950: #04271F;
+  /* lime -> emerald */
+  --color-lime-50: #ECF8F3;
+  --color-lime-100: #D3F0E4;
+  --color-lime-200: #A9E0C8;
+  --color-lime-300: #6FD0A3;
+  --color-lime-400: #3CCB8A;
+  --color-lime-500: #22C55E;
+  --color-lime-600: #047857;
+  --color-lime-700: #065F46;
+  --color-lime-800: #064E3B;
+  --color-lime-900: #053C2E;
+  --color-lime-950: #04271F;
+  /* yellow -> amber */
+  --color-yellow-50: #FBF3DF;
+  --color-yellow-100: #F6E6BC;
+  --color-yellow-200: #EBD08C;
+  --color-yellow-300: #E5B24E;
+  --color-yellow-400: #D9A441;
+  --color-yellow-500: #C8962E;
+  --color-yellow-600: #8C6314;
+  --color-yellow-700: #6F4E10;
+  --color-yellow-800: #583E0D;
+  --color-yellow-900: #43300B;
+  --color-yellow-950: #2A1E06;
+  /* orange -> amber */
+  --color-orange-50: #FBF3DF;
+  --color-orange-100: #F6E6BC;
+  --color-orange-200: #EBD08C;
+  --color-orange-300: #E5B24E;
+  --color-orange-400: #D9A441;
+  --color-orange-500: #C8962E;
+  --color-orange-600: #8C6314;
+  --color-orange-700: #6F4E10;
+  --color-orange-800: #583E0D;
+  --color-orange-900: #43300B;
+  --color-orange-950: #2A1E06;
+}
+
+/* Evening safety net: many pages use light-mode text utilities with no dark: counterpart.
+ * On dark surfaces those fall below AA, so the mid-to-dark steps are remapped to the Evening tokens.
+ * Only text colour is remapped; backgrounds, borders and explicit text-white are untouched.
+ * Unlayered on purpose so it wins over utilities. */
+
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-gray-400,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-gray-400:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-gray-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-gray-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-gray-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-gray-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-gray-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-gray-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-slate-400,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-slate-400:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-slate-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-slate-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-slate-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-slate-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-slate-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-slate-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-zinc-400,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-zinc-400:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-zinc-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-zinc-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-zinc-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-zinc-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-zinc-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-zinc-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-neutral-400,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-neutral-400:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-neutral-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-neutral-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-neutral-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-neutral-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-neutral-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-neutral-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-stone-400,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-stone-400:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-stone-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-stone-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-stone-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-stone-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-stone-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-stone-700:hover {
+  color: var(--cgs-subdued);
+}
+
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-gray-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-gray-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-gray-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-gray-900:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-gray-950,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-gray-950:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-slate-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-slate-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-slate-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-slate-900:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-slate-950,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-slate-950:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-zinc-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-zinc-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-zinc-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-zinc-900:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-zinc-950,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-zinc-950:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-neutral-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-neutral-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-neutral-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-neutral-900:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-neutral-950,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-neutral-950:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-stone-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-stone-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-stone-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-stone-900:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-stone-950,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-stone-950:hover {
+  color: var(--cgs-text);
+}
+
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-blue-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-blue-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-blue-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-blue-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-blue-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-blue-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-indigo-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-indigo-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-indigo-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-indigo-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-indigo-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-indigo-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-sky-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-sky-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-sky-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-sky-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-sky-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-sky-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-cyan-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-cyan-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-cyan-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-cyan-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-cyan-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-cyan-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-teal-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-teal-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-teal-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-teal-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-teal-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-teal-700:hover {
+  color: var(--cgs-primary);
+}
+
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-blue-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-blue-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-blue-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-blue-900:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-indigo-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-indigo-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-indigo-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-indigo-900:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-sky-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-sky-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-sky-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-sky-900:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-cyan-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-cyan-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-cyan-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-cyan-900:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-teal-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-teal-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-teal-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-teal-900:hover {
+  color: var(--cgs-sky);
+}
+
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-emerald-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-emerald-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-emerald-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-emerald-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-emerald-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-emerald-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-emerald-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-emerald-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-emerald-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-emerald-900:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-green-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-green-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-green-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-green-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-green-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-green-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-green-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-green-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-green-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-green-900:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-lime-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-lime-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-lime-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-lime-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-lime-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-lime-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-lime-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-lime-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-lime-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-lime-900:hover {
+  color: var(--cgs-success);
+}
+
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-amber-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-amber-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-amber-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-amber-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-amber-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-amber-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-amber-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-amber-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-amber-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-amber-900:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-yellow-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-yellow-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-yellow-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-yellow-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-yellow-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-yellow-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-yellow-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-yellow-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-yellow-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-yellow-900:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-orange-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-orange-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-orange-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-orange-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-orange-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-orange-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-orange-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-orange-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-orange-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-orange-900:hover {
+  color: var(--cgs-warning);
+}
+
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-red-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-red-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-red-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-red-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-red-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-red-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-red-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-red-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-red-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-red-900:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-rose-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-rose-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-rose-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-rose-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-rose-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-rose-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-rose-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-rose-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-rose-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-rose-900:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-pink-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-pink-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-pink-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-pink-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-pink-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-pink-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-pink-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-pink-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-pink-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-pink-900:hover {
+  color: var(--cgs-danger);
+}
+
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-purple-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-purple-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-purple-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-purple-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-purple-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-purple-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-purple-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-purple-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-purple-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-purple-900:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-violet-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-violet-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-violet-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-violet-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-violet-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-violet-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-violet-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-violet-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-violet-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-violet-900:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-fuchsia-500,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-fuchsia-500:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-fuchsia-600,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-fuchsia-600:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-fuchsia-700,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-fuchsia-700:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-fuchsia-800,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-fuchsia-800:hover,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .text-fuchsia-900,
+:is(.dark,[data-theme="dark"],[data-theme="evening"]) .hover\:text-fuchsia-900:hover {
+  color: #8FA4C2;
 }
 
 body {
@@ -97,4 +696,8 @@ body {
   color: var(--cgs-text);
   font-family: var(--font-sans);
   min-height: 100vh;
+}
+
+:focus-visible {
+  outline-color: var(--cgs-focus);
 }

@@ -67,18 +67,18 @@ export async function POST(request: NextRequest) {
     const schoolName = process.env.NEXT_PUBLIC_APP_NAME || 'CHOSEN GENERATION SCHOOL'
 
     const adminHtml = `
-      <div style="font-family: Arial, sans-serif; color: #1e293b; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
-        <div style="background-color: #1e3a8a; padding: 15px; border-radius: 6px; color: #ffffff; text-align: center; margin-bottom: 20px;">
+      <div style="font-family: Arial, sans-serif; color: #0F2A44; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #E5DEC9; border-radius: 8px;">
+        <div style="background-color: #0B3A6B; padding: 15px; border-radius: 6px; color: #ffffff; text-align: center; margin-bottom: 20px;">
           <h2 style="margin: 0; font-size: 18px;">New Portal Website Inquiry</h2>
-          <p style="margin: 4px 0 0 0; font-size: 12px; color: #cbd5e1;">${schoolName}</p>
+          <p style="margin: 4px 0 0 0; font-size: 12px; color: #C9CFD9;">${schoolName}</p>
         </div>
         <p><strong>From:</strong> ${name}</p>
         <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
         <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
         <p><strong>Subject / Department:</strong> ${topic || 'General Inquiry'}</p>
-        <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 15px 0;" />
+        <hr style="border: none; border-top: 1px solid #E5DEC9; margin: 15px 0;" />
         <p><strong>Message:</strong></p>
-        <div style="background-color: #f8fafc; padding: 15px; border-radius: 6px; font-size: 13px; line-height: 1.6; border: 1px solid #e2e8f0;">
+        <div style="background-color: #F7F4EA; padding: 15px; border-radius: 6px; font-size: 13px; line-height: 1.6; border: 1px solid #E5DEC9;">
           ${message.replace(/\n/g, '<br/>')}
         </div>
       </div>
@@ -92,19 +92,19 @@ export async function POST(request: NextRequest) {
     }
 
     const ackHtml = `
-      <div style="font-family: Arial, sans-serif; color: #1e293b; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
-        <div style="background-color: #1e3a8a; padding: 15px; border-radius: 6px; color: #ffffff; text-align: center; margin-bottom: 20px;">
+      <div style="font-family: Arial, sans-serif; color: #0F2A44; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #E5DEC9; border-radius: 8px;">
+        <div style="background-color: #0B3A6B; padding: 15px; border-radius: 6px; color: #ffffff; text-align: center; margin-bottom: 20px;">
           <h2 style="margin: 0; font-size: 18px;">Inquiry Received</h2>
-          <p style="margin: 4px 0 0 0; font-size: 12px; color: #cbd5e1;">${schoolName}</p>
+          <p style="margin: 4px 0 0 0; font-size: 12px; color: #C9CFD9;">${schoolName}</p>
         </div>
         <p>Dear ${name},</p>
         <p>Thank you for reaching out to <strong>${schoolName}</strong> regarding <em>${topic || 'your inquiry'}</em>.</p>
         <p>Our administrative desk has received your message and an officer will review and respond within 24 business hours.</p>
-        <div style="background-color: #f8fafc; padding: 12px; border-radius: 6px; font-size: 12px; margin: 15px 0; border: 1px solid #e2e8f0;">
+        <div style="background-color: #F7F4EA; padding: 12px; border-radius: 6px; font-size: 12px; margin: 15px 0; border: 1px solid #E5DEC9;">
           <strong>Your Submitted Message:</strong><br/>
           ${message.replace(/\n/g, '<br/>')}
         </div>
-        <p style="font-size: 12px; color: #64748b;">
+        <p style="font-size: 12px; color: #4B5E71;">
           Warm regards,<br/>
           <strong>Admissions & Communications Office</strong><br/>
           ${schoolName}

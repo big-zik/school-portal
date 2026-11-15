@@ -682,7 +682,7 @@ export default function TeacherAssignmentsPage() {
                               {sub.isLate && <span className="text-red-500 font-medium">(Late)</span>}
                             </div>
                             {sub.remarks && (
-                              <p className="text-[11px] text-gray-600 dark:text-gray-400 mt-1 italic line-clamp-2">
+                              <p className="text-[11px] text-gray-600 dark:text-gray-300 mt-1 italic line-clamp-2">
                                 "{sub.remarks}"
                               </p>
                             )}

@@ -183,7 +183,7 @@ export default function TeacherResourcesPage() {
       case 'VIDEO':
         return <Video className="w-5 h-5 text-blue-500" />
       case 'LINK':
-        return <LinkIcon className="w-5 h-5 text-emerald-500" />
+        return <LinkIcon className="w-5 h-5 text-emerald-600" />
       default:
         return <BookOpen className="w-5 h-5 text-purple-500" />
     }
@@ -282,7 +282,7 @@ export default function TeacherResourcesPage() {
                         </Badge>
                       )}
                       {res.class && (
-                        <Badge variant="outline" className="text-[10px] text-gray-600 dark:text-gray-400">
+                        <Badge variant="outline" className="text-[10px] text-gray-600 dark:text-gray-300">
                           {res.class.name}
                         </Badge>
                       )}
@@ -291,7 +291,7 @@ export default function TeacherResourcesPage() {
 
                   <CardContent className="pt-0 pb-4">
                     {res.description && (
-                      <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 mb-3">
+                      <p className="text-xs text-gray-600 dark:text-gray-300 line-clamp-2 mb-3">
                         {res.description}
                       </p>
                     )}

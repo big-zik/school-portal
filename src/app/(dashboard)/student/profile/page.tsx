@@ -272,7 +272,7 @@ export default function StudentProfilePage() {
                     />
                   </div>
 
-                  <Button type="submit" size="sm" disabled={passwordLoading} className="w-full text-xs font-semibold bg-blue-600 hover:bg-blue-700 mt-2">
+                  <Button type="submit" size="sm" disabled={passwordLoading} className="text-white w-full text-xs font-semibold bg-blue-600 hover:bg-blue-700 mt-2">
                     {passwordLoading ? 'Updating…' : 'Update Security Password'}
                   </Button>
                 </form>

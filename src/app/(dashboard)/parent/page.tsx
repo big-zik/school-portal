@@ -180,7 +180,7 @@ export default async function ParentDashboardPage() {
           {/* Quick Action Shortcuts */}
           <div className="flex flex-wrap gap-2.5">
             <Link href="/parent/fees">
-              <Button size="sm" className="text-xs bg-emerald-500 hover:bg-emerald-600 text-white font-semibold gap-1.5 shadow-sm">
+              <Button size="sm" className="text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-semibold gap-1.5 shadow-sm">
                 <UploadCloud className="w-3.5 h-3.5" /> Upload Fee Receipt
               </Button>
             </Link>
@@ -249,7 +249,7 @@ export default async function ParentDashboardPage() {
                       </Button>
                     </Link>
                     <Link href="/parent/meetings">
-                      <Button size="sm" className="text-xs bg-emerald-600 hover:bg-emerald-700">
+                      <Button size="sm" className="text-white text-xs bg-emerald-600 hover:bg-emerald-700">
                         Book Meeting
                       </Button>
                     </Link>

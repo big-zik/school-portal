@@ -82,9 +82,9 @@ function LoginFormContent() {
             <div className="h-10 w-10 rounded-xl bg-[var(--cgs-navy)] text-white font-bold flex items-center justify-center text-lg">
               CG
             </div>
-            <div className="flex flex-col text-[var(--cgs-heading)]">
+            <div className="flex flex-col text-[var(--cgs-navy)]">
               <span className="text-sm font-bold leading-tight">CHOSEN GENERATION</span>
-              <span className="text-[11px] font-semibold text-[var(--cgs-primary)] tracking-wider uppercase">Born to Excel</span>
+              <span className="text-[11px] font-semibold text-[var(--cgs-navy)]/80 tracking-wider uppercase">Born to Excel</span>
             </div>
           </Link>
         </div>
@@ -120,9 +120,9 @@ function LoginFormContent() {
               <div className="h-10 w-10 rounded-xl bg-[var(--cgs-navy)] text-white font-bold flex items-center justify-center text-lg">
                 CG
               </div>
-              <div className="flex flex-col text-[var(--cgs-heading)]">
+              <div className="flex flex-col text-[var(--cgs-navy)]">
                 <span className="text-sm font-bold leading-tight">CHOSEN GENERATION</span>
-                <span className="text-[11px] font-semibold text-[var(--cgs-primary)]">Born to Excel</span>
+                <span className="text-[11px] font-semibold text-[var(--cgs-navy)]/80">Born to Excel</span>
               </div>
             </Link>
           </div>
@@ -139,7 +139,7 @@ function LoginFormContent() {
 
           {/* Error Notice */}
           {errorMessage && (
-            <div className="flex items-center gap-2 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 p-3.5 text-xs text-[#BA362A]">
+            <div className="flex items-center gap-2 rounded-xl bg-[var(--cgs-danger-soft)] border border-[var(--cgs-danger)]/30 p-3.5 text-xs text-[var(--cgs-danger)]">
               <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{errorMessage}</span>
             </div>
@@ -210,7 +210,7 @@ function LoginFormContent() {
               disabled={loading}
               className="w-full h-12 text-sm font-semibold rounded-xl shadow-sm transition-all"
             >
-              {loading ? 'Verifying credentials...' : 'Sign in &rarr;'}
+              {loading ? 'Verifying credentials...' : 'Sign in →'}
             </Button>
           </form>
 

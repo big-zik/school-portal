@@ -238,7 +238,7 @@ export default function AboutPage() {
           </p>
           <div className="pt-2 flex justify-center gap-3">
             <Link href="/admissions/apply">
-              <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-xs font-bold gap-2">
+              <Button size="lg" className="text-white bg-emerald-600 hover:bg-emerald-700 text-xs font-bold gap-2">
                 Apply for Admission Now <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>

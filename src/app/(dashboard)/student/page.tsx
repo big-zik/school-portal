@@ -246,7 +246,7 @@ export default async function StudentDashboardPage() {
           <Card className="hover:shadow-md transition-shadow">
             <CardContent className="p-5 flex items-center justify-between">
               <div>
-                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Term Attendance</p>
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-300">Term Attendance</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">
                   {studentData.attendance.percentage}%
                 </h3>
@@ -264,7 +264,7 @@ export default async function StudentDashboardPage() {
           <Card className="hover:shadow-md transition-shadow">
             <CardContent className="p-5 flex items-center justify-between">
               <div>
-                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Current Average</p>
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-300">Current Average</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">
                   91.2%
                 </h3>
@@ -282,7 +282,7 @@ export default async function StudentDashboardPage() {
           <Card className="hover:shadow-md transition-shadow">
             <CardContent className="p-5 flex items-center justify-between">
               <div>
-                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Assignments</p>
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-300">Assignments</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">
                   1 Pending
                 </h3>
@@ -300,7 +300,7 @@ export default async function StudentDashboardPage() {
           <Card className="hover:shadow-md transition-shadow">
             <CardContent className="p-5 flex items-center justify-between">
               <div>
-                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Term 2 Fees</p>
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-300">Term 2 Fees</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">
                   {formatCurrency(studentData.feeBalance)}
                 </h3>

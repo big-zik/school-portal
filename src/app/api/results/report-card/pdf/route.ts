@@ -160,7 +160,7 @@ export async function GET(request: NextRequest) {
       margin: 1,
       width: 140,
       color: {
-        dark: '#0f172a',
+        dark: '#0F2A44',
         light: '#ffffff',
       },
     })

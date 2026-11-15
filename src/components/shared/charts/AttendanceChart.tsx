@@ -39,18 +39,18 @@ export function AttendanceChart({ data, className }: AttendanceChartProps) {
           <XAxis
             dataKey="month"
             tick={{ fill: 'currentColor' }}
-            className="text-xs text-gray-600 dark:text-gray-400"
+            className="text-xs text-gray-600 dark:text-gray-300"
           />
           <YAxis
             tick={{ fill: 'currentColor' }}
-            className="text-xs text-gray-600 dark:text-gray-400"
+            className="text-xs text-gray-600 dark:text-gray-300"
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: 'var(--tooltip-bg, #111827)',
-              borderColor: 'var(--tooltip-border, #374151)',
+              backgroundColor: 'var(--tooltip-bg, #0F2A44)',
+              borderColor: 'var(--tooltip-border, #2B4260)',
               borderRadius: '0.5rem',
-              color: '#f9fafb',
+              color: '#F4EFE2',
               fontSize: '0.875rem',
             }}
           />
@@ -63,19 +63,19 @@ export function AttendanceChart({ data, className }: AttendanceChartProps) {
           <Bar
             dataKey="present"
             name="Present"
-            fill="#10b981"
+            fill="var(--cgs-success, #047857)"
             radius={[4, 4, 0, 0]}
           />
           <Bar
             dataKey="absent"
             name="Absent"
-            fill="#ef4444"
+            fill="var(--cgs-danger, #BA362A)"
             radius={[4, 4, 0, 0]}
           />
           <Bar
             dataKey="late"
             name="Late"
-            fill="#f59e0b"
+            fill="var(--cgs-gold, #C8962E)"
             radius={[4, 4, 0, 0]}
           />
         </BarChart>

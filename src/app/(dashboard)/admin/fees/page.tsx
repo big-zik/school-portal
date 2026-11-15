@@ -313,7 +313,7 @@ export default function AdminFeesManagementPage() {
                           <TableCell className="text-xs font-medium text-gray-900 dark:text-gray-100">
                             {inv.student?.user?.name || 'Unknown Student'}
                           </TableCell>
-                          <TableCell className="text-xs text-gray-600 dark:text-gray-400">
+                          <TableCell className="text-xs text-gray-600 dark:text-gray-300">
                             {inv.student?.currentClass?.name || 'Unassigned'}
                           </TableCell>
                           <TableCell className="text-xs font-semibold text-gray-900 dark:text-gray-100">
@@ -378,7 +378,7 @@ export default function AdminFeesManagementPage() {
                   </div>
                 ) : approvals.length === 0 ? (
                   <div className="text-center py-12 text-sm text-gray-500 space-y-2">
-                    <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto" />
+                    <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" />
                     <p className="font-semibold text-gray-800 dark:text-gray-200">No Pending Bank Transfers</p>
                     <p className="text-xs text-gray-400">All submitted proof of payment receipts have been reviewed.</p>
                   </div>
@@ -512,7 +512,7 @@ export default function AdminFeesManagementPage() {
               <CardContent className="p-0">
                 {debtors.length === 0 ? (
                   <div className="text-center py-12 text-sm text-gray-500 space-y-2">
-                    <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto" />
+                    <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" />
                     <p className="font-semibold text-gray-800 dark:text-gray-200">Zero Outstanding Debtors</p>
                     <p className="text-xs text-gray-400">All student invoices have been fully cleared and verified.</p>
                   </div>

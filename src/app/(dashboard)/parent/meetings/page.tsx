@@ -159,7 +159,7 @@ export default function ParentMeetingsPage() {
                       {m.mode === 'VIRTUAL' ? (
                         <Video className="w-3.5 h-3.5 text-indigo-500" />
                       ) : (
-                        <MapPin className="w-3.5 h-3.5 text-emerald-500" />
+                        <MapPin className="w-3.5 h-3.5 text-emerald-600" />
                       )}
                       <span className="font-medium text-[11px] truncate max-w-[200px]">{m.locationOrLink}</span>
                     </div>

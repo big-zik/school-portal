@@ -115,7 +115,7 @@ export default function AdminSettingsPage() {
               onClick={handleSave}
               disabled={isSaving || loading}
               size="sm"
-              className="text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 font-semibold"
+              className="text-white text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 font-semibold"
             >
               {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
               Save Changes

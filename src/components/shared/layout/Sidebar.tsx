@@ -181,21 +181,21 @@ export function Sidebar({ role, isOpen, onClose }: SidebarProps) {
 
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-[var(--cgs-border)] bg-[var(--cgs-surface)] text-[var(--cgs-text)] transition-transform duration-300 ease-in-out md:static md:translate-x-0',
+          'fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-[var(--cgs-sidebar)] text-[var(--cgs-on-sidebar)] transition-transform duration-300 ease-in-out md:static md:translate-x-0',
           isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
         )}
       >
         {/* Brand Header */}
-        <div className="flex h-16 items-center justify-between border-b border-[var(--cgs-border)] px-6">
+        <div className="flex h-16 items-center justify-between border-b border-white/10 px-6">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--cgs-primary)] text-white shadow-md shadow-blue-900/20">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--cgs-sky)] text-[var(--cgs-navy)]">
               <GraduationCap className="h-5 w-5" />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-bold tracking-tight text-[var(--cgs-heading)]">
+              <span className="text-sm font-bold tracking-tight text-[var(--cgs-on-sidebar)]">
                 CHOSEN GENERATION
               </span>
-              <span className="text-[10px] font-semibold text-[var(--cgs-primary)] tracking-wide">
+              <span className="text-[10px] font-semibold text-[var(--cgs-sidebar-muted)] tracking-wide">
                 Born to Excel
               </span>
             </div>
@@ -204,7 +204,7 @@ export function Sidebar({ role, isOpen, onClose }: SidebarProps) {
           {onClose && (
             <button
               onClick={onClose}
-              className="p-1 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 md:hidden"
+              className="p-1 rounded-lg text-[var(--cgs-sidebar-muted)] hover:bg-[var(--cgs-sidebar-hover)] hover:text-[var(--cgs-on-sidebar)] md:hidden"
             >
               <X className="w-5 h-5" />
             </button>
@@ -215,7 +215,7 @@ export function Sidebar({ role, isOpen, onClose }: SidebarProps) {
         <div className="flex-1 overflow-y-auto px-4 py-4 space-y-6">
           {navSections.map((sec, idx) => (
             <div key={idx} className="space-y-1">
-              <h4 className="px-3 text-[11px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+              <h4 className="px-3 text-[11px] font-semibold uppercase tracking-wider text-[var(--cgs-sidebar-muted)]">
                 {sec.section}
               </h4>
               <div className="mt-1 space-y-0.5">
@@ -235,16 +235,16 @@ export function Sidebar({ role, isOpen, onClose }: SidebarProps) {
                       className={cn(
                         'flex items-center justify-between gap-3 rounded-lg px-3 py-2 text-xs font-medium transition-all',
                         isActive
-                          ? 'bg-[var(--cgs-tint)] text-[var(--cgs-primary)] border border-[var(--cgs-sky)]/40 shadow-sm font-semibold'
-                          : 'text-[var(--cgs-subdued)] hover:bg-[var(--cgs-surface-subtle)] hover:text-[var(--cgs-text)]'
+                          ? 'bg-[var(--cgs-sidebar-active)] text-[var(--cgs-on-sidebar)] font-semibold shadow-[inset_3px_0_0_var(--cgs-gold)]'
+                          : 'text-[var(--cgs-sidebar-muted)] hover:bg-[var(--cgs-sidebar-hover)] hover:text-[var(--cgs-on-sidebar)]'
                       )}
                     >
                       <div className="flex items-center gap-2.5">
-                        <Icon className={cn('h-4 w-4 shrink-0', isActive ? 'text-[var(--cgs-primary)]' : 'text-gray-400')} />
+                        <Icon className={cn('h-4 w-4 shrink-0', isActive ? 'text-[var(--cgs-on-sidebar)]' : 'text-[var(--cgs-sidebar-muted)]')} />
                         <span>{item.label}</span>
                       </div>
                       {item.badge && (
-                        <span className="rounded-full bg-[var(--cgs-tint)] px-2 py-0.5 text-[10px] font-semibold text-[var(--cgs-primary)] border border-[var(--cgs-sky)]/30">
+                        <span className="rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-semibold text-[var(--cgs-on-sidebar)]">
                           {item.badge}
                         </span>
                       )}
@@ -257,13 +257,13 @@ export function Sidebar({ role, isOpen, onClose }: SidebarProps) {
         </div>
 
         {/* Bottom Help & Version info */}
-        <div className="border-t border-gray-200/80 dark:border-gray-800 p-4">
-          <div className="rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50/50 dark:from-gray-800 dark:to-gray-800/50 p-3 border border-blue-100/50 dark:border-gray-700">
-            <div className="flex items-center gap-2 text-blue-700 dark:text-blue-300">
+        <div className="border-t border-white/10 p-4">
+          <div className="rounded-xl bg-white/10 p-3 border border-white/10">
+            <div className="flex items-center gap-2 text-[var(--cgs-on-sidebar)]">
               <HelpCircle className="w-4 h-4" />
               <span className="text-xs font-semibold">Help & Support</span>
             </div>
-            <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-[11px] text-[var(--cgs-sidebar-muted)] mt-1">
               Need assistance? Contact admin office or IT desk.
             </p>
           </div>

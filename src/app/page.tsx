@@ -174,7 +174,7 @@ export default async function HomePage() {
 
               {/* Motto Banner */}
               <div className="pt-4 flex items-center gap-3">
-                <div className="bg-[var(--cgs-gold)] text-[var(--cgs-text)] font-bold text-sm tracking-wide px-4 py-2 rounded-lg shadow-sm">
+                <div className="bg-[var(--cgs-gold)] text-[var(--cgs-on-accent)] font-bold text-sm tracking-wide px-4 py-2 rounded-lg shadow-sm">
                   Born to Excel
                 </div>
                 <span className="text-xs font-medium text-[var(--cgs-subdued)]">
@@ -378,9 +378,9 @@ export default async function HomePage() {
                 <div className="h-9 w-9 rounded-lg bg-[var(--cgs-navy)] text-white font-bold flex items-center justify-center text-base">
                   CG
                 </div>
-                <div className="flex flex-col text-[var(--cgs-heading)]">
+                <div className="flex flex-col text-[var(--cgs-navy)]">
                   <span className="text-xs font-bold leading-tight">CHOSEN GENERATION</span>
-                  <span className="text-[10px] font-semibold text-[var(--cgs-primary)]">Born to Excel</span>
+                  <span className="text-[10px] font-semibold text-[var(--cgs-navy)]/80">Born to Excel</span>
                 </div>
               </div>
               <p className="text-xs text-blue-200 leading-relaxed">

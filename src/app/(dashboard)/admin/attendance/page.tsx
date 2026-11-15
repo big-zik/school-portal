@@ -195,7 +195,7 @@ export default function AdminAttendancePage() {
                           {rec.class.name}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-gray-600 dark:text-gray-400">
+                      <TableCell className="text-gray-600 dark:text-gray-300">
                         {rec.subject?.name || 'Homeroom Morning Roll-Call'}
                       </TableCell>
                       <TableCell>
