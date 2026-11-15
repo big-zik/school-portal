@@ -1,252 +1,46 @@
 'use client'
 
 import React, { useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
-import {
-  GraduationCap,
-  Calendar,
-  User,
-  ArrowRight,
-  Phone,
-  Mail,
-  Search,
-  BookOpen,
-  Sparkles,
-  Trophy,
-  Tag,
-  Clock,
-} from 'lucide-react'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { SiteShell } from '@/components/site/SiteShell'
+import { PageHead, FilterPills } from '@/components/site/PageHead'
+
+const FILTERS = ['All updates', 'School life', 'Academics', 'Events']
+
+const STORIES = [
+  { cat: 'Admissions', filter: 'Academics', title: 'Applications open for 2026/2027', src: '/images/classroom.jpg', alt: 'Students learning together in a classroom' },
+  { cat: 'School life', filter: 'School life', title: 'A day of teamwork and sport', src: '/images/football.jpg', alt: 'Students playing football' },
+  { cat: 'Community', filter: 'Events', title: 'Working together with our parents', src: '/images/classroom.jpg', alt: 'Students and a teacher reading together' },
+]
 
 export default function NewsPage() {
-  const [search, setSearch] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState<string>('All')
-
-  const articles = [
-    {
-      id: 'news-1',
-      title: 'Chosen Generation STEM Robotics Team Clinches 1st Prize in Lagos Robotics Olympiad',
-      date: 'Feb 10, 2025',
-      category: 'STEM & Innovation',
-      author: 'Academic Directorate',
-      readTime: '3 min read',
-      excerpt:
-        'Our Senior Secondary Grade 10 and 11 robotics scholars engineered an autonomous flood-detection robot to claim the top trophy among 48 competing private schools across the state.',
-      content:
-        'Competing against 48 international schools, our robotics contingent demonstrated exceptional prowess in Python micro-controller programming, sensor calibration, and 3D prototyping. The team will proceed to represent Nigeria in the Pan-African Youth Science Exhibition in Nairobi later this year.',
-    },
-    {
-      id: 'news-2',
-      title: 'Term 2 Mid-Term Assessment Schedule & Continuous Assessment Submission Advisory',
-      date: 'Feb 06, 2025',
-      category: 'Academic Calendar',
-      author: 'Office of the Principal',
-      readTime: '2 min read',
-      excerpt:
-        'Continuous Assessment tests (CA 2) will be conducted from February 17th to 19th prior to the mid-term recess. Parents are advised to review revision topics on the portal.',
-      content:
-        'All continuous assessment test timetables have been published under the Parent Portal. Please ensure students complete their term revision projects and arrive promptly at their designated examination halls.',
-    },
-    {
-      id: 'news-3',
-      title: 'Annual Inter-House Athletics & Swimming Gala: Sapphire Blue House Takes Gold',
-      date: 'Jan 30, 2025',
-      category: 'Sports & Athletics',
-      author: 'Sports Department',
-      readTime: '4 min read',
-      excerpt:
-        'Over 1,200 parents and supporters witnessed an electrifying day of sprints, relays, high jump, and 50m aquatic butterfly strokes at our Olympic complex.',
-      content:
-        'Sapphire Blue House led the medal table with 18 Gold, 12 Silver, and 9 Bronze medals, closely pursued by Ruby Red House. Outstanding athlete awards were presented to Daniel Johnson (SS 1) and Amara Okafor (SS 1).',
-    },
-    {
-      id: 'news-4',
-      title: 'School Board Commissions 100kVA Solar Clean Energy Microgrid for Boarding Quarters',
-      date: 'Jan 15, 2025',
-      category: 'Campus Facilities',
-      author: 'Board of Governors',
-      readTime: '3 min read',
-      excerpt:
-        'In line with our sustainable campus policy, the school has completed the installation of a 100kVA hybrid lithium solar microgrid delivering 24/7 silent, uninterrupted power.',
-      content:
-        'The transition to clean solar energy guarantees 24-hour air conditioning, water heating, and ICT digital library power across all boarding halls while reducing carbon emissions by 65%.',
-    },
-    {
-      id: 'news-5',
-      title: 'Cambridge IGCSE & WAEC May/June Registration Guidelines for Senior Secondary Scholars',
-      date: 'Jan 08, 2025',
-      category: 'Admissions & Exams',
-      author: 'Registrar',
-      readTime: '3 min read',
-      excerpt:
-        'Subject selection verification and bio-metric capturing for Grade 12 valedictory students has commenced at the ICT CBT center.',
-      content:
-        'Parents of SS 3 students are advised to confirm candidate subjects with the academic dean before the deadline to ensure error-free index number issuance.',
-    },
-  ]
-
-  const categories = ['All', 'STEM & Innovation', 'Academic Calendar', 'Sports & Athletics', 'Campus Facilities', 'Admissions & Exams']
-
-  const filtered = articles.filter(art => {
-    const matchesSearch = art.title.toLowerCase().includes(search.toLowerCase()) || art.excerpt.toLowerCase().includes(search.toLowerCase())
-    const matchesCat = selectedCategory === 'All' || art.category === selectedCategory
-    return matchesSearch && matchesCat
-  })
-
+  const [filter, setFilter] = useState(FILTERS[0])
+  const shown = filter === FILTERS[0] ? STORIES : STORIES.filter((s) => s.filter === filter)
   return (
-    <div className="min-h-screen bg-[var(--cgs-canvas)] text-[var(--cgs-text)] flex flex-col font-sans">
-      {/* Top Bar */}
-      <div className="bg-[var(--cgs-navy)] text-white py-2 px-4 text-xs">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1">
-              <Phone className="w-3 h-3 text-[var(--cgs-sky)]" /> +234 (0) 800 CHOSEN SCH
-            </span>
-            <span className="flex items-center gap-1">
-              <Mail className="w-3 h-3 text-[var(--cgs-sky)]" /> info@chosengeneration.edu.ng
-            </span>
-          </div>
+    <SiteShell active="/news">
+      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <PageHead eyebrow="NEWS & EVENTS" title="Good things are happening." />
+        <div className="mt-12 grid items-center gap-12 lg:grid-cols-[1.35fr_1fr]">
+          <Image src="/images/science-lab.jpg" alt="Students and a teacher working on a science experiment" width={610} height={437} className="h-auto w-full rounded-3xl object-cover" />
           <div>
-            <span>Chosen Generation Campus, Lagos, Nigeria &middot; Born to Excel</span>
+            <p className="text-xs font-semibold uppercase tracking-wider text-[var(--cgs-primary)]">School life · 12 Nov 2026</p>
+            <h2 className="mt-8 font-serif text-4xl font-semibold leading-snug text-[var(--cgs-navy)]">Curiosity takes centre stage at Science Week</h2>
+            <p className="mt-12 text-lg text-[var(--cgs-text)]">Students explore practical science through questions, experiments and teamwork.</p>
+            <Link href="/gallery" className="mt-12 inline-flex h-12 items-center rounded-lg border border-[var(--cgs-primary)] bg-[var(--cgs-tint)] px-14 text-sm font-semibold text-[var(--cgs-navy)]">Read story</Link>
           </div>
         </div>
-      </div>
-
-      {/* Main Navbar */}
-      <header className="sticky top-0 z-40 bg-[var(--cgs-surface)]/95 border-b border-[var(--cgs-border)] backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="h-11 w-11 rounded-xl bg-[var(--cgs-tint)] border border-[var(--cgs-sky)]/40 flex items-center justify-center font-bold text-lg text-[var(--cgs-heading)] shadow-sm">
-              CG
-            </div>
-            <div>
-              <h1 className="text-base font-bold tracking-tight text-[var(--cgs-heading)] leading-none">
-                CHOSEN GENERATION
-              </h1>
-              <p className="text-[10px] text-[var(--cgs-primary)] uppercase tracking-wider font-semibold mt-1">
-                Born to Excel
-              </p>
-            </div>
-          </Link>
-
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-            <Link href="/" className="text-[var(--cgs-subdued)] hover:text-[var(--cgs-text)] transition-colors">Home</Link>
-            <Link href="/about" className="text-[var(--cgs-subdued)] hover:text-[var(--cgs-text)] transition-colors">About</Link>
-            <Link href="/admissions" className="text-[var(--cgs-subdued)] hover:text-[var(--cgs-text)] transition-colors">Admissions</Link>
-            <Link href="/news" className="text-[var(--cgs-primary)] font-semibold">News</Link>
-            <Link href="/gallery" className="text-[var(--cgs-subdued)] hover:text-[var(--cgs-text)] transition-colors">Gallery</Link>
-            <Link href="/contact" className="text-[var(--cgs-subdued)] hover:text-[var(--cgs-text)] transition-colors">Contact</Link>
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <Link href="/login">
-              <Button className="h-10 px-5 rounded-lg font-semibold shadow-sm">
-                School portal
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      {/* Header Banner */}
-      <section className="py-12 md:py-16 px-4 bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white text-center">
-        <div className="max-w-3xl mx-auto space-y-3">
-          <Badge className="bg-white/20 text-white border-0 text-xs">Official School Bulletins</Badge>
-          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">Campus News & Press Releases</h2>
-          <p className="text-xs md:text-sm text-blue-100 max-w-xl mx-auto">
-            Stay updated with academic milestones, sports celebrations, international recognitions, and school calendar announcements.
-          </p>
-        </div>
-      </section>
-
-      {/* Search and Category Filter */}
-      <section className="py-6 px-4 max-w-7xl mx-auto w-full space-y-4">
-        <div className="flex flex-col md:flex-row items-center gap-4 justify-between">
-          <div className="relative w-full md:w-80">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-            <Input
-              placeholder="Search news articles..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 text-xs"
-            />
-          </div>
-
-          <div className="flex flex-wrap items-center gap-1.5 overflow-x-auto pb-1">
-            {categories.map((cat) => (
-              <Button
-                key={cat}
-                size="sm"
-                variant={selectedCategory === cat ? 'default' : 'outline'}
-                onClick={() => setSelectedCategory(cat)}
-                className="text-xs h-8 whitespace-nowrap"
-              >
-                {cat}
-              </Button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Articles Grid */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((art) => (
-            <Card key={art.id} className="flex flex-col justify-between hover:shadow-lg transition-all duration-300">
-              <CardHeader className="space-y-2">
-                <div className="flex items-center justify-between text-[11px] text-gray-500">
-                  <Badge variant="outline" className="text-[10px] text-blue-600 font-semibold border-blue-200">
-                    {art.category}
-                  </Badge>
-                  <span className="flex items-center gap-1">
-                    <Clock className="w-3 h-3 text-gray-400" /> {art.readTime}
-                  </span>
-                </div>
-                <CardTitle className="text-base font-bold text-gray-900 dark:text-gray-100 line-clamp-2 leading-snug">
-                  {art.title}
-                </CardTitle>
-                <div className="flex items-center gap-2 text-[11px] text-gray-400 pt-1">
-                  <span>{art.date}</span>
-                  <span>•</span>
-                  <span>{art.author}</span>
-                </div>
-              </CardHeader>
-
-              <CardContent className="space-y-4">
-                <p className="text-xs text-gray-600 dark:text-gray-300 line-clamp-3 leading-relaxed">
-                  {art.excerpt}
-                </p>
-
-                <div className="pt-2 border-t border-gray-100 dark:border-gray-800">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => alert(`Full Article:\n\n${art.title}\n\n${art.content}`)}
-                    className="p-0 h-auto text-xs text-blue-600 hover:text-blue-700 font-semibold gap-1"
-                  >
-                    Read Full Story <ArrowRight className="w-3.5 h-3.5" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+        <div className="mt-16"><FilterPills items={FILTERS} value={filter} onChange={setFilter} /></div>
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {shown.map((s) => (
+            <article key={s.title}>
+              <Image src={s.src} alt={s.alt} width={420} height={230} className="h-[230px] w-full rounded-2xl object-cover" />
+              <p className="mt-5 text-xs font-semibold uppercase tracking-wider text-[var(--cgs-primary)]">{s.cat}</p>
+              <h3 className="mt-3 text-2xl font-semibold leading-snug text-[var(--cgs-navy)]">{s.title}</h3>
+            </article>
           ))}
         </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="py-8 px-4 bg-gray-900 text-gray-400 text-center text-xs border-t border-gray-800">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>© 2026 CHOSEN GENERATION SCHOOL. All rights reserved.</p>
-          <div className="flex items-center gap-4">
-            <Link href="/about" className="text-blue-400 hover:underline">About School</Link>
-            <Link href="/admissions/apply" className="text-blue-400 hover:underline">Online Admissions</Link>
-            <Link href="/contact" className="text-blue-400 hover:underline">Contact Campus</Link>
-          </div>
-        </div>
-      </footer>
-    </div>
+      </div>
+    </SiteShell>
   )
 }

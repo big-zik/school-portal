@@ -104,7 +104,8 @@
   --color-background: var(--cgs-canvas);
   --color-foreground: var(--cgs-text);
   --color-ring: var(--cgs-focus);
-  --font-sans: var(--font-geist-sans), Inter, sans-serif;
+  --font-sans: var(--font-inter), Inter, system-ui, sans-serif;
+  --font-serif: var(--font-playfair), 'Playfair Display', Georgia, serif;
   --font-mono: var(--font-geist-mono), monospace;
 
   --color-cgs-canvas: var(--cgs-canvas);
