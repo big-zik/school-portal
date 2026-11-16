@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, Playfair_Display, Geist_Mono } from 'next/font/google'
 import './globals.css'
+import './site.css'
 
 const inter = Inter({
   variable: '--font-inter',
@@ -34,7 +35,16 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} ${playfair.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <script
+          // Apply the saved palette before first paint so there is no flash.
+          dangerouslySetInnerHTML={{
+            __html: `try{var p=localStorage.getItem('cgs-palette');var d=document.documentElement;if(p==='calm')d.setAttribute('data-palette','calm');else if(p==='evening')d.classList.add('dark')}catch(e){}`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col font-sans bg-[var(--cgs-canvas)] text-[var(--cgs-text)]">
         {children}
       </body>

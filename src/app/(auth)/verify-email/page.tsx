@@ -43,7 +43,7 @@ function VerifyEmailBody() {
     return (
       <AuthSplit title="Check your email" sub={`We sent a verification link${address ? ` to ${address}` : ''}.`}>
         <div className="rounded-2xl bg-[var(--cgs-tint)] p-6">
-          <p className="text-xl font-semibold text-[var(--cgs-navy)]">Open the link to activate your account.</p>
+          <p className="text-xl font-semibold text-[var(--cgs-heading)]">Open the link to activate your account.</p>
           <p className="mt-8">Check your spam folder too. The link expires in 24 hours. You can request another below.</p>
         </div>
         <div className="mt-24 space-y-6">

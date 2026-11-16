@@ -1,0 +1,57 @@
+/* Public-site and sign-in finish: gold foil, hero colours per palette, scroll motion.
+   Hand-maintained; palette base tokens live in globals.css. */
+:root {
+  --cgs-hero: #0B3A6B;
+  --cgs-hero-2: #124F86;
+  --cgs-foil: linear-gradient(115deg, #7C5A14 0%, #C99A2E 16%, #F6DE8F 32%, #FFF6CF 40%, #E2B848 52%, #A8791F 74%, #EBCB66 100%);
+  --cgs-on-foil: #0B2A4A;
+}
+[data-palette="calm"] { --cgs-hero: #0E3F6C; --cgs-hero-2: #17588F; }
+.dark, [data-theme="dark"], [data-theme="evening"] { --cgs-hero: #0C1F37; --cgs-hero-2: #16355B; }
+
+html { scroll-behavior: smooth; }
+:focus-visible { outline: 3px solid var(--cgs-focus); outline-offset: 3px; border-radius: 6px; }
+.skip-link { position: absolute; left: 12px; top: -64px; z-index: 100; background: var(--cgs-surface); color: var(--cgs-heading); padding: 10px 16px; border-radius: 8px; font-weight: 600; box-shadow: 0 4px 16px rgb(0 0 0 / .25); }
+.skip-link:focus { top: 12px; }
+
+/* gold foil */
+@keyframes cgs-sheen { 0%, 100% { background-position: 0% 0; } 50% { background-position: 100% 0; } }
+@keyframes cgs-turn { to { transform: rotate(360deg); } }
+.foil { background: var(--cgs-foil); background-size: 260% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; animation: cgs-sheen 7s ease-in-out infinite; }
+.foil-bg { background: var(--cgs-foil); background-size: 260% 100%; animation: cgs-sheen 7s ease-in-out infinite; }
+.btn-gold { background: var(--cgs-foil); background-size: 260% 100%; animation: cgs-sheen 7s ease-in-out infinite; color: var(--cgs-on-foil); box-shadow: 0 6px 18px rgb(0 0 0 / .28), inset 0 1px 0 rgb(255 255 255 / .55); transition: filter .2s, transform .2s; }
+.btn-gold:hover { filter: brightness(1.06); }
+.btn-gold:active { transform: translateY(1px); }
+
+/* hero surfaces */
+.hero-surface { position: relative; overflow: hidden; color: #fff; background: radial-gradient(900px 520px at 78% 40%, var(--cgs-hero-2), transparent 70%), var(--cgs-hero); }
+.hero-surface::after { content: ""; position: absolute; inset: auto 0 0 0; height: 4px; background: var(--cgs-foil); }
+.band-surface { position: relative; overflow: hidden; color: #fff; background: radial-gradient(700px 320px at 85% 0%, var(--cgs-hero-2), transparent 70%), var(--cgs-hero); }
+.band-surface::after { content: ""; position: absolute; inset: auto 0 0 0; height: 3px; background: var(--cgs-foil); }
+
+/* arch frame: the one memorable shape */
+.arch-frame { padding: 4px; border-radius: 999px 999px 20px 20px; background: var(--cgs-foil); background-size: 260% 100%; animation: cgs-sheen 7s ease-in-out infinite; box-shadow: 0 24px 60px rgb(0 0 0 / .4); }
+.arch { aspect-ratio: 4 / 5; border-radius: 999px 999px 16px 16px; overflow: hidden; background: var(--cgs-hero); }
+.arch img { width: 100%; height: 100%; object-fit: cover; display: block; transform: translate3d(0, var(--y, 0px), 0) scale(1.1); }
+.arch-sm { border-radius: 120px 120px 14px 14px; }
+.seal { transform: translate3d(0, var(--sy, 0px), 0) rotate(var(--sr, 0deg)); box-shadow: 0 0 0 6px var(--cgs-hero), 0 10px 26px rgb(0 0 0 / .4); }
+.seal svg { position: absolute; inset: 0; width: 100%; height: 100%; animation: cgs-turn 40s linear infinite; }
+.seal text { font: 700 10.5px var(--font-sans); letter-spacing: .2em; fill: var(--cgs-on-foil); }
+
+/* scroll motion: content is visible unless JS marks it .pre; reduced motion skips all of it */
+.scroll-progress { position: fixed; top: env(safe-area-inset-top, 0px); left: 0; right: 0; height: 3px; z-index: 60; transform-origin: 0 50%; transform: scaleX(var(--p, 0)); background: var(--cgs-foil); pointer-events: none; }
+.pre { opacity: 0; transform: translateY(24px); }
+.pre.in { opacity: 1; transform: none; transition: opacity .8s cubic-bezier(.2,.7,.2,1) var(--d, 0s), transform .8s cubic-bezier(.2,.7,.2,1) var(--d, 0s); }
+.rule-draw::before { transform-origin: 0 50%; }
+.rule-draw.pre::before { transform: scaleX(0); }
+.rule-draw.in::before { transform: scaleX(1); transition: transform 1.1s cubic-bezier(.2,.7,.2,1) calc(var(--d, 0s) + .35s); }
+@keyframes cgs-rise { from { opacity: 0; transform: translateY(18px); } }
+.rise { animation: cgs-rise .9s cubic-bezier(.2,.7,.2,1) backwards; animation-delay: var(--d, 0s); }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .foil, .foil-bg, .btn-gold, .arch-frame, .seal svg { animation: none; background-position: 30% 0; }
+  .pre { opacity: 1; transform: none; }
+  .rise { animation: none; }
+  .arch img, .seal { transform: none; }
+  .scroll-progress { display: none; }
+}

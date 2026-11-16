@@ -61,7 +61,7 @@ function LoginFormContent() {
           <Link href="/forgot-password" className="font-semibold text-[var(--cgs-primary)] hover:underline">Forgot password?</Link>
         </div>
         <button type="submit" disabled={loading} className={`${authPrimary} mt-12`}>{loading ? 'Signing in…' : 'Sign in'}</button>
-        <div className="mt-6"><Link href="/" className="inline-flex h-12 w-full items-center justify-center rounded-lg border border-[var(--cgs-primary)] bg-[var(--cgs-tint)] text-sm font-semibold text-[var(--cgs-navy)]">Back to website</Link></div>
+        <div className="mt-6"><Link href="/" className="inline-flex h-12 w-full items-center justify-center rounded-lg border border-[var(--cgs-primary)] bg-[var(--cgs-tint)] text-sm font-semibold text-[var(--cgs-heading)]">Back to website</Link></div>
       </form>
     </AuthSplit>
   )

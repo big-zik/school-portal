@@ -44,11 +44,11 @@ export default function ContactPage() {
 
   return (
     <SiteShell active="/contact">
+      <PageHead eyebrow="CONTACT US" title="Let’s talk about your child’s future." sub="Ask a question, arrange a visit or get help with the school portal." />
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <PageHead eyebrow="CONTACT US" title="Let’s talk about your child’s future." sub="Ask a question, arrange a visit or get help with the school portal." />
         <div className="mt-16 grid items-start gap-8 lg:grid-cols-[1.74fr_1fr]">
           <form onSubmit={submit} className="rounded-3xl bg-[var(--cgs-tint)]/50 p-8" noValidate={false}>
-            <h2 className="text-3xl font-semibold text-[var(--cgs-navy)]">Send a message</h2>
+            <h2 className="text-3xl font-semibold text-[var(--cgs-heading)]">Send a message</h2>
             {submitted && (
               <p role="status" className="mt-6 rounded-lg border border-[var(--cgs-success)] bg-[var(--cgs-success-soft)] p-4 text-sm text-[var(--cgs-success)]">
                 Thank you. Your message has been sent and the school office will reply soon.
@@ -57,19 +57,19 @@ export default function ContactPage() {
             {error && (
               <p role="alert" className="mt-6 rounded-lg border border-[var(--cgs-danger)] bg-[var(--cgs-danger-soft)] p-4 text-sm text-[var(--cgs-danger)]">{error}</p>
             )}
-            <label className="mt-8 block text-sm font-semibold text-[var(--cgs-navy)]">
+            <label className="mt-8 block text-sm font-semibold text-[var(--cgs-heading)]">
               Your name *
               <input required value={name} onChange={(e) => setName(e.target.value)} placeholder="Full name" className={field} />
             </label>
-            <label className="mt-8 block text-sm font-semibold text-[var(--cgs-navy)]">
+            <label className="mt-8 block text-sm font-semibold text-[var(--cgs-heading)]">
               Email address *
               <input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className={field} />
             </label>
-            <label className="mt-8 block text-sm font-semibold text-[var(--cgs-navy)]">
+            <label className="mt-8 block text-sm font-semibold text-[var(--cgs-heading)]">
               What can we help with? *
               <input required value={topic} onChange={(e) => setTopic(e.target.value)} placeholder="Admissions / school portal / general enquiry" className={field} />
             </label>
-            <label className="mt-8 block text-sm font-semibold text-[var(--cgs-navy)]">
+            <label className="mt-8 block text-sm font-semibold text-[var(--cgs-heading)]">
               Message *
               <textarea required rows={3} value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Tell us how we can help" className={`${field} h-auto py-3`} />
             </label>
@@ -79,11 +79,11 @@ export default function ContactPage() {
             </button>
           </form>
           <aside className="rounded-3xl bg-[var(--cgs-tint)] p-8">
-            <h2 className="text-3xl font-semibold text-[var(--cgs-navy)]">Visit our school</h2>
+            <h2 className="text-3xl font-semibold text-[var(--cgs-heading)]">Visit our school</h2>
             <p className="mt-8 text-lg text-[var(--cgs-text)]">Arrange a visit through the school office. We will confirm the address and a suitable time.</p>
-            <h3 className="mt-16 text-xl font-semibold text-[var(--cgs-navy)]">Office hours</h3>
+            <h3 className="mt-16 text-xl font-semibold text-[var(--cgs-heading)]">Office hours</h3>
             <p className="mt-6 text-lg text-[var(--cgs-text)]">Monday – Friday<br />8:00am – 4:00pm (WAT)</p>
-            <h3 className="mt-16 text-xl font-semibold text-[var(--cgs-navy)]">Already a parent?</h3>
+            <h3 className="mt-16 text-xl font-semibold text-[var(--cgs-heading)]">Already a parent?</h3>
             <p className="mt-6 text-lg text-[var(--cgs-text)]">Sign in to send a private message about fees, attendance or your child’s learning.</p>
             <Link href="/login" className="mt-12 inline-flex h-12 w-full max-w-[340px] items-center justify-center rounded-lg bg-[var(--cgs-primary)] text-sm font-semibold text-[var(--cgs-on-primary)] hover:bg-[var(--cgs-primary-hover)]">
               Open school portal

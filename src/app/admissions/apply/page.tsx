@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { PageHead } from '@/components/site/PageHead'
 import { SiteShell } from '@/components/site/SiteShell'
 
 interface ClassOption { id: string; name: string }
@@ -15,11 +16,11 @@ const ACCEPT = ['image/jpeg', 'image/png', 'application/pdf']
 
 const input =
   'mt-2 h-12 w-full rounded-lg font-normal border border-[var(--cgs-control)] bg-[var(--cgs-surface)] px-4 text-sm text-[var(--cgs-text)] placeholder:text-[var(--cgs-muted)]'
-const label = 'block text-sm font-semibold text-[var(--cgs-navy)]'
+const label = 'block text-sm font-semibold text-[var(--cgs-heading)]'
 const primaryBtn =
   'inline-flex h-12 items-center justify-center rounded-lg bg-[var(--cgs-primary)] px-8 text-sm font-semibold text-[var(--cgs-on-primary)] hover:bg-[var(--cgs-primary-hover)] disabled:opacity-60'
 const backBtn =
-  'inline-flex h-12 min-w-[120px] items-center justify-center rounded-lg border border-[var(--cgs-primary)] bg-[var(--cgs-tint)] px-8 text-sm font-semibold text-[var(--cgs-navy)]'
+  'inline-flex h-12 min-w-[120px] items-center justify-center rounded-lg border border-[var(--cgs-primary)] bg-[var(--cgs-tint)] px-8 text-sm font-semibold text-[var(--cgs-heading)]'
 
 export default function ApplyPage() {
   const [step, setStep] = useState(0)
@@ -117,19 +118,16 @@ export default function ApplyPage() {
 
   return (
     <SiteShell active="/admissions">
+      <PageHead eyebrow="Admissions · 2026–2027 session" title="A new beginning starts here." sub="Save your progress and return at any time. Fields marked * are required." />
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <p className="text-xs font-semibold uppercase tracking-wider text-[var(--cgs-primary)]">Admissions / 2026–2027 session</p>
-        <h1 className="mt-6 font-serif text-4xl font-semibold text-[var(--cgs-navy)] sm:text-5xl lg:text-[56px]">A new beginning starts here.</h1>
-        <p className="mt-6 text-lg text-[var(--cgs-text)]">Save your progress and return at any time. Fields marked * are required.</p>
-
         <ol className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label="Application steps">
           {STEPS.map((s, i) => (
             <li
               key={s}
               aria-current={i === step && !done ? 'step' : undefined}
-              className={`flex h-14 items-center rounded-lg px-4 text-sm font-semibold ${i === (done ? 0 : step) ? 'bg-[var(--cgs-navy)] text-white' : 'bg-[var(--cgs-tint)] text-[var(--cgs-navy)]'}`}
+              className={`flex h-14 items-center rounded-lg px-4 text-sm font-semibold ${i === (done ? 0 : step) && !done ? 'bg-[var(--cgs-sidebar)] text-[var(--cgs-on-sidebar)]' : 'bg-[var(--cgs-tint)] text-[var(--cgs-heading)]'}`}
             >
-              <span className="mr-2">{i + 1}</span>
+              <span className="mr-2">{done || i < step ? '✓' : i + 1}</span>
               {s}
             </li>
           ))}
@@ -138,7 +136,7 @@ export default function ApplyPage() {
         <div className="mt-10 grid items-start gap-8 lg:grid-cols-[1.9fr_1fr]">
           {done ? (
             <section className="rounded-3xl bg-[var(--cgs-tint)] p-8 lg:min-h-[380px]" aria-live="polite">
-              <h2 className="mt-8 text-4xl font-semibold text-[var(--cgs-navy)]">Application received</h2>
+              <h2 className="mt-8 text-4xl font-semibold text-[var(--cgs-heading)]">Application received</h2>
               <p className="mt-10 text-xl">Thank you, {parentName}. We have received {firstName}’s application for {className}.</p>
               <p className="mt-16 text-lg">Reference: {done.applicationNumber}</p>
               <p className="mt-8 max-w-2xl text-lg">The school office will review your documents and contact you about the next step. Keep this reference when you contact us.</p>
@@ -157,7 +155,7 @@ export default function ApplyPage() {
 
               {step === 0 && (
                 <>
-                  <h2 className="text-3xl font-semibold text-[var(--cgs-navy)]">Tell us about your child</h2>
+                  <h2 className="text-3xl font-semibold text-[var(--cgs-heading)]">Tell us about your child</h2>
                   <div className="mt-8 grid gap-x-9 gap-y-8 sm:grid-cols-2">
                     <label className={label}>First name *<input required className={input} value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="e.g. Chiamaka" /></label>
                     <label className={label}>Last name *<input required className={input} value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="e.g. Okafor" /></label>
@@ -181,7 +179,7 @@ export default function ApplyPage() {
 
               {step === 1 && (
                 <>
-                  <h2 className="text-3xl font-semibold text-[var(--cgs-navy)]">Parent / guardian details</h2>
+                  <h2 className="text-3xl font-semibold text-[var(--cgs-heading)]">Parent / guardian details</h2>
                   <div className="mt-8 space-y-8">
                     <label className={label}>Full name *<input required minLength={3} className={input} value={parentName} onChange={(e) => setParentName(e.target.value)} /></label>
                     <label className={label}>Relationship *<input required className={input} value={relationship} onChange={(e) => setRelationship(e.target.value)} placeholder="e.g. Mother" /></label>
@@ -195,13 +193,13 @@ export default function ApplyPage() {
 
               {step === 2 && (
                 <>
-                  <h2 className="text-3xl font-semibold text-[var(--cgs-navy)]">Upload supporting documents</h2>
+                  <h2 className="text-3xl font-semibold text-[var(--cgs-heading)]">Upload supporting documents</h2>
                   <div className="mt-8 space-y-6">
                     {DOC_SLOTS.map((slot) => {
                       const d = docs[slot]
                       return (
                         <div key={slot} className="rounded-lg border border-[var(--cgs-control)] bg-[var(--cgs-surface)] p-5">
-                          <h3 className="text-xl font-semibold text-[var(--cgs-navy)]">{slot}</h3>
+                          <h3 className="text-xl font-semibold text-[var(--cgs-heading)]">{slot}</h3>
                           <p className="mt-4 text-sm">{d ? `${d.name} · ${Math.max(1, Math.round(d.size / 1024))}KB · Uploaded` : uploading === slot ? 'Uploading…' : 'Not uploaded yet'}</p>
                           <label className="mt-4 inline-block cursor-pointer text-sm font-semibold text-[var(--cgs-primary)] hover:underline">
                             {d ? 'Replace document →' : 'Choose file →'}
@@ -217,12 +215,12 @@ export default function ApplyPage() {
 
               {step === 3 && (
                 <>
-                  <h2 className="text-3xl font-semibold text-[var(--cgs-navy)]">Review your application</h2>
-                  <h3 className="mt-10 font-semibold text-[var(--cgs-navy)]">Child</h3>
+                  <h2 className="text-3xl font-semibold text-[var(--cgs-heading)]">Review your application</h2>
+                  <h3 className="mt-10 font-semibold text-[var(--cgs-heading)]">Child</h3>
                   <p className="mt-4 text-lg leading-relaxed">{firstName} {lastName} · Applying for {className}<br />Date of birth: {fmtDob}{previousSchool && <><br />Current school: {previousSchool}</>}</p>
-                  <h3 className="mt-10 font-semibold text-[var(--cgs-navy)]">Parent / guardian</h3>
+                  <h3 className="mt-10 font-semibold text-[var(--cgs-heading)]">Parent / guardian</h3>
                   <p className="mt-4 text-lg leading-relaxed">{parentName} · {relationship}<br />{parentEmail} · {parentPhone}</p>
-                  <h3 className="mt-10 font-semibold text-[var(--cgs-navy)]">Documents</h3>
+                  <h3 className="mt-10 font-semibold text-[var(--cgs-heading)]">Documents</h3>
                   <p className="mt-4 text-lg">{DOC_SLOTS.map((s) => (docs[s] ? `✓ ${s}` : `Missing: ${s}`)).join('   ')}</p>
                   <label className="mt-10 flex items-start gap-3 text-lg">
                     <input type="checkbox" checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} className="mt-1.5 h-5 w-5 accent-[var(--cgs-primary)]" />
@@ -236,13 +234,13 @@ export default function ApplyPage() {
           )}
 
           <aside className="rounded-3xl bg-[var(--cgs-tint)] p-7 lg:min-h-[650px]">
-            <h2 className="text-3xl font-semibold text-[var(--cgs-navy)]">Before you begin</h2>
+            <h2 className="text-3xl font-semibold text-[var(--cgs-heading)]">Before you begin</h2>
             <p className="mt-8 text-lg">Have these ready:</p>
             <ul className="mt-6 space-y-1 text-lg">
               <li>• Child’s birth certificate</li><li>• Recent school report</li><li>• Parent contact details</li><li>• Passport photograph</li>
             </ul>
             <p className="mt-8 text-lg">Accepted files: JPG, PNG or PDF.<br />Maximum 5MB per file.</p>
-            <h2 className="mt-28 text-2xl font-semibold text-[var(--cgs-navy)]">Need help?</h2>
+            <h2 className="mt-28 text-2xl font-semibold text-[var(--cgs-heading)]">Need help?</h2>
             <p className="mt-6 text-lg">Contact the school office. Your application is private and secure.</p>
           </aside>
         </div>
