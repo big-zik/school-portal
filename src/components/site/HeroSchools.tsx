@@ -10,7 +10,7 @@ const SCHOOLS = {
     h: 'A bright future begins here.',
     lede: 'Where curiosity is the first lesson and every child is known by name.',
     name: 'Chosen Generation School (CGS)',
-    stage: 'Nursery to Primary 6',
+    stage: 'Pre-school to Primary 6',
     apply: 'Apply to CGS',
     seal: 'CGS',
     img: '/images/classroom.jpg',
