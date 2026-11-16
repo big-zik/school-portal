@@ -9,7 +9,7 @@ import { getServerUser } from '@/lib/auth/helpers'
 export const dynamic = 'force-dynamic'
 
 const SCHOOLS = [
-  { code: 'CGS', name: 'Chosen Generation School', level: 'Primary', range: 'Pre-school to Primary 6', body: 'Play, discovery and strong foundations, with teachers who know every child by name.', apply: 'Apply to CGS' },
+  { code: 'CGS', name: 'Chosen Generation School', level: 'Primary', range: 'Pre-school to Basic 5', body: 'Play, discovery and strong foundations, with teachers who know every child by name.', apply: 'Apply to CGS' },
   { code: 'CGHS', name: 'Chosen Generation High School', level: 'Secondary', range: 'JSS 1 to SS 3', body: 'Focused teaching, practical science and the confidence to lead into university and beyond.', apply: 'Apply to CGHS' },
 ]
 
