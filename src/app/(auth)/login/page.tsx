@@ -16,9 +16,14 @@ function LoginFormContent() {
   const [password, setPassword] = useState('')
   const [keep, setKeep] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [errorMessage, setErrorMessage] = useState(
-    errorParam === 'SessionExpired' ? 'Your session expired. Please sign in again.' : '',
-  )
+  const [errorMessage, setErrorMessage] = useState(() => {
+    if (errorParam === 'SessionExpired') return 'Your session expired. Please sign in again.'
+    if (errorParam === 'Configuration') {
+      return 'Authentication configuration error: AUTH_SECRET or database connection is missing in deployment environment variables.'
+    }
+    if (errorParam === 'AccessDenied') return 'Access denied. You do not have permission to access that section.'
+    return ''
+  })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
